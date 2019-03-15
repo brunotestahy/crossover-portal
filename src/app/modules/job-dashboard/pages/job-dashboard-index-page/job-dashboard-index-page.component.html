@@ -1,0 +1,106 @@
+<div class="section__header section__header--aligned d-flex align-items-center">
+  <span class="mr-2">Marketplace</span>
+  <form class="marketplace__search-form ml-auto"
+        (submit)="searchPipelines()"
+        [formGroup]="form">
+    <df-input-container>
+      <input type="text"
+             formControlName="query"
+             placeholder="Search All Pipelines"
+             class="marketplace__search-input">
+    </df-input-container>
+    <df-validation-messages [control]="form.get('query')"
+                            [validationMessagesMap]="validationMessages"></df-validation-messages>
+  </form>
+</div>
+<div class="page-scroll">
+  <div class="container-fluid padding-aligned">
+    <app-page-alert *ngIf="error"
+                    [text]="error"
+                    class="my-3"></app-page-alert>
+  </div>
+  <div class="df-loader-container"
+       *ngIf="isLoading; else loadedContent">
+    <i class="df-loader"></i>
+  </div>
+  <ng-template #loadedContent>
+    <ng-container *ngIf="customJobs.length > 0">
+      <div class="section-subheader padding-aligned my-3">
+        Custom Roles
+      </div>
+      <div class="container-fluid padding-aligned my-3">
+        <div class="row">
+          <div class="col-sm-6 col-md-4 col-lg-3 my-3"
+               *ngFor="let job of customJobs">
+            <div class="job"
+                 [routerLink]="[job.id, 'marketplace-members']"
+                 [style.background-image]="sanitizeURL(job.imageUrl)">
+              <div class="overlay content">
+                <div class="inner">
+                  <div class="link">
+                    <span class="title w-100 d-inline-block">
+                      {{job.title}}
+                      <br>
+                      <span class="mt-4">
+                        ${{job.salary | number : '1.0-2'}}/{{job.salaryType === 'WEEKLY' ? 'hr' : 'month'}}
+                      </span>
+                    </span>
+                  </div>
+                  <div class="apply">
+                    <div class="top">
+                      HIRE NOW
+                    </div>
+                    <div class="bottom">
+                      {{job.title}}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </ng-container>
+    <ng-container *ngIf="genericJobs.length > 0">
+      <div class="section-subheader padding-aligned my-3">
+        Marketplace Roles
+      </div>
+      <div class="container-fluid padding-aligned my-3">
+        <div class="row">
+          <div class="col-sm-6 col-md-4 col-lg-3 my-3"
+               *ngFor="let job of genericJobs">
+            <div class="job"
+                 [routerLink]="[job.id, 'marketplace-members']"
+                 [style.background-image]="sanitizeURL( job.imageUrl)">
+              <div class="overlay content">
+                <div class="inner">
+                  <div class="link">
+                    <span class="title w-100 d-inline-block">
+                      {{job.title}}
+                      <br>
+                      <span class="mt-4">
+                        ${{job.salary | number : '1.0-2'}}/{{job.salaryType === 'WEEKLY' ? 'hr' : 'month'}}
+                      </span>
+                    </span>
+                  </div>
+                  <div class="apply">
+                    <div class="top">
+                      HIRE NOW
+                    </div>
+                    <div class="bottom">
+                      {{job.title}}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </ng-container>
+    <div class="container-fluid padding-aligned"
+         *ngIf="genericJobs.length === 0 && customJobs.length === 0">
+      You have no jobs on marketplace.
+    </div>
+  </ng-template>
+</div>

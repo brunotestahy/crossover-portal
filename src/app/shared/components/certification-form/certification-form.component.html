@@ -1,0 +1,33 @@
+<form [formGroup]="form" class="standard-form" (submit)="onSubmit()">
+  <div>
+    <label>Certification Name</label>
+    <df-input-container>
+      <input type="text" formControlName="name">
+    </df-input-container>
+    <df-validation-messages [control]="form.get('name')"></df-validation-messages>
+  </div>
+  <label>Period</label>
+  <div class="row">
+    <div class="col-sm">
+      <df-datepicker formControlName="startDateTime"></df-datepicker>
+      <df-validation-messages [control]="form.get('startDateTime')"></df-validation-messages>
+    </div>
+    <div class="d-none d-sm-block col-sm-auto text-center">
+      -
+    </div>
+    <div class="col-sm">
+      <df-datepicker formControlName="endDateTime"></df-datepicker>
+      <df-validation-messages [control]="form.get('endDateTime')"></df-validation-messages>
+    </div>
+  </div>
+  <div class="d-flex">
+    <button class="mr-2" type="submit" df-button theme="info">Save</button>
+    <button class="mr-2" type="button" df-button theme="danger" (click)="cancel.emit()">Cancel</button>
+    <button
+      class="mr-2"
+      type="button"
+      df-button theme="danger"
+      (click)="onDelete(this.form.value)"
+      *ngIf="this.form.value.id !== null">Remove this certification</button>
+  </div>
+</form>

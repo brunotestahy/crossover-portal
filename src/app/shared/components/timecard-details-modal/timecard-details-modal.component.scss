@@ -1,0 +1,11 @@
+.timecard-screenshot {
+  display: block;
+  width: 200px;
+  height: 100px;
+}
+
+:host {
+  .has-missing-screenshot {
+    background: url('/assets/images/not-found-screenshot.png') no-repeat;
+  }
+}

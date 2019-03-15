@@ -1,0 +1,48 @@
+.tabset {
+  background-color: map-get($map: $au-neutral, $key: 5);
+  display: flex;
+  justify-content: start;
+  align-items: center;
+  flex-wrap: wrap;
+  flex-shrink: 0;
+  flex-basis: 36px;
+  &:after {
+    clear: both;
+  }
+}
+
+.tabset__link {
+  padding: 0 17px;
+  height: 100%;
+  cursor: pointer;
+  text-decoration: none;
+  text-align: center;
+  font-weight: 500;
+  color: #e4e4e4;
+  opacity: 0.6;
+  flex-grow: 1;
+  display: flex;
+  align-items: center;
+  border-bottom: 3px solid rgba(0,0,0,0);
+  &--active {
+    color: #fff;
+    background: rgba(0,0,0,.2);
+    border-bottom: 3px solid #ea5a5a;
+    opacity: 1;
+  }
+  &:hover,
+  &:active,
+  &:focus {
+    color: #fff;
+    text-decoration: none;
+  }
+}
+
+.tabset__text {
+  padding: 6px 15px;
+  height: 100%;
+  cursor: pointer;
+  text-decoration: none;
+  flex-grow: 1;
+  text-align: left;
+}

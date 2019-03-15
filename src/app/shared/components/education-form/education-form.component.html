@@ -1,0 +1,50 @@
+<form [formGroup]="form" class="standard-form" (submit)="onSubmit()">
+  <div>
+    <label>School</label>
+    <df-input-container>
+      <input type="text" formControlName="school">
+    </df-input-container>
+    <df-validation-messages [control]="form.get('school')"></df-validation-messages>
+  </div>
+  <label>Dates Attended</label>
+  <div class="row">
+    <div class="col-sm">
+      <df-select formControlName="startDate" placeholder="Start date">
+        <df-option [value]="null" [displayText]="'Not defined'">Not defined</df-option>
+        <df-option
+          *ngFor="let year of yearRange;"
+          [value]="year">{{ year | date:'yyyy':'UTC' }}</df-option>
+      </df-select>
+      <df-validation-messages [control]="form.get('startDate')"></df-validation-messages>
+    </div>
+    <div class="d-none d-sm-block col-sm-auto text-center">
+      -
+    </div>
+    <div class="col-sm">
+      <df-select formControlName="endDate" placeholder="End date">
+        <df-option [value]="null" [displayText]="'Not defined'">Not defined</df-option>
+        <df-option
+          *ngFor="let year of yearRange;"
+          [value]="year">{{ year | date:'yyyy':'UTC' }}</df-option>
+      </df-select>
+      <df-validation-messages [control]="form.get('endDate')"></df-validation-messages>
+    </div>
+  </div>
+  <div>
+    <label>Degree</label>
+    <df-input-container>
+      <input type="text" formControlName="degree">
+    </df-input-container>
+    <df-validation-messages [control]="form.get('degree')"></df-validation-messages>
+  </div>
+  <div class="d-flex">
+    <button class="mr-2" type="submit" df-button theme="info">Save</button>
+    <button class="mr-2" type="button" df-button theme="danger" (click)="cancel.emit()">Cancel</button>
+    <button
+      class="mr-2"
+      type="button"
+      df-button theme="danger"
+      (click)="onDelete(this.form.value)"
+      *ngIf="this.form.value.id !== null">Remove this education</button>
+  </div>
+</form>

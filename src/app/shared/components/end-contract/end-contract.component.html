@@ -1,0 +1,139 @@
+<div class="au-modal-header p-3">
+  <div class="d-flex align-items-center m-0">
+    <h5>End Contract</h5>
+    <i (click)="onClose()"
+       class="au-modal-close fa fa-times">
+    </i>
+  </div>
+</div>
+<div class="m-4 end-contract-content">
+  <app-page-alert *ngIf="error"
+                  [text]="error"></app-page-alert>
+  <div class="df-loader-container"
+       *ngIf="isLoading">
+    <i class="df-loader"></i>
+  </div>
+  <form [formGroup]="formGroup"
+        class="d-block"
+        *ngIf="!isLoading">
+    <div class="d-flex">
+      <div class="p-3">
+        <img class="img-fluid mb-2 picture-card-image"
+             [src]="userDetail?.photoUrl || '/assets/images/user.png'">
+      </div>
+      <div class="d-flex flex-column align-self-center">
+        <div class="d-flex w-100 align-items-center">
+          <h5 class="my-1">{{userDetail?.firstName}} {{userDetail?.lastName}}</h5>
+        </div>
+        <div class="au-neutral-3 my-1">
+          {{assignment?.jobTitle}}
+        </div>
+        <div class="au-neutral-3 my-1"
+             *ngIf="assignment?.team">
+          {{assignment?.currentAssignmentHistory?.team?.name}}
+        </div>
+      </div>
+    </div>
+    <hr>
+    <h6 class="mt-4">What is the reason for ending the contract?</h6>
+    <df-select class="w-100 w-md-25"
+               placeholder="Please select one"
+               formControlName="reason">
+      <df-option *ngFor="let reason of reasons"
+                 [value]="reason.value"
+                 [displayText]="reason.label">
+      </df-option>
+    </df-select>
+    <h6 class="mt-4">Would you recommend {{userDetail?.fullName}} to other Hiring Managers?</h6>
+    <div class="d-flex justify-content-start">
+      <div class="d-block d-md-none align-self-end">
+        <em>
+          <small>Definitely no</small>
+        </em>
+      </div>
+    </div>
+    <div class="d-flex justify-content-center">
+      <div class="d-none d-md-block align-self-end mr-2">
+        <em>
+          <small>Definitely no</small>
+        </em>
+      </div>
+      <df-group-toggle class="score-toggle"
+                       [items]="scores"
+                       formControlName="contractorScore">
+      </df-group-toggle>
+      <div class="d-none d-md-block align-self-end ml-2">
+        <em>
+          <small>Definitely yes</small>
+        </em>
+      </div>
+    </div>
+    <div class="d-flex justify-content-end">
+      <div class="d-block d-md-none align-self-start">
+        <em>
+          <small>Definitely yes</small>
+        </em>
+      </div>
+    </div>
+    <h6 class="mt-4">Additional comments:</h6>
+    <df-input-container class="reason-text"
+                        [label]="">
+      <textarea class="h-100"
+                rows="4"
+                [allowResize]="true"
+                formControlName="additionalComments">
+      </textarea>
+    </df-input-container>
+    <div class="d-flex justify-content-between mt-4">
+      <h6 class="m-0 align-self-center">Effective end date:</h6>
+      <df-datepicker class="effective-date-picker pb-0"
+                     formControlName="effectiveDate"
+                     [formatFn]="getDailyFormat"
+                     [direction]="1">
+      </df-datepicker>
+    </div>
+    <div class="alert alert-warning mt-4"
+         *ngIf="twoWeeksNotice()">
+      You are about to override the 2-week notice period. It is mandatory to explain why in the comment box
+    </div>
+    <div class="mt-4 d-flex justify-content-end">
+      <button type="submit"
+              df-button
+              [disabled]="!formGroup.valid"
+              (click)="openConfirmationModal()"
+              theme="danger">
+        End Contract
+      </button>
+    </div>
+  </form>
+</div>
+<ng-template #confirmationModal
+             let-close="close">
+  <div class="au-modal-header p-3">
+    <div class="d-flex align-items-center m-0">
+      <h5>Confirm Ending Contract</h5>
+      <i (click)="close()"
+         class="au-modal-close fa fa-times">
+      </i>
+    </div>
+  </div>
+  <div class="container-fluid mt-2">
+    Are you sure to end {{userDetail?.firstName}} {{userDetail?.lastName}}'s contract on {{getDailyFormat(formGroup.value.effectiveDate)}}
+    ?
+  </div>
+  <div class="w-100 d-flex align-items-center justify-content-end p-3">
+    <button df-button
+            type="button"
+            class="mr-2"
+            theme="success"
+            (click)="endContract(close)">
+      <span>Yes</span>
+    </button>
+    <button df-button
+            type="button"
+            theme="danger"
+            (click)="close()">
+      <span>No</span>
+    </button>
+  </div>
+</ng-template>

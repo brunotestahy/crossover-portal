@@ -1,0 +1,230 @@
+@import "variables";
+
+$success-color: #8bc34a;
+$warning-color: #ff9800;
+$danger-color: #f44346;
+
+.page-scroll {
+  overflow-y: visible !important;
+}
+
+.team-member {
+  min-width: 42px;
+  text-align: left;
+  min-height: 54px;
+  img {
+    width: 40px;
+    border-radius: 20px;
+    border: 1px solid #d8d8d8;
+  }
+  .online-status {
+    position: relative;
+    &:before {
+      content: "";
+      position: absolute;
+      width: 13px;
+      height: 13px;
+      border-radius: 50%;
+      right: -2px;
+      bottom: 1px;
+      border: 2px solid #fff;
+      z-index: 1;
+      background-color: #BFBEBC;
+    }
+    &.online:before {
+      background-color: #32B16A;
+    }
+    &.no-activity:before {
+      background-color: #FED152;
+    }
+  }
+}
+
+.pointer {
+  cursor: pointer;
+  outline: none;
+}
+
+h4 {
+  white-space: nowrap;
+}
+
+.success {
+  color: $success-color;
+}
+
+.warning {
+  color: $warning-color;
+}
+
+.danger {
+  color: $danger-color;
+}
+
+.disabled {
+  color: #ccc;
+  pointer-events: none;
+  cursor: not-allowed;
+}
+
+.currently-visible-week {
+  color: black;
+  font-weight: bold;
+}
+
+.inactive {
+  opacity: 0.5;
+}
+
+.shortened-column {
+  width: 100%;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+.user-cell {
+  height: 46px;
+  min-width: 42px;
+  img {
+    width: 40px;
+    border-radius: 20px;
+    border: 1px solid #d8d8d8;
+  }
+}
+
+.small-text {
+  font-size: 12px;
+}
+
+df-bar {
+  display: block;
+  height: 180px;
+  left: -18px;
+}
+
+::ng-deep {
+  app-team-summary {
+    .df-datepicker__icon {
+      display: none;
+    }
+
+    .df-progress-bar__fill {
+      border-radius: 3px;
+      max-width: 100%;
+      outline: none;
+    }
+
+    df-progress-bar.success .df-progress-bar__fill {
+      background-color: $success-color;
+    }
+
+    df-progress-bar.warning .df-progress-bar__fill {
+      background-color: $warning-color;
+    }
+
+    df-progress-bar.danger .df-progress-bar__fill {
+      background-color: $danger-color;
+    }
+
+    #teamSummaryGrid {
+      .df-grid-scrollable-view__header {
+        overflow: visible;
+      }
+
+      .df-grid-scrollable-view__body {
+        overflow: visible !important;
+        max-height: none !important;
+      }
+
+      tr {
+        td:first-child {
+          .df-grid-table-body__cell-column-title {
+            display: none;
+            @media (min-width: $breakpoint-md) {
+              display: block;
+            }
+          }
+        }
+      }
+
+      .df-grid {
+        font-size: 12px !important;
+        overflow-x: visible !important;
+      }
+
+      .df-grid__row--data:nth-child(even) {
+        background-color: white !important;
+      }
+
+      td:not(:nth-child(1)) {
+        span {
+          text-align: center !important;
+        }
+      }
+
+      th {
+        text-align: center !important;
+      }
+
+      td:nth-child(2),
+      td:nth-child(3),
+      th:nth-child(2),
+      th:nth-child(3) {
+        @media (min-width: $breakpoint-md) {
+          width: 20% !important;
+          min-width: 20% !important;
+          max-width: 20% !important;
+        }
+      }
+
+      td:nth-child(4),
+      td:nth-child(5),
+      td:nth-child(6),
+      th:nth-child(4),
+      th:nth-child(5),
+      th:nth-child(6) {
+        @media (min-width: $breakpoint-md) {
+          width: 10% !important;
+          min-width: 10% !important;
+          max-width: 10% !important;
+          padding-left: 0px !important;
+          padding-right: 0px !important;
+        }
+      }
+
+      .df-grid-column--sortable__icon {
+        position: unset !important;
+      }
+
+      .df-grid-column__title {
+        margin-left: auto;
+      }
+
+      .df-grid-scrollable-view__header-box {
+        margin-right: 0px !important;
+      }
+
+      .df-grid-table-body__cell-column-title {
+        min-width: 50% !important;
+        max-width: 50% !important;
+      }
+    }
+
+    .contractor-cell .df-tooltip--top .df-tooltip__content {
+      padding: 0.5rem !important;
+    }
+
+    .contractor-cell [ng-reflect-df-tool-tip="empty"] ~ .df-tooltip--top .df-tooltip__content {
+      padding: 0 !important;
+    }
+  }
+
+  .full-screen .df-modal__content {
+    width: 100%;
+    height: 100%;
+    max-height: none;
+    background-color: #f1f2f5;
+    text-align: left;
+  }
+}

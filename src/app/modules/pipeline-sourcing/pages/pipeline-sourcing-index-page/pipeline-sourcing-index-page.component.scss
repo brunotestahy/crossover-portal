@@ -1,0 +1,26 @@
+@import "variables";
+
+:host {
+  ::ng-deep {
+    .df-grid-table-body__cell-data {
+      width: 100%;
+    }
+    .pipeline-sourcing {
+       .df-select--shadow-box {
+        min-width: 54px;
+      }
+      .df-table-paginator__options__search, .df-table-paginator__options__aux {
+        display: none;
+      }
+    }
+    @media screen and (min-width: $breakpoint-md) {
+      .job-name-column { 
+        width: 150px;
+      }
+
+    .df-grid {
+      overflow-y: hidden;
+    }
+  }
+}
+}

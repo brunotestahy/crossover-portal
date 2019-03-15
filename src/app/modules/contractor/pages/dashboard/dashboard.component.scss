@@ -1,0 +1,216 @@
+@import "variables";
+
+$success-color: #8bc34a;
+$warning-color: #ff9800;
+$danger-color: #f44346;
+
+:host {
+  .clickable-section:hover {
+    box-shadow: 0 0 15px rgba(34,170,228,.3);
+    cursor: pointer;
+  }
+
+  .summary-link:hover {
+    color: #23b1f7 !important;
+    text-decoration: none !important;
+  }
+
+  .no-activities {
+    position: absolute;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    left: 50%;
+  }
+}
+
+.productivity-card {
+  height: 330px;
+}
+
+.success {
+  color: $success-color;
+}
+
+.workflows-icon {
+  margin: 0 auto 11px;
+  width: 56px;
+  height: 56px;
+  line-height: 56px;
+  background: #d8d8d8;
+  text-align: center;
+  color: #9d9d9d;
+  border-radius: 10px;
+  background-image: url('/assets/images/contractor/apps/workflow.png');
+  background-position: center;
+}
+
+.productivity-card-header {
+  padding-bottom: 15px;
+  padding-top: 15px;
+}
+
+.app-button {
+  max-height: 150px;
+
+  &:hover {
+    background-color: #e0e1e2;
+  }
+}
+
+.row-app-grid {
+  max-height: 300px;
+}
+
+.app-icon {
+  display: inline-block;
+  border: 1px solid #fff;
+  border-radius: 15px;
+  width: 68px;
+  max-width: 68px;
+  height: 68px;
+  background-size: 100%;
+  background-repeat: no-repeat;
+
+  &__dashboard {
+    background-image: url('/assets/images/contractor/apps/my-dashboard.svg');
+  }
+
+  &__check-in-chats {
+    background-image: url('/assets/images/contractor/apps/checkin-chat.svg');
+  }
+
+  &__timezones {
+    background-image: url('/assets/images/contractor/apps/timezone.svg');
+  }
+
+  &__rand-and-review {
+    background-image: url('/assets/images/contractor/apps/team-rank-and-review.svg');
+  }
+
+  &__learn {
+    background-image: url('/assets/images/contractor/apps/learn.svg');
+  }
+
+  &__world {
+    background-image: url('/assets/images/contractor/apps/partner-world.svg');
+  }
+
+  &__community {
+    background-image: url('/assets/images/contractor/apps/community.svg');
+  }
+
+  &__worksmart {
+    background-image: url('/assets/images/contractor/apps/worksmart.svg');
+  }
+
+  &__team-summary {
+    background-image: url('/assets/images/contractor/apps/team-summary.svg');
+  }
+
+  &__timesheet {
+    background-image: url('/assets/images/contractor/apps/team-timesheet.svg');
+  }
+
+  &__activities {
+    background-image: url('/assets/images/contractor/apps/team-activities.svg');
+  }
+
+  &__metrics {
+    background-image: url('/assets/images/contractor/apps/team-metrics.svg');
+  }
+
+  &__team-history {
+    background-image: url('/assets/images/contractor/apps/team-history.svg');
+  }
+
+  &__workflows {
+    background-image: url('/assets/images/contractor/apps/workflow.svg');
+  }
+
+  &__gemba-walk {
+    background-image: url('/assets/images/contractor/apps/team-gemba-walk.svg');
+  }
+
+  &__organization {
+    background-image: url('/assets/images/contractor/apps/team-organization.svg');
+  }
+
+  &__hire {
+    background-image: url('/assets/images/contractor/apps/team-hire.svg');
+  }
+
+  &__team-settings {
+    background-image: url('/assets/images/contractor/apps/team-settings.svg');
+  }
+
+  &__goals {
+    background-image: url('/assets/images/contractor/apps/business-goal.svg');
+  }
+
+  &__polls {
+    background-image: url('/assets/images/contractor/apps/team-polls.svg');
+  }
+
+  &__scoring {
+    background-image: url('/assets/images/contractor/apps/team-scoring.svg');
+  }
+
+  &__time-approval {
+    background-image: url('/assets/images/contractor/apps/time-approval.svg');
+  }
+
+  &__accounts {
+    background-image: url('/assets/images/contractor/apps/team-accounts.svg');
+  }
+
+  &__reports {
+    background-image: url('/assets/images/contractor/apps/reports-app.svg');
+  }
+}
+
+.chart-tooltip {
+  padding: 4px 6px;
+  color: #fff;
+  border-radius: 4px;
+  background: #333;
+  font-size: 13px;
+}
+
+::ng-deep {
+  app-dashboard {
+
+    .df-line-chart {
+      left: -14px;
+      top: 15px;
+      height: 265px;
+      width: 100%;
+    }
+
+    .df-progress-bar__fill {
+      border-radius: 3px;
+      max-width: 100%;
+      outline: none;
+    }
+
+    .score-info >
+      .df-tooltip {
+        display: none !important;
+        @media (min-width: $breakpoint-md) {
+          display: block !important;
+        }
+      }
+
+    df-progress-bar.success .df-progress-bar__fill {
+      background-color: $success-color;
+    }
+
+    df-progress-bar.warning .df-progress-bar__fill {
+      background-color: $warning-color;
+    }
+
+    df-progress-bar.danger .df-progress-bar__fill {
+      background-color: $danger-color;
+    }
+  }
+}

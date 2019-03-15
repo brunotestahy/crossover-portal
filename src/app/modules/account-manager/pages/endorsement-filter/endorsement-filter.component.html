@@ -1,0 +1,243 @@
+<div class="au-modal-header p-4 d-flex align-items-center w-100">
+  <h5 class="m-0">
+    <span>Filter</span>
+  </h5>
+  <i (click)="close()"
+     class="au-modal-close fa fa-times">
+  </i>
+</div>
+<div class="page-scroll">
+  <form [formGroup]="form"
+        class="standard-form w-100 py-4 px-2 pull-left">
+    <div class="d-flex mb-2 pull-left col-12 flex-wrap p-0">
+      <div class="d-flex flex-column w-100 col-12 col-md">
+        <label>
+          Date From
+        </label>
+        <df-datepicker formControlName="createdOnFrom">
+        </df-datepicker>
+        <df-validation-messages class="text-left"
+                                [control]="form.controls.createdOnFrom">
+        </df-validation-messages>
+      </div>
+      <div class="d-flex flex-column w-100 col-12 col-md">
+        <label>
+          Date To
+        </label>
+        <df-datepicker formControlName="createdOnTo">
+        </df-datepicker>
+        <df-validation-messages class="text-left"
+                                [control]="form.controls.createdOnTo">
+        </df-validation-messages>
+      </div>
+    </div>
+    <div class="d-flex mb-2 pull-left col-12 flex-wrap p-0">
+      <div class="d-flex flex-column w-100 col-12 col-md">
+        <label>
+          Status
+        </label>
+        <div class="d-flex flex-wrap">
+          <div class="col-12 col-md-6 pl-md-0 p-0 pr-md-3">
+            <df-select formControlName="applicationStatus"
+                       class="text-left">
+              <df-option *ngFor="let appStatus of applicationStatusModels"
+                         [value]="appStatus.value">
+                {{ appStatus.label }}
+              </df-option>
+            </df-select>
+            <df-validation-messages class="text-left"
+                                    [control]="form.controls.applicationStatus">
+            </df-validation-messages>
+          </div>
+          <div class="col-12 col-md-6 p-0 pl-md-3">
+            <df-select formControlName="tasks"
+                       class="text-left"
+                       [class.d-none]="form.value.applicationStatus !== applicationStatusModels[0].value"
+                       multiselect="true"
+                       autoSize="false">
+              <df-option *ngFor="let opt of tasks"
+                         [value]="opt.value">
+                {{ opt.text }}
+              </df-option>
+            </df-select>
+            <df-validation-messages class="text-left"
+                                    [control]="form.controls.tasks">
+            </df-validation-messages>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="d-flex mb-2 pull-left col-12 flex-wrap p-0">
+      <div class="d-flex flex-column w-100 col-12 col-md">
+        <label>
+          Total Applicant Score Min
+        </label>
+        <df-input-container>
+          <input type="number"
+                 formControlName="totalScoreMin"/>
+        </df-input-container>
+        <df-validation-messages class="text-left"
+                                [control]="form.controls.totalScoreMin">
+        </df-validation-messages>
+      </div>
+      <div class="d-flex flex-column w-100 col-12 col-md">
+        <label>
+          Total Applicant Score Max
+        </label>
+        <df-input-container>
+          <input type="number"
+                 formControlName="totalScoreMax"/>
+        </df-input-container>
+        <df-validation-messages class="text-left"
+                                [control]="form.controls.totalScoreMax">
+        </df-validation-messages>
+      </div>
+    </div>
+    <div [formGroup]="scoreFilters">
+      <ng-container *ngFor="let filter of scoreFields">
+        <div class="d-flex w-100 mb-2 pull-left"
+             *ngIf="filter.type === scoreType.TEST_SCORE">
+          <div class="d-flex flex-column w-100 col-12 col-md">
+            <label>
+              {{ filter.name }} Min
+            </label>
+            <df-input-container>
+              <input type="number"
+                     [formControlName]="filter.fields.min"/>
+            </df-input-container>
+            <df-validation-messages class="text-left"
+                                    [control]="scoreFilters.controls[filter.fields.min]">
+            </df-validation-messages>
+          </div>
+          <div class="d-flex flex-column w-100 col-12 col-md">
+            <label>
+              {{ filter.name }} Max
+            </label>
+            <df-input-container>
+              <input type="number"
+                     [formControlName]="filter.fields.max"/>
+            </df-input-container>
+            <df-validation-messages class="text-left"
+                                    [control]="scoreFilters.controls[filter.fields.max]">
+            </df-validation-messages>
+          </div>
+        </div>
+
+        <div class="d-flex w-100 mb-2 pull-left"
+             *ngIf="filter.type === scoreType.RUBRIC_SCORE">
+          <div class="d-flex flex-column w-100 col-12 col-md">
+            <label>
+              {{ filter.name }} Min
+            </label>
+            <df-input-container>
+              <input type="number"
+                     [formControlName]="filter.fields.min"/>
+            </df-input-container>
+            <df-validation-messages class="text-left"
+                                    [control]="scoreFilters.controls[filter.fields.min]">
+            </df-validation-messages>
+          </div>
+          <div class="d-flex flex-column w-100 col-12 col-md">
+            <label>
+              {{ filter.name }} Max
+            </label>
+            <df-input-container>
+              <input type="number"
+                     [formControlName]="filter.fields.max"/>
+            </df-input-container>
+            <df-validation-messages class="text-left"
+                                    [control]="scoreFilters.controls[filter.fields.max]">
+            </df-validation-messages>
+          </div>
+        </div>
+
+        <div class="d-flex w-100 mb-2 pull-left"
+             *ngIf="filter.type === scoreType.QUESTION_SCORE">
+          <div class="d-flex flex-column w-100 col-12 col-md">
+            <label>
+              {{ filter.name }} Min
+            </label>
+            <df-input-container>
+              <input type="number"
+                     [formControlName]="filter.fields.min"/>
+            </df-input-container>
+            <df-validation-messages class="text-left"
+                                    [control]="scoreFilters.controls[filter.fields.min]">
+            </df-validation-messages>
+          </div>
+          <div class="d-flex flex-column w-100 col-12 col-md">
+            <label>
+              {{ filter.name }} Max
+            </label>
+            <df-input-container>
+              <input type="number"
+                     [formControlName]="filter.fields.max"/>
+            </df-input-container>
+            <df-validation-messages class="text-left"
+                                    [control]="scoreFilters.controls[filter.fields.max]">
+            </df-validation-messages>
+          </div>
+        </div>
+      </ng-container>
+    </div>
+    <div class="d-flex mb-2 pull-left col-12 flex-wrap p-0">
+      <div class="d-flex flex-column w-100 col-12 col-md">
+        <label>
+          HM Rating Min
+        </label>
+        <df-input-container>
+          <input type="number"
+                 formControlName="hmRatingMin"/>
+        </df-input-container>
+        <df-validation-messages class="text-left"
+                                [control]="form.controls.hmRatingMin">
+        </df-validation-messages>
+      </div>
+      <div class="d-flex flex-column w-100 col-12 col-md">
+        <label>
+          HM Rating Max
+        </label>
+        <df-input-container>
+          <input type="number"
+                 formControlName="hmRatingMax"/>
+        </df-input-container>
+        <df-validation-messages class="text-left"
+                                [control]="form.controls.hmRatingMax">
+        </df-validation-messages>
+      </div>
+    </div>
+    <div class="d-flex mb-2 pull-left col-12 flex-wrap p-0">
+      <div class="col text-left">
+        <label class="mb-3">
+          Previewed
+        </label>
+        <df-group-toggle formControlName="previewToHM"
+                         #previewToggle
+                         [items]="previewItems"
+                         [selectedIndex]="previewItemsSelected">
+        </df-group-toggle>
+      </div>
+    </div>
+  </form>
+</div>
+<div class="w-100 d-flex align-items-center justify-content-end p-4">
+  <button df-button
+          type="button"
+          class="btn-primary mr-2"
+          (click)="close(); submit()"
+          [disabled]="form.invalid">
+    <span>Set</span>
+  </button>
+  <button df-button
+          type="button"
+          class="btn-red mr-2"
+          (click)="close()">
+    <span>Cancel</span>
+  </button>
+  <button df-button
+          type="button"
+          class="btn-clear"
+          (click)="clear()">
+    <span>Clear</span>
+  </button>
+</div>

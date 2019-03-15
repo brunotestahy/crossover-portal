@@ -1,0 +1,132 @@
+<df-card #card
+         class="px-4 py-3">
+  <h4 class="project-evaluation__title d-flex align-items-center w-100 py-3">
+    <img src="/assets/images/candidate/application-process/steps/project-evaluation.svg"
+         width="45"
+         height="45" />
+    <span class="ml-3">Project Evaluation</span>
+    <div class="d-flex align-items-center ml-2 ml-md-4">
+      <small><i class="fa fa-circle au-blue mr-2"></i></small>
+      <small><i class="fa fa-circle au-blue mr-2"></i></small>
+      <small><i class="fa fa-circle au-blue mr-2"></i></small>
+      <small><i class="fa fa-circle-o au-gray-3"></i></small>
+    </div>
+  </h4>
+  <div class="mt-2 d-flex align-items-center justify-content-between flex-wrap">
+    <h2>
+      <span>Time for some problem-solving!</span>
+    </h2>
+    <div class="position-relative project-evaluation__countdown mt-2 mt-md-0">
+      <b>Time left</b>
+      <df-countdown *ngIf="data" [end]="endDate">
+      </df-countdown>
+    </div>
+  </div>
+  <p class="pt-4">
+    Please download and carefully read through your assignment.
+    Once you’ve finished and have the solution ready,
+    upload a *.zip file below and click submit.
+    Maximum filesize is <b>{{ data?.maxDeliveryInMB }} MB</b>.
+  </p>
+  <app-page-alert *ngIf="error"
+                  [text]="error"
+                  class="mb-3">
+  </app-page-alert>
+  <div class="w-100 d-flex flex-column flex-md-row">
+    <i class="col-12 col-md project-evaluation__assignment-block d-block d-lg-flex align-items-center cursor-pointer mr-md-3 pull-left w-100 mb-3 mb-md-0"
+       (click)="downloadAssignmentPdf()">
+      <h1 class="project-evaluation__assignment-block__icon m-0 d-flex align-items-center justify-content-center pull-left w-100">
+        <i class="fa fa-download"></i>
+      </h1>
+      <h4 class="m-0 p-3 pull-left w-100">
+        {{ assignmentUrl }}
+      </h4>
+    </i>
+    <div class="col-12 col-md project-evaluation__assignment-block d-block d-lg-flex align-items-center cursor-pointer p-0 pull-left w-100 mb-3 mb-md-0">
+      <h1
+        class="project-evaluation__assignment-block__icon m-0 d-flex flex-column align-items-center justify-content-center position-relative pull-left w-100"
+        [class.isIE]="isIE">
+        <i class="fa fa-upload"></i>
+        <small *ngIf="uploadControl.valid"
+               [class.position-absolute]="!isIE"
+               [class.position-relative]="isIE"
+               class="text-center w-100 pt-4">
+          Change Solution
+        </small>
+      </h1>
+      <div class="col px-3 pull-left w-100">
+        <df-file-upload [fileUploader]="fileUploader"
+                        (fileAdd)="onFileChanges()" (validationError)="onErrorEvent($event)">
+        </df-file-upload>
+      </div>
+    </div>
+  </div>
+  <div class="d-flex justify-content-end">
+    <button df-button [disabled]="!canSubmitAssignmentRequest"
+            type="button"
+            class="mr-2 col-6 col-md-auto"
+            (click)="openTimeExtensionModal(requestTimeExtensionTemplate)">
+      <span>Request Time</span>
+    </button>
+    <button df-button
+            type="button"
+            class="btn-primary col col-md-auto"
+            (click)="submit()"
+            [disabled]="uploadControl.invalid">
+      <span>Submit</span>
+    </button>
+  </div>
+</df-card>
+
+<ng-template #requestTimeExtensionTemplate
+             let-close="close">
+  <div class="au-modal-header p-3">
+    <h5 class="d-flex align-items-center w-100 m-0">
+      <span>Request an Extension</span>
+    </h5>
+    <i (click)="close()"
+       class="au-modal-close fa fa-times">
+    </i>
+  </div>
+  <div class="px-3 pt-3 text-left"
+       [formGroup]="extensionForm">
+    <p>
+      We understand that unexpected things may come up, so we’ll try to give
+      you more time to start the assessment.
+    </p>
+    <p>
+      Please indicate how much time you need. Our evaluation team will look
+      into your request and get back to you shortly.
+    </p>
+    <p class="days d-flex align-items-center">
+      I need
+      <df-input-container class="px-2">
+        <input type="text"
+               formControlName="days" />
+      </df-input-container>
+      more day(s).
+    </p>
+    <p>
+      Reason
+      <df-input-container>
+        <textarea formControlName="reason">
+        </textarea>
+      </df-input-container>
+    </p>
+  </div>
+  <div class="w-100 d-flex align-items-center justify-content-center pb-3">
+    <button df-button
+            type="button"
+            class="btn-primary mr-2"
+            (click)="close(); submitExtension()"
+            [disabled]="extensionForm.invalid">
+      <span>Submit Request</span>
+    </button>
+    <button df-button
+            type="button"
+            class="btn-red"
+            (click)="close()">
+      <span>Cancel</span>
+    </button>
+  </div>
+</ng-template>

@@ -1,0 +1,163 @@
+@import "~@angular/cdk/overlay-prebuilt.css";
+@import "~angular-calendar/css/angular-calendar.css";
+
+// imports from app/styles
+@import "variables";
+@import "flex";
+@import "components/buttons";
+@import "components/standard-form";
+@import "components/grid";
+@import "components/loader";
+@import "components/tabset";
+@import "components/section-header";
+@import "components/page-alert";
+@import "components/backgrounds";
+@import "components/colors";
+@import "components/note";
+@import "components/notification";
+@import "components/linkedin";
+@import "components/typography";
+@import "components/modal";
+@import "components/circle-icon";
+@import "components/sizing";
+@import "components/table";
+@import "components/calendar";
+@import "components/placeholder";
+@import "modules/onboarding";
+@import "modules/interview";
+
+$font-family: 'Roboto', Helvetica, sans-serif;
+
+body {
+  @import "~@devfactory/ngx-df/core/theming/aurea-skin/main";
+  @import "aurea";
+}
+
+html, body {
+  font-family: $font-family;
+  color: $au-gray-main;
+  -webkit-font-smoothing: antialiased;
+  -webkit-overflow-scrolling: touch;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  font-weight: 400;
+  font-size: 14px;
+  overflow-x: hidden;
+  background: $au-white;
+}
+
+a {
+  color: $au-blue;
+}
+
+input:-webkit-autofill, textarea:-webkit-autofill, select:-webkit-autofill {
+  background-color: transparent;
+}
+
+.page-content {
+  padding: 15px;
+}
+
+.df-visually-hidden {
+  position: absolute;
+
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+
+  text-transform: none;
+
+  border: none;
+}
+
+/* This removes the yellow background that is used on auto-filled form inputs */
+input:-webkit-autofill {
+  transition-delay: 999999s !important;
+}
+
+input:focus, input:active, input:active:focus,
+button:focus, button:active, button:active:focus,
+{
+  outline: none;
+}
+
+df-select:focus {
+  outline: none;
+}
+
+df-input-container input[readonly][type='text'] {
+  background-color: map-get($map: $au-gray, $key: 2) !important;
+}
+
+.pointer {
+  cursor: pointer;
+}
+
+.overflow-y {
+  overflow-y: auto !important;
+}
+
+.overflow-initial {
+  overflow: initial !important;
+}
+
+.overflow-visible {
+  overflow: visible !important;
+}
+
+.overflow-hidden {
+  overflow: hidden !important;
+}
+
+.padding-aligned {
+  padding-left: 15px;
+  padding-right: 15px;
+}
+
+@media screen and (min-width: $breakpoint-md) {
+  .padding-aligned {
+    padding-left: 35px;
+    padding-right: 35px;
+  }
+}
+
+.cursor-pointer {
+  cursor: pointer;
+}
+
+.df-grid--reflow {
+  .df-grid-table-body__cell-data {
+    word-break: break-word;
+  }
+}
+
+.page-scroll {
+  flex-grow: 1;
+  overflow: auto;
+  position: relative;
+}
+.x-large-modal{
+  .df-modal__content{
+      width: 1400px;
+      text-align: left;
+  }
+}
+.disabled {
+  pointer-events: none;
+}
+.df-input--disabled {
+  cursor: not-allowed;
+}
+*:focus {
+  outline: none;
+}
+.btn-primary , .btn-primary:hover, .btn-primary:focus {
+  background-color: #03a9f4;
+  border-color: #03a9f4;
+}
+

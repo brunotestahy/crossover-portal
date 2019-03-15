@@ -1,0 +1,77 @@
+<div class="df-loader-container"
+     *ngIf="isSaving">
+<i class="df-loader"></i>
+</div>
+<div *ngIf="!isSaving"
+     class="d-block">
+  <div class="d-flex justify-content-between mb-4">
+    <div class="mb-2 d-block d-sm-flex">
+      <h4 class="mb-0 mr-1">Desk Settings</h4>
+      <a href="#"
+         class="align-self-center d-flex"
+         *ngIf="servers.length < 3"
+         (click)="$event.preventDefault();addServer()">
+        <span class="d-flex mr-1">Add Server</span>
+        <i class="fa fa-plus-circle align-self-center"></i>
+      </a>
+    </div>
+    <button df-button
+            type="button"
+            (click)="showMetricSources()">
+      Change Metric Source
+    </button>
+  </div>
+  <div *ngIf="error !== ''"
+       class="alert alert-danger my-3">{{error}}</div>
+  <df-tab-group [selectedIndex]="selectedIndex">
+    <df-tab *ngFor="let server of servers; let i = index">
+      <ng-template dfTabHeader>
+        <i class="fa fa-server mr-2"></i>
+        Server {{(i + 1)}}
+      </ng-template>
+      <app-desk-dot-com-server-settings (checkServers)="checkServers()"
+                                   [servers]="servers"
+                                   [deskDotComUsers]="users"
+                                   (remove)="openConfirmationModal(i)"
+                                   [(isLoading)]="isLoading"></app-desk-dot-com-server-settings>
+    </df-tab>
+  </df-tab-group>
+</div>
+<div *ngIf="!isSaving"
+      class="d-flex justify-content-end mt-3">
+  <button (click)="onClose()"
+          type="button"
+          class="mr-2"
+          df-button
+          df-border-button>
+    Cancel
+  </button>
+  <button type="button"
+          (click)="saveSetup()"
+          df-border-button
+          df-button>
+    Save
+  </button>
+</div>
+
+<ng-template #confirmationModal
+             let-close="close">
+  <div class="mt-2">
+    You are disabling this server. Do you also want to delete it?
+  </div>
+  <div class="w-100 d-flex align-items-center justify-content-end p-3">
+    <button df-button
+            type="button"
+            class="mr-2"
+            theme="danger"
+            (click)="close()">
+      <span>No</span>
+    </button>
+    <button df-button
+            type="button"
+            theme="success"
+            (click)="removeServer(close)">
+      <span>Yes</span>
+    </button>
+  </div>
+</ng-template>

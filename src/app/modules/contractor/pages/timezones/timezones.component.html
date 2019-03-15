@@ -1,0 +1,81 @@
+
+<div class="section__header section__header--aligned">
+  Timezones
+</div>
+
+<div class="page-content padding-aligned page-scroll">
+  <app-page-alert *ngIf="error !== ''"
+                  [text]="error"
+                  class="my-3"></app-page-alert>
+  <div class="df-loader-container"
+       *ngIf="isLoading; else timezonesContent">
+    <i class="df-loader"></i>
+  </div>
+  <ng-template #timezonesContent>
+    <df-card class="my-3">
+      <div class="d-flex">
+        <div class="px-3 py-3">
+          CURRENT TIME
+        </div>
+        <div class="current-time-icon py-3">
+          <i class="fa fa-clock-o"></i>
+        </div>
+      </div>
+      <df-card-content>
+        <div class="current-time-line"></div>
+        <div *ngFor="let candidate of candidates"
+             class="row candidate-row position-relative">
+          <div class="user col-xl-1 d-none d-xl-flex">
+            <div class="d-inline-block">
+              <img [src]="candidate.photoUrl || 'assets/images/user.png'">
+            </div>
+            <div>{{candidate.firstName}}</div>
+          </div>
+          <div class="timeline row mt-1 col px-0 mx-2 justify-content-center ">
+            <div class="work-bar"
+                 [style.left]="getBarPosition(candidate.location?.timeZone, 0) + '%'"
+                 [style.maxWidth]="getMaxWidth(candidate.location?.timeZone) + '%'">
+              <div class="pull-left mt-3">8 AM</div>
+              <div class="pull-right mt-3">5 PM</div>
+            </div>
+
+            <div *ngIf="setCurrentTime(candidate.location?.timeZone)"
+                class="current-time-label">
+              {{currentTime | date: 'hh:mm a'}}
+            </div>
+            <div class="col marker px-0"></div>
+            <div class="col marker px-0"></div>
+            <div class="col marker px-0"></div>
+            <div class="col marker px-0"></div>
+            <div class="col marker px-0"></div>
+            <div class="col marker px-0"></div>
+            <div class="col marker px-0"></div>
+            <div class="col marker px-0"></div>
+            <div class="col marker px-0"></div>
+            <div class="col marker px-0"></div>
+            <div class="col marker px-0"></div>
+            <div class="col marker px-0"></div>
+            <div class="col marker px-0"></div>
+            <div class="col marker px-0"></div>
+            <div class="col marker px-0"></div>
+            <div class="col marker px-0"></div>
+            <div class="col marker px-0"></div>
+            <div class="col marker px-0"></div>
+            <div class="col marker px-0"></div>
+            <div class="col marker px-0"></div>
+            <div class="col marker px-0"></div>
+            <div class="col marker px-0"></div>
+            <div class="col marker px-0"></div>
+            <div class="col marker px-0"></div>
+          </div>
+          <div class="col-xl-1 d-none d-xl-flex">
+            {{getUtcDifference(candidate.location?.timeZone?.offset)}}
+          </div>
+          <div class="timezone-label">
+            {{candidate.firstName}}  -  {{getUtcDifference(candidate.location?.timeZone?.offset)}}
+          </div>
+        </div>
+      </df-card-content>
+    </df-card>
+  </ng-template>
+</div>

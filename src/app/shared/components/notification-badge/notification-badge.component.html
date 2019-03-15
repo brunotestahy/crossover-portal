@@ -1,0 +1,51 @@
+<div ngbDropdown
+     class="d-none d-md-block"
+     placement="bottom-right">
+  <div class="notifications"
+       ngbDropdownToggle>
+    <div class="notifications__icon">
+      <i class="fa fa-bell-o "></i>
+      <df-badge [count]="getNotificationCount()"
+                theme="info"></df-badge>
+    </div>
+  </div>
+  <div class="dropdown-menu peek-notifications px-4"
+       ngbDropdownMenu>
+    <h5 class="peek-notifications__header">Notifications</h5>
+    <div class="notification-item"
+         *ngFor="let n of notifications | slice:0:maxEntries;">
+      <div class="notification-timestamp">
+        <span>{{n.updated | amTimeAgo}}</span>
+      </div>
+      <div class="d-flex align-items-center flex-sm-nowrap flex-wrap py-2">
+        <div class="notification-info">
+          <div class="notification-icon">
+            <img class="notification-image"
+                 src="/assets/crossover-white.svg">
+          </div>
+        </div>
+        <div class="notification-message">
+          <p class="notification-message__from">Crossover</p>
+          <p class="notification-message__text"
+             [innerHTML]="n.message"
+             (click)="checkNavigation($event)"></p>
+        </div>
+      </div>
+    </div>
+    <p *ngIf="getNotificationCount() === 0"
+       class="text-center">
+      You have no pending notifications.
+    </p>
+    <a *ngIf="getNotificationCount() > 0"
+       class="text-center pointer"
+       routerLink="/notifications">
+            See all notifications
+          </a>
+  </div>
+</div>
+<div class="notifications d-flex d-md-none"
+     routerLink="/notifications">
+  <i class="fa fa-bell-o notifications__icon"></i>
+  <df-badge [count]="getNotificationCount()"
+            theme="info"></df-badge>
+</div>

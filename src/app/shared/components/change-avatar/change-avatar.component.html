@@ -1,0 +1,70 @@
+<df-card>
+  <df-card-header class="au-modal-header">
+    <h5 class="d-flex align-items-center m-0">
+      <span>Change Photo</span>
+    </h5>
+    <i (click)="cancel()"
+       class="au-modal-close fa fa-times">
+    </i>
+  </df-card-header>
+  <df-card-content>
+    <app-page-alert *ngIf="error"
+                    [text]="error"
+                    class="mb-3">
+    </app-page-alert>
+    <div class="mb-3">
+      <p>JPEG and PNG allowed. Max size < 2Mb.</p>
+      <df-file-upload [fileUploader]="fileUploader"
+                      (fileAdd)="onFileChanges($event)"
+                      (validationError)="onErrorEvent($event)">
+      </df-file-upload>
+    </div>
+    <div class="standard-form d-flex flex-column flex-md-row">
+      <div class="col-12 col-md adjust">
+        <label>Adjust Photo</label>
+        <div class="wrapper">
+          <img-cropper #cropper
+                       [image]="cropperData"
+                       [settings]="cropperSettings">
+          </img-cropper>
+        </div>
+      </div>
+      <div class="col-12 col-md preview">
+        <label>Preview</label>
+        <div class="wrapper position-relative">
+          <span *ngIf="!cropperData?.image"
+                [style.width]="cropperSettings?.croppedWidth + 'px'"
+                [style.height]="cropperSettings?.croppedHeight + 'px'"
+                class="blank-preview position-absolute">
+          </span>
+          <img *ngIf="cropperData?.image"
+               [src]="cropperData?.image"
+               [width]="cropperSettings?.croppedWidth"
+               [height]="cropperSettings?.croppedHeight" />
+        </div>
+      </div>
+    </div>
+  </df-card-content>
+  <df-card-footer class="d-flex justify-content-end">
+    <button df-button
+            type="button"
+            class="btn btn-red mr-2"
+            (click)="remove()"
+            [disabled]="fileUploader.filesQueue.length < 1">
+      Remove Photo
+    </button>
+    <button df-button
+            type="button"
+            class="btn btn-primary mr-2"
+            (click)="save()"
+            [disabled]="!cropperData.image">
+      Save
+    </button>
+    <button df-button
+            type="button"
+            class="btn btn-red"
+            (click)="cancel()">
+      Cancel
+    </button>
+  </df-card-footer>
+</df-card>

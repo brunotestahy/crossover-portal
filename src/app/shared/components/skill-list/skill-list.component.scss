@@ -1,0 +1,20 @@
+.fa-times {
+  display: none;
+}
+
+.badge {
+  font-size: 100%;
+}
+
+.edit {
+  .fa-times {
+    display: inline-block;
+    vertical-align: middle;
+  }
+  .edit-arrow {
+    display: none;
+  }
+  .badge {
+    cursor: pointer;
+  }
+}

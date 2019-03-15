@@ -1,0 +1,263 @@
+<div class='applicants-tracking'>
+  <div class="section__header section__header--aligned d-flex align-items-center">
+    Applicants Tracking
+  </div>
+  <div class="container-fluid padding-aligned">
+    <app-page-alert class="my-3"
+                    *ngIf="error !== ''"
+                    [text]="error"></app-page-alert>
+    <df-card class="my-3 filter-card">
+      <df-card-content>
+        <form [formGroup]="form"
+              (submit)="search()"
+              class="standard-form">
+          <div class="row">
+            <div class="col-xl-2 col-md-4 form-group px-2">
+              <label>Pipeline</label>
+              <df-select placeholder="Select or search a pipeline"
+                         formControlName="jobId"
+                         [filterable]="true">
+                <df-option *ngFor="let job of jobs"
+                           [value]="job.id"
+                           [displayText]="job.title">{{job.title}}</df-option>
+              </df-select>
+            </div>
+            <div class="col-xl-2 col-md-4 form-group px-2">
+              <label>Campaign</label>
+              <df-select [filterable]="true"
+                         formControlName="campaign">
+                <df-option value=""
+                           displayText="ALL">ALL</df-option>
+                <df-option value="NONE"
+                           displayText="No Campaign">No Campaign</df-option>
+                <df-option *ngFor="let campaign of campaigns"
+                           [value]="campaign"
+                           [displayText]="campaign">{{campaign}}</df-option>
+              </df-select>
+            </div>
+            <div class="col-xl-2 col-md-4 form-group px-2">
+              <label>Status</label>
+              <df-select placeholder="Select a status"
+                         formControlName="status">
+                <df-option *ngFor="let status of statuses"
+                           [value]="status.value"
+                           [displayText]="status.label">{{status.label}}</df-option>
+              </df-select>
+            </div>
+            <div class="col-xl-2 col-md-4 form-group px-2">
+              <label>Email/Name</label>
+              <df-input-container>
+                <input type="text"
+                       formControlName="email"
+                       placeholder="Search with email or name">
+              </df-input-container>
+            </div>
+            <div class="col-xl-2 col-md-4 form-group px-2">
+              <label>Resume Keyword Search</label>
+              <df-input-container>
+                <input type="text"
+                       formControlName="resumeKeyword"
+                       placeholder="Search with keywords">
+              </df-input-container>
+            </div>
+            <div class="col-xl-2 col-md-4 form-group px-2">
+              <label>Status Updated</label>
+              <df-select formControlName="statusUpdated">
+                <df-option [value]="null"
+                           displayText="ALL">ALL</df-option>
+                <df-option [value]="lastStatusUpdate.last7Days"
+                           displayText="Less than 7 days ago">Less than 7 days ago</df-option>
+                <df-option [value]="lastStatusUpdate.between7And15Days"
+                           displayText="Between 7 and 15 days ago">Between 7 and 15 days ago</df-option>
+                <df-option [value]="lastStatusUpdate.between15And30Days"
+                           displayText="Between 15 and 30 days ago">Between 15 and 30 days ago</df-option>
+                <df-option [value]="lastStatusUpdate.moreThan30Days"
+                           displayText="More than 30 days ago">More than 30 days ago</df-option>
+              </df-select>
+            </div>
+          </div>
+          <button type="submit"
+                  class="d-none"></button>
+        </form>
+        <div class="row">
+          <div class="col-md-8 px-2">
+            <div class="form-row">
+              <div class="col-md-4 mb-md-0 mb-3">
+                <button class="w-100"
+                        type="button"
+                        df-button
+                        [disabled]="isRejectDisabled()"
+                        (click)="openRejectForm()"
+                        theme="danger">Reject</button>
+              </div>
+              <div class="col-md-4 mb-md-0 mb-3">
+                <button class="w-100"
+                        type="button"
+                        [disabled]="!selectedApplicants.length"
+                        df-button
+                        (click)="scoreResumes()"
+                        theme="success">Score resume</button>
+              </div>
+              <div class="col-md-4 mb-md-0 mb-3">
+                <button class="w-100"
+                        type="button"
+                        df-button
+                        (click)="exportToCSV()"
+                        theme="info">Export as CSV report</button>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-4 d-flex align-items-center">
+            Matched Results: {{collectionSize}}
+          </div>
+
+        </div>
+      </df-card-content>
+    </df-card>
+
+
+    <df-card class="my-3">
+      <df-card-content>
+        <div class="df-loader-container"
+             *ngIf="isSearching">
+          <i class="df-loader"></i>
+        </div>
+        <div [class.d-none]="isSearching">
+          <df-grid #applicantsGrid
+                   (selectionChange)="checkSelection($event)"
+                   [value]="applicants"
+                   emptyMessage="No applicants found"
+                   [showHeaderCheckbox]="true"
+                   [responsive]="isResponsive$ | async"
+                   (sortEvent)="onColumnSort($event)"
+                   sortField="timeSpent"
+                   class="applicants-table">
+            <df-grid-column selectionMode="multiple">
+            </df-grid-column>
+            <df-grid-column field="name"
+                            header="Name"
+                            [sortable]="true">
+            </df-grid-column>
+            <df-grid-column field="pipeline"
+                            header="Pipeline"
+                            [sortable]="true">
+            </df-grid-column>
+            <df-grid-column field="campaign"
+                            header="Campaign"
+                            [sortable]="true">
+            </df-grid-column>
+            <df-grid-column field="email"
+                            header="Email"
+                            [sortable]="true">
+            </df-grid-column>
+            <df-grid-column field="skype"
+                            header="Skype"
+                            [sortable]="true">
+            </df-grid-column>
+            <df-grid-column field="location"
+                            header="Location"
+                            [sortable]="true">
+            </df-grid-column>
+            <df-grid-column field="resume"
+                            header="Resume">
+              <ng-template dfGridTemplate="body"
+                           let-col
+                           let-item="rowData">
+                <a href="#"
+                   (click)="$event.preventDefault();openResume(item);">Resume</a>
+              </ng-template>
+            </df-grid-column>
+            <df-grid-column field="files"
+                            header="Files">
+            </df-grid-column>
+            <df-grid-column field="technicalScreenScore"
+                            header="Technical Screen Score">
+            </df-grid-column>
+            <df-grid-column field="evaluationScore"
+                            header="Project/Written Evaluation Score">
+            </df-grid-column>
+            <df-grid-column field="status"
+                            header="Status"
+                            [sortable]="true">
+            </df-grid-column>
+            <df-grid-column field="timeSpent"
+                            header="Time Spent"
+                            [sortable]="true">
+            </df-grid-column>
+            <df-grid-column field="resumeKeywordScore"
+                            header="Resume Keyword Score"
+                            [sortable]="true">
+            </df-grid-column>
+          </df-grid>
+          <df-table-paginator [collectionSize]="collectionSize"
+                              [(currentPage)]="currentPage"
+                              [pageSize]="pageSize"
+                              (refresh)="onRefresh()"
+                              (pageChange)="onPageChange($event)"
+                              [showPrint]="false"
+                              [showSearchInput]="false"
+                              [showMatchCase]="false"
+                              [showExcel]="false">
+          </df-table-paginator>
+        </div>
+      </df-card-content>
+    </df-card>
+  </div>
+
+  <ng-template #filesModal>
+
+  </ng-template>
+
+  <ng-template #rejectForm
+               let-close="close">
+    <form class="text-left standard-form"
+          [formGroup]="rejectFormGroup">
+      <div class="section__header d-flex w-100">
+        <span>Reject Applicants</span>
+        <span class="ml-auto pointer"
+              (click)="close()">
+          <i class="fa fa-fw fa-times"></i>
+        </span>
+      </div>
+      <div class="p-3">
+        <label>
+          Select which rejection method you want ({{selectedApplicants.length}}
+          applicant(s) will be rejected):
+        </label>
+        <df-radio-group formControlName="method">
+          <df-radio-input class="d-block"
+                          [value]="1">Will not be able to apply for this job for the next 3 months</df-radio-input>
+          <df-radio-input class="d-block"
+                          [value]="2">Can apply for this or another job immediately</df-radio-input>
+        </df-radio-group>
+        <df-validation-messages controlName="method"></df-validation-messages>
+
+        <label>Reason:</label>
+        <df-input-container>
+          <textarea formControlName="reason"></textarea>
+        </df-input-container>
+        <df-validation-messages controlName="reason"></df-validation-messages>
+      </div>
+      <div class="container-fluid py-2">
+        <div class="form-row">
+          <div class="col-6">
+            <button type="submit"
+                    theme="success"
+                    class="w-100"
+                    [loading]="isRejecting"
+                    loaderPosition="after"
+                    (click)="rejectApplicants(close)"
+                    df-button>Confirm</button>
+          </div>
+          <div class="col-6">
+            <button type="button"
+                    theme="danger"
+                    class="w-100"
+                    df-button
+                    (click)="close()">Cancel</button>
+          </div>
+        </div>
+      </div>
+    </form>
+  </ng-template>
+</div>

@@ -1,0 +1,100 @@
+<div>
+  <h6 class="invisible">text</h6>
+  <df-card class="overflow-visible productivity-card"
+           [class.clickable-section]="managerMode"
+           (click)="navigateToTeamActivities()">
+    <df-card-header class="d-flex justify-content-center overview-header">
+      <div class="row w-100 mx-0 score-info">
+        <div class="col-4 px-1 d-flex flex-column justify-content-center"
+             [dfToolTip]="ALIGNMENT_LABEL"
+             dfToolTipPlacement="bottom">
+                <span class="align-self-center small-text">
+                  <small>Alignment</small>
+                  <i class="fa fa-info-circle d-inline d-md-none"
+                     [dfToolTip]="ALIGNMENT_LABEL"
+                     dfToolTipPlacement="bottom"></i>
+                </span>
+          <df-progress-bar
+            [percentage]="alignment"
+            class="align-self-center w-100 d-flex {{ getScoreClass(alignment, 1) }}">
+          </df-progress-bar>
+        </div>
+        <div class="col-4 px-1 d-flex flex-column justify-content-center"
+             [dfToolTip]="FOCUS_LABEL"
+             dfToolTipPlacement="bottom">
+                <span class="align-self-center small-text">
+                  <small>Focus</small>
+                  <i class="fa fa-info-circle d-inline d-md-none"
+                     [dfToolTip]="FOCUS_LABEL"
+                     dfToolTipPlacement="bottom"></i>
+                </span>
+          <df-progress-bar
+            [percentage]="focus"
+            class="align-self-center w-100 d-flex {{ getScoreClass(focus, 1) }}"></df-progress-bar>
+        </div>
+        <div class="col-4 px-1 d-flex flex-column justify-content-center"
+             [dfToolTip]="INTENSITY_LABEL"
+             dfToolTipPlacement="bottom">
+                <span class="align-self-center small-text">
+                  <small>Intensity</small>
+                  <i class="fa fa-info-circle d-inline d-md-none"
+                     [dfToolTip]="INTENSITY_LABEL"
+                     dfToolTipPlacement="bottom"></i>
+                </span>
+          <df-progress-bar
+            [percentage]="intensity"
+            class="align-self-center w-100 d-flex {{ getScoreClass(intensity, 1) }}"></df-progress-bar>
+        </div>
+      </div>
+    </df-card-header>
+    <df-card-content>
+      <div *ngIf="!noManagersSelected" class="row mx-0">
+        <div class="col-6 section-bar">
+          <strong class="text-center">PLAN</strong>
+          <div *ngFor="let section of plannedSections; let i = index"
+               class="section-bar__element
+                           d-flex
+                           mx-auto
+                           flex-column
+                           justify-content-center
+                           position-relative
+                           section-height-{{section.percentageRounded}}
+                           text-white
+                           w-100"
+               [style.background]="section.color">
+            <div class="text-center section-name">
+              {{section?.sectionName}}
+            </div>
+            <div class="text-center spent-time-percentage">
+              {{section?.percentageRounded}}%
+            </div>
+          </div>
+        </div>
+        <div class="col-6 section-bar">
+          <strong class="text-center">T4W Avg</strong>
+          <div *ngFor="let section of sections; let i = index"
+               class="section-bar__element
+                           d-flex
+                           mx-auto
+                           flex-column
+                           justify-content-center
+                           position-relative
+                           section-height-{{section.percentageRounded}}
+                           text-white
+                           w-100"
+               [style.background]="section.color">
+            <div class="text-center section-name">
+              {{section?.sectionName}}
+            </div>
+            <div class="text-center spent-time-percentage">
+              {{section?.percentageRounded}}%
+            </div>
+          </div>
+        </div>
+      </div>
+      <div *ngIf="noManagersSelected" class="row mx-0 no-activities">
+        Select a Manager to see the team's activity
+      </div>
+    </df-card-content>
+  </df-card>
+</div>

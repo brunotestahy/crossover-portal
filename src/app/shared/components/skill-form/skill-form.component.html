@@ -1,0 +1,19 @@
+<form [formGroup]="form" class="standard-form" (submit)="onSubmit()">
+  <div>
+    <label>Skill</label>
+    <df-select
+      formControlName="skill"
+      [filterable]="true"
+      class="skills-filter"
+      placeholder="Skill...">
+      <df-option *ngFor="let skill of skills" [value]="skill" [displayText]="skill.name">
+        {{ skill.name }}
+      </df-option>
+    </df-select>
+    <df-validation-messages [control]="form.get('skill')"></df-validation-messages>
+  </div>
+  <div class="d-flex">
+    <button class="mr-2" type="submit" df-button theme="info">Save</button>
+    <button class="mr-2" type="button" df-button theme="danger" (click)="cancel.emit()">Cancel</button>
+  </div>
+</form>

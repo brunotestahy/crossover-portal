@@ -1,0 +1,32 @@
+.font-light {
+  font-weight: 200;
+}
+
+.font-medium {
+  font-weight: 400;
+}
+
+.text-decoration-none {
+  text-decoration: none !important;
+}
+
+.fake-link {
+  cursor: pointer;
+  color: $au-blue;
+  &:hover {
+    color: #0056b3;
+    text-decoration: underline;
+  }
+}
+
+.font-13 {
+  font-size: 13px;
+}
+
+.font-16 {
+  font-size: 16px;
+}
+
+.font-18 {
+  font-size: 18px;
+}

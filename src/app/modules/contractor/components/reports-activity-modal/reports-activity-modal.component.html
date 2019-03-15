@@ -1,0 +1,17 @@
+<div class="reports-activity-modal d-flex flex-column">
+  <div class="reports-activity-modal__header section__header  d-flex justify-content-between">
+    <span>
+      <h1>{{activityDescription.title}} Insight</h1>
+      <span>What is it?</span>
+    </span>
+    <button type="button" df-button df-clear-button theme="danger" (click)="close()">
+      <df-icon name="times"></df-icon>
+    </button>
+  </div>
+
+  <div class="reports-activity-modal__content d-flex flex-column h-100 flex-shrink" [innerHTML]="activityDescription.insight">
+  </div>
+
+  <div class="reports-activity-modal__footer mt-3">
+  </div>
+</div>

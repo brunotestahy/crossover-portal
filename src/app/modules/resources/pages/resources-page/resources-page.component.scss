@@ -1,0 +1,36 @@
+@import "variables";
+
+:host {
+  ::ng-deep {
+    h4 {
+      background-color: lighten(map-get($map: $au-gray, $key: 3), 40%);
+      font-weight: 400;
+      color: #131313;
+      margin: 0;
+      padding: 16px 25px;
+      line-height: 30px;
+      border: 1px solid map-get($map: $au-gray, $key: 3);
+      border-bottom: none;
+      float: left;
+      width: 100%;
+    }
+
+    p {
+      border: 1px solid map-get($map: $au-gray, $key: 3);
+      border-bottom: 0;
+      width: 100%;
+      margin: 0;
+      float: left;
+      font-size: 16px;
+      padding: 15px 25px;
+      background: #ffffff;
+      &:last-child {
+        border-bottom: 1px solid map-get($map: $au-gray, $key: 3);
+      }
+    }
+  }
+}
+
+.worksmart-header {
+  border-bottom: 1px solid map-get($map: $au-gray, $key: 3);
+}

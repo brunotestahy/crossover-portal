@@ -1,0 +1,26 @@
+<div class="container-fluid d-flex flex-column" *ngIf="!loading">
+  <div class="px-5 pt-5 pb-4 w-100">
+    <div class="px-3 py-2 au-primary-background pull-left d-flex">
+      <img src="assets/crossover-white.svg"
+           width="90" />
+    </div>
+  </div>
+  <div class="px-5 pt-md-5 pb-4 w-100 flex-grow">
+    <h1>Sorry</h1>
+    <h2 class="mb-4 col-sm-10" *ngIf="errorStatus.userNotFound">
+      There is no user with the email address provided by you.
+    </h2>
+    <h2 class="mb-4 col-sm-10" *ngIf="errorStatus.hiringManagerAccount">
+      Hiring managers cannot login with LinkedIn account.
+    </h2>
+    <h2 class="mb-4 col-sm-10" *ngIf="errorStatus.unknownError">
+      There seems to have been an error to login with your LinkedIn account.
+    </h2>
+    <button df-button routerLink="/auth/login">
+      <span>Click here to log back in</span>
+    </button>
+  </div>
+  <div class="px-5 pt-5 pb-4 w-100">
+    <p class="small"> &copy; Crossover, {{ year }}.</p>
+  </div>
+</div>

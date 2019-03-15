@@ -1,0 +1,124 @@
+<form [formGroup]="formGroup"
+      class="d-block">
+  <div class="d-block"
+        formGroupName="zendeskAccount">
+    <div *ngIf="error !== ''"
+          class="alert alert-danger my-3">{{error}}</div>
+    <div class="d-flex mt-3 justify-content-between">
+      <h6 class="mb-0 mt-3">Base URL*</h6>
+      <df-slide-toggle class="mr-2"
+                        formControlName="confirmServer"></df-slide-toggle>
+    </div>
+    <div class="d-block">
+      <span> Enter your Zendesk domain URL (with https://). Might be an on-demand subdomain like </span>
+      <a target="_blank" href="https://youraccount.zendesk.com">https://youraccount.zendesk.com</a>
+      <span> or a custom domain like </span><a target="_blank" href="https://youraccount.com">https://youraccount.com</a><span>.</span>
+    </div>
+    <df-input-container>
+      <input type="text"
+             formControlName="baseUrl">
+    </df-input-container>
+    <h6 class="mb-0 mt-3">Username*</h6>
+    <div class="au-neutral-3">
+      Your username in Zendesk.
+    </div>
+    <df-input-container>
+      <input type="text"
+              formControlName="username">
+    </df-input-container>
+    <h6 class="mb-0 mt-3">Password*</h6>
+    <df-input-container>
+      <input type="password"
+              formControlName="password">
+    </df-input-container>
+  </div>
+  <div class="d-flex flex-column my-4 justify-content-center">
+    <div class="align-self-center">
+      To continue, we need to check the connection to the server(s)
+    </div>
+    <button (click)="onCheckServers()"
+            class="w-100 w-md-75 align-self-center"
+            type="button"
+            [loading]="isLoading"
+            df-button
+            df-border-button
+            df-large-button>
+      Check Server(s)
+    </button>
+  </div>
+  <div *ngIf="showDetailContent">
+    <div class="d-block"
+          formGroupName="metricInfo">
+      <h5 class="mb-4">Metric</h5>
+      <h6 class="mb-0 mt-3">Metric Name*</h6>
+      <df-input-container>
+        <input type="text"
+               placeholder="eg: # of tickets resolved"
+               formControlName="name">
+      </df-input-container>
+      <df-validation-messages [control]="metricInfo.get('name')"></df-validation-messages>
+      <h6 class="mb-0 mt-3">Define the metric as</h6>
+      
+      <div class="d-flex mt-3">
+        <h6 class="mb-0 mr-2">Metric target per team member</h6>
+        <i class="fa fa-question-circle"
+            dfToolTipColor="dark"
+            dfToolTip="Weekly target of the metric for the contractor"
+            dfToolTipPlacement="top"></i>
+      </div>
+      <df-input-container>
+        <input type="number"
+               placeholder="eg: 10"
+               formControlName="metricTarget">
+      </df-input-container>
+      <df-validation-messages [control]="metricInfo.get('metricTarget')"></df-validation-messages>
+      <div class="d-block pt-3 px-2">
+        <h6 class="mb-0 mt-3"><strong>Query for</strong></h6>
+        <df-radio-group formControlName="metricDefinition">
+          <df-radio-input [value]="SOLVED_TICKETS">
+            Solved Tickets
+          </df-radio-input>
+          <df-radio-input [value]="CLOSED_TICKETS">
+            Closed Tickets
+          </df-radio-input>
+        </df-radio-group>
+        <h6 class="mb-0 mt-3"><strong>Custom Query*</strong></h6>
+        <small>Type the Zendesk query, make sure it compiles with Zendesk query format.</small>
+        <df-input-container class="w-100 settings-query">
+          <input type="text"
+                 placeholder="eg: To show tickets with a Satisfy Survey rating use 'satisfaction:good'"
+                 formControlName="customQuery">
+        </df-input-container>
+      </div>
+    </div>
+    <div class="mt-4">
+      <h5 class="mb-4">User Zendesk ID</h5>
+      <div *ngFor="let user of zendeskUsers; let i = index;"
+            class="row">
+        <div class="col-12 col-md-4 mt-5 mt-md-0 d-flex zendesk-user">
+          <div class="align-self-end">
+            {{user.name}}
+          </div>
+        </div>
+        <div class="col-12 col-md-4">
+          <df-select class="w-100"
+                      placeholder="Select a server">
+            <df-option *ngFor="let server of servers"
+                        [value]="server.name"
+                        (change)="updateServer($event, i)"
+                        [displayText]="server.name">
+            </df-option>
+          </df-select>
+        </div>
+        <div class="col-12 col-md-4">
+          <df-input-container>
+            <input type="text"
+                   placeholder="eg: 1234567"
+                   (change)="updateUsername($event, i)"
+                   [value]="user.username">
+          </df-input-container>
+        </div>
+      </div>
+    </div>
+  </div>
+</form>

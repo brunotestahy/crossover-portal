@@ -1,0 +1,157 @@
+<div class="df-loader-container"
+     *ngIf="isLoading">
+  <i class="df-loader"></i>
+</div>
+<div *ngIf="!isLoading"
+     class="d-block">
+  <div class="d-flex justify-content-between mb-4">
+    <div class="mb-2 d-block d-sm-flex">
+      <h4 class="mb-0 mr-1">Google Sheets Settings</h4>
+    </div>
+    <div [dfToolTip]="tooltipText"
+         dfToolTipPlacement="bottom"
+         container="body"
+         class="d-flex"
+         [disabled]="isTeamOwnerOrAdmin">
+      <button df-button
+              type="button"
+              [disabled]="!isTeamOwnerOrAdmin"
+              (click)="showMetricSources()">
+        Change Metric Source
+      </button>
+    </div>
+  </div>
+  <div *ngIf="error"
+       class="alert alert-danger my-3">{{error}}</div>
+  <form class="d-block"
+        [formGroup]="formGroup">
+    <h6 class="mb-0 mt-3">Sheet URL*</h6>
+    Please share your sheet as "Anyone with the link can edit" and paste the link bellow
+    <div [dfToolTip]="tooltipText"
+         dfToolTipPlacement="bottom"
+         container="body"
+         class="d-flex"
+         [disabled]="isTeamOwnerOrAdmin">
+      <df-input-container>
+        <input type="text"
+               placeholder="https://docs.google.com/spreadsheets/d/xxxxxxxxx"
+               formControlName="sheetUrl">
+      </df-input-container>
+    </div>
+    <df-validation-messages [control]="formGroup.get('sheetUrl')"></df-validation-messages>
+    <h6 class="mb-0 mt-3">Access method*</h6>
+    <div [dfToolTip]="tooltipText"
+         dfToolTipPlacement="bottom"
+         container="body"
+         class="d-flex"
+         [disabled]="isTeamOwnerOrAdmin">
+      <df-radio-group formControlName="accessMethod">
+        <df-radio-input [value]="SHARED">
+          Anyone with the link can edit
+        </df-radio-input>
+        <df-radio-input [value]="OAUTH">
+          Allow Crossover read and write your sheets
+        </df-radio-input>
+      </df-radio-group>
+    </div>
+    <div *ngIf="formGroup.get('accessMethod').value === OAUTH">
+      <a class="btn btn-primary my-3"
+         [href]="qAuthUrl"
+         target="_blank">Get a code</a>
+      <div>
+        Please copy the code and paste it below*
+        <df-input-container>
+          <input type="text"
+                 formControlName="password"
+                 placeholder="4/D_W05dyDKlr3IU8tmzVeZ6KsQHpx5LcZt7K1OXs_9xs">
+        </df-input-container>
+        <df-validation-messages [control]="formGroup.get('password')"></df-validation-messages>
+      </div>
+    </div>
+    <h6 class="mb-0 mt-5">Template worksheet*</h6>
+    Please provide a name for the template worksheet that we generate, maintain and pull metrics from
+    <div [dfToolTip]="tooltipText"
+         dfToolTipPlacement="bottom"
+         container="body"
+         class="d-flex"
+         [disabled]="isTeamOwnerOrAdmin">
+      <df-input-container>
+        <input type="text"
+               formControlName="template">
+      </df-input-container>
+    </div>
+    <df-validation-messages [control]="formGroup.get('template')"></df-validation-messages>
+    <h6 class="mb-0 mt-3">Metric Name*</h6>
+    Please name your metric, it will help your team recognize the data everywhere we show it
+    <div [dfToolTip]="tooltipText"
+         dfToolTipPlacement="bottom"
+         container="body"
+         class="d-flex"
+         [disabled]="isTeamOwnerOrAdmin">
+      <df-input-container>
+        <input type="text"
+               formControlName="name">
+      </df-input-container>
+    </div>
+    <df-validation-messages [control]="formGroup.get('name')"></df-validation-messages>
+    <div class="d-flex mt-3">
+      <h6 class="mb-0 mr-2">Metric target per team member</h6>
+      <i class="fa fa-question-circle"
+         dfToolTipColor="dark"
+         dfToolTip="Weekly target of the metric for the contractor"
+         dfToolTipPlacement="top"></i>
+    </div>
+    <div [dfToolTip]="tooltipText"
+         dfToolTipPlacement="bottom"
+         container="body"
+         class="d-flex"
+         [disabled]="isTeamOwnerOrAdmin">
+      <df-input-container>
+        <input type="number"
+               step="0.1"
+               min="0"
+               placeholder="eg: 10"
+               formControlName="metricTarget">
+      </df-input-container>
+    </div>
+    <df-validation-messages [control]="formGroup.get('metricTarget')"></df-validation-messages>
+  </form>
+  <div class="d-flex justify-content-end mt-3 mb-4">
+    <button (click)="onClose()"
+            type="button"
+            class="mr-2"
+            theme="danger"
+            df-button>
+      Cancel
+    </button>
+    <button type="button"
+            [disabled]="formGroup.invalid || !this.isTeamOwnerOrAdmin"
+            (click)="saveSetup()"
+            df-button>
+      Save
+    </button>
+  </div>
+  <div class="d-block">
+    <p>
+      <strong>Important information:</strong>
+    </p>
+    <ul>
+      <li>In the template worksheet do not change data in column A "XOID" nor the first row (the table headings), we won't be
+        able to match metrics
+      </li>
+      <li>Do not insert empty rows between team members in the template worksheet, it will break the table and we can't read
+        data bellow the break
+      </li>
+      <li>We will automatically add new team members to the template worksheet
+      </li>
+      <li>Use the same template worksheet name for multiple teams if you want to add all their team members in the same worksheet
+      </li>
+      <li>Use a different template worksheet name for each team if you want a separate worksheet for each team
+      </li>
+      <li>Use formula upon your convenience to (auto)fill metric values from the other worksheets or just add the values manually
+      </li>
+      <li>Enter a new worksheet name or just delete the old worksheet template if you want to start over
+      </li>
+    </ul>
+  </div>
+</div>

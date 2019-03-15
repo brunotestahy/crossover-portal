@@ -1,0 +1,16 @@
+<div class="df-countdown__inner" [class.isIE]="isIE">
+  <div class="df-countdown__time" >
+    <span>{{ diffDays > 9 ? diffDays : '0' + diffDays }}</span>
+    <small>days</small>
+  </div>
+  <span class="df-countdown__colon">:</span>
+  <div class="df-countdown__time">
+    <span>{{ diffHours > 9 ? diffHours : '0' + diffHours }}</span>
+    <small>hours</small>
+  </div>
+  <span class="df-countdown__colon">:</span>
+  <div class="df-countdown__time">
+    <span>{{ diffMinutes > 9 ? diffMinutes : '0' + diffMinutes }}</span>
+    <small>minutes</small>
+  </div>
+</div>

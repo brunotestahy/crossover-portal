@@ -1,0 +1,47 @@
+<df-card #card
+         class="px-4 py-3">
+  <h4 class="technical-screen__title d-flex align-items-center w-100 py-3">
+    <img src="/assets/images/candidate/application-process/steps/technical-screen.svg"
+         width="45"
+         height="45"/>
+    <span class="ml-3">Technical Screen</span>
+  </h4>
+  <h2 class="mt-4">Let’s start the challenge</h2>
+  <p class="py-2">
+    Crossover connects the most talented people from around the world with
+    companies that are searching for that talent. To do so, we put our
+    candidates through an evaluation to test their technical skills. It is up
+    to you when you are ready to take the test. When ready click “Go to Test”
+    to open the test in a new tab. You will be asked to provide username and
+    password. Use the ones given below. We’ll notify you by email when your
+    test has been evaluated.
+  </p>
+  <div class="d-flex flex-column align-items-center p-4 standard-form">
+    <h4>Login Information</h4>
+    <form [formGroup]="form">
+      <div class="form-row flex-column mb-3">
+        <label>Username</label>
+        <df-input-container>
+          <input type="text"
+                 readonly
+                 formControlName="username"/>
+        </df-input-container>
+      </div>
+      <div class="form-row flex-column">
+        <label>Password</label>
+        <df-input-container>
+          <input type="text"
+                 readonly
+                 formControlName="password"/>
+        </df-input-container>
+      </div>
+    </form>
+  </div>
+  <div class="d-flex justify-content-end">
+    <button df-button
+            type="button"
+            (click)="goToTest()">
+      <span>Go to test</span>
+    </button>
+  </div>
+</df-card>

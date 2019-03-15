@@ -1,0 +1,44 @@
+@import "variables";
+.df-donut {
+  height: 48px;
+  width: 48px;
+  display: block;
+}
+
+:host {
+   ::ng-deep {
+    .df-grid-table-body__cell-column-title {
+      min-width: 50% !important;
+      max-width: 50% !important;
+    }
+    .df-group-toggle__item {
+      width: 100px;
+    }
+    .df-group-toggle__btn {
+      width: 100%;
+    }
+    .df-progress-bar__text {
+      overflow: visible;
+    }
+    .clickable-cell {
+      cursor: pointer;
+      transition: all 0.2s;
+      &:hover {
+        background-color: map-get($map: $au-neutral, $key: 3);
+      }
+    }
+
+    @media screen and (min-width: $breakpoint-md) {
+      .column-lg {
+        width: 160px;
+      }
+      .column-md {
+        width: 120px;
+      }
+      .column-sm {
+        width: 100px;
+      }
+    }
+
+  }
+}

@@ -1,0 +1,22 @@
+<app-placeholder-bar-chart *ngIf="isLoading; else chart"></app-placeholder-bar-chart>
+<ng-template #chart>
+  <div class="d-flex align-items-center mb-2">
+    <h4 class="mr-2 my-0">Time Logged</h4>
+  </div>
+  <div class="text-center my-0 font-18">
+    <strong class="au-blue"><i class="fa fa-clock-o"></i> {{printableTime}}
+    </strong> {{timeLoggedMessage}}
+  </div>
+  <df-bar [data]="data"
+          [valueTickFormatter]="tickFormatter"
+          [colors]="colors"
+          [margins]="margins"
+          [padding]="0.4"
+          [tooltipTemplate]="tooltipTemplate"></df-bar>
+</ng-template>
+<ng-template #tooltipTemplate
+             let-selected="selected">
+  <div class="df-bar__tooltip">
+    {{selected.yKey | durationFormat: 'hours':'h[h] m[m]' }}
+  </div>
+</ng-template>

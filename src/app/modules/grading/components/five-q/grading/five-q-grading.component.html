@@ -1,0 +1,337 @@
+<div class="df-loader-container"
+     *ngIf="isLoading">
+  <i class="df-loader"></i>
+</div>
+<div class="d-flex justify-content-start scoring-grid">
+  <div [class.d-none]="isLoading">
+    <app-page-alert
+      *ngIf="error !== ''"
+      [text]="error"
+      class="my-3"></app-page-alert>
+    <df-grid
+         [value]="candidates"
+         [responsive]="true">
+    <df-grid-column>
+      <ng-template dfGridTemplate="header">
+        <div class="d-flex align-items-center">
+          Name / Email
+        </div>
+      </ng-template>
+      <ng-template dfGridTemplate="body"
+                  let-col
+                  let-item="rowData">
+        <a
+          [routerLink]=""
+          (click)="openResumeFile(item)">
+          {{item.name}} ({{item.email}})</a>
+      </ng-template>
+    </df-grid-column>
+    <df-grid-column>
+      <ng-template dfGridTemplate="header">
+        <div class="d-flex align-items-center justify-content-center">
+          Date
+        </div>
+      </ng-template>
+      <ng-template
+        dfGridTemplate="body"
+        let-col
+        let-item="rowData">
+        <div class="d-flex justify-content-center">
+          {{formatDate(item.date)}}
+        </div>
+      </ng-template>
+    </df-grid-column>
+    <df-grid-column>
+      <ng-template dfGridTemplate="header">
+        <div>
+            Keyword Score
+        </div>
+      </ng-template>
+      <ng-template
+        dfGridTemplate="body"
+        let-col
+        let-item="rowData">
+        <div class="d-flex justify-content-center">{{item.keywordScore}}</div>
+      </ng-template>
+    </df-grid-column>
+    <df-grid-column *ngFor="let question of questions; let i = index">
+      <ng-template dfGridTemplate="header">
+        <div class="d-flex flex-column">
+          <a
+            [routerLink]=""
+            (click)="showQuestionModal(i)">Q{{i + 1}} Ans</a>
+          Q{{i + 1}}
+        </div>
+      </ng-template>
+      <ng-template
+        dfGridTemplate="body"
+        let-col
+        let-item="rowData">
+        <df-input-container>
+          <input type="number"
+                (change)="updateAnswerValue($event, item, i)"
+                [value]="getAnswerValue(item,i)">
+        </df-input-container>
+      </ng-template>
+    </df-grid-column>
+    <df-grid-column>
+      <ng-template dfGridTemplate="header">
+        <div class="d-flex align-items-center justify-content-center">
+            Total
+        </div>
+      </ng-template>
+      <ng-template
+        dfGridTemplate="body"
+        let-col
+        let-item="rowData">
+      <div class="d-flex justify-content-center">{{item.totalAverage}}</div>
+      </ng-template>
+    </df-grid-column>
+    <df-grid-column>
+      <ng-template dfGridTemplate="header">
+        <div class="d-flex align-items-center">
+            All Answers
+        </div>
+      </ng-template>
+      <ng-template
+        dfGridTemplate="body"
+        let-col
+        let-item="rowData">
+        <div class="d-flex justify-content-center">
+          <a
+            [routerLink]=""
+            (click)="showAllAnswersModal(item)">
+            View
+          </a>
+        </div>
+      </ng-template>
+    </df-grid-column>
+    <df-grid-column header="">
+      <ng-template
+        dfGridTemplate="body"
+        let-col
+        let-item="rowData">
+        <button
+          df-button
+          type="button"
+          class="px-3"
+          [disabled]="isDoneDisabled(item)"
+          (click)="finalizeCandidateGrading(item)"
+          theme="primary">
+          Done
+        </button>
+      </ng-template>
+    </df-grid-column>
+  </df-grid>
+  <div class="d-flex justify-content-center my-3">
+    <a
+    *ngIf="candidates.length !== 0 || lowResumeScoreCandidates.length !== 0"
+    [routerLink]=""
+    (click)="toggleLowResumeScoreCandidates()"
+    class="font-18">
+    Candidates who scored poorly on resume keyword score
+    <i *ngIf="!showLowResumeScore"
+        class="fa fa-chevron-right"></i>
+    <i *ngIf="showLowResumeScore"
+        class="fa fa-chevron-down"></i>
+    </a>
+  </div>
+  <df-grid *ngIf="showLowResumeScore && lowResumeScoreCandidates.length"
+          [value]="lowResumeScoreCandidates"
+          [responsive]="true">
+    <df-grid-column>
+      <ng-template dfGridTemplate="header">
+        <div class="d-flex align-items-center">
+          Name / Email
+        </div>
+      </ng-template>
+      <ng-template dfGridTemplate="body"
+                  let-col
+                  let-item="rowData">
+        <a
+          [routerLink]=""
+          (click)="openResumeFile(item)">
+          {{item.name}} ({{item.email}})</a>
+      </ng-template>
+    </df-grid-column>
+    <df-grid-column>
+      <ng-template dfGridTemplate="header">
+        <div class="d-flex align-items-center justify-content-center">
+          Date
+        </div>
+      </ng-template>
+      <ng-template
+        dfGridTemplate="body"
+        let-col
+        let-item="rowData">
+        <div class="d-flex justify-content-center">
+          {{formatDate(item.date)}}
+        </div>
+      </ng-template>
+    </df-grid-column>
+    <df-grid-column>
+      <ng-template dfGridTemplate="header">
+        <div>
+          Keyword Score
+        </div>
+      </ng-template>
+      <ng-template
+        dfGridTemplate="body"
+        let-col
+        let-item="rowData">
+        <div class="d-flex justify-content-center">{{item.keywordScore}}</div>
+      </ng-template>
+    </df-grid-column>
+    <df-grid-column *ngFor="let question of questions; let i = index">
+      <ng-template dfGridTemplate="header">
+        <div class="d-flex flex-column">
+          <a
+            [routerLink]=""
+            (click)="showQuestionModal(i)">Q{{i + 1}} Ans</a>
+          Q{{i + 1}}
+        </div>
+      </ng-template>
+      <ng-template
+        dfGridTemplate="body"
+        let-col
+        let-item="rowData">
+        <df-input-container>
+          <input type="number"
+                (change)="updateAnswerValue($event, item, i)"
+                [value]="getAnswerValue(item,i)">
+        </df-input-container>
+      </ng-template>
+    </df-grid-column>
+    <df-grid-column>
+      <ng-template dfGridTemplate="header">
+        <div class="d-flex align-items-center justify-content-center">
+            Total
+        </div>
+      </ng-template>
+      <ng-template
+        dfGridTemplate="body"
+        let-col
+        let-item="rowData">
+      <div class="d-flex justify-content-center">{{item.totalAverage}}</div>
+      </ng-template>
+    </df-grid-column>
+    <df-grid-column>
+      <ng-template dfGridTemplate="header">
+        <div class="d-flex align-items-center">
+            All Answers
+        </div>
+      </ng-template>
+      <ng-template
+        dfGridTemplate="body"
+        let-col
+        let-item="rowData">
+        <div class="d-flex justify-content-center">
+          <a
+            [routerLink]=""
+            (click)="showAllAnswersModal(item)">
+            View
+          </a>
+        </div>
+      </ng-template>
+    </df-grid-column>
+    <df-grid-column header="">
+      <ng-template
+        dfGridTemplate="body"
+        let-col
+        let-item="rowData">
+        <button
+          df-button
+          class="px-3"
+          type="button"
+          [disabled]="isDoneDisabled(item)"
+          (click)="finalizeCandidateGrading(item)"
+          theme="primary">
+          Done
+        </button>
+      </ng-template>
+    </df-grid-column>
+  </df-grid>
+  </div>
+</div>
+
+<ng-template #questionModal
+             let-close="close">
+  <div class="text-left d-flex flex-column">
+    <div class="au-modal-header p-3">
+      <div class="d-flex align-items-center m-0">
+        <h5>{{selectedJob.title}}: Question {{selectedQuestion.sequenceNumber}}</h5>
+        <i (click)="close()"
+            class="au-modal-close fa fa-times">
+        </i>
+      </div>
+    </div>
+    <p class="p-3 p-md-4 mb-0"
+       [innerHTML]="bypassSecurityTrustHtml(selectedQuestion.question)">
+    </p>
+    <div *ngFor="let candidate of candidates"
+         class="p-3 p-md-4 d-flex flex-column">
+      <span class="mb-3">{{candidate.name}}:</span>
+      <p class="answer-box">FIVE Q ANSWER</p>
+      <div class="d-flex justify-content-end">
+        <div class="d-flex">
+          <strong class="d-flex align-self-center mr-1">Score:</strong>
+          <df-input-container class="d-flex">
+            <input type="number"
+                   class="score-box"
+                   (change)="updateAnswerValue($event, candidate, selectedQuestion.sequenceNumber - 1)"
+                   [value]="getAnswerValue(candidate, selectedQuestion.sequenceNumber - 1)">
+          </df-input-container>
+        </div>
+      </div>
+    </div>
+    <div *ngFor="let candidate of lowResumeScoreCandidates"
+         class="p-3 p-md-4 d-flex flex-column">
+      <span class="mb-3">{{candidate.name}}:</span>
+      <p class="answer-box">FIVE Q ANSWER</p>
+      <div class="d-flex justify-content-end">
+        <div class="d-flex">
+          <strong class="d-flex align-self-center mr-1">Score:</strong>
+          <df-input-container class="d-flex">
+            <input type="number"
+                   class="score-box"
+                   (change)="updateAnswerValue($event, candidate, selectedQuestion.sequenceNumber - 1)"
+                   [value]="getAnswerValue(candidate, selectedQuestion.sequenceNumber - 1)">
+          </df-input-container>
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #allAnswersModal
+             let-close="close">
+  <div class="text-left d-flex flex-column">
+    <div class="au-modal-header p-3">
+      <div class="d-flex align-items-center m-0">
+        <h5>{{selectedJob.title}}: </h5>
+        <i (click)="close()"
+            class="au-modal-close fa fa-times">
+        </i>
+      </div>
+    </div>
+    <span class="p-3 p-md-4">{{selectedCandidate.name}}:</span>
+    <div *ngFor="let question of questions"
+          class="p-3 p-md-4 d-flex flex-column">
+      <p class="mb-2"
+         [innerHTML]="bypassSecurityTrustHtml(question.question)">
+      </p>
+      <p class="answer-box">FIVE Q ANSWER</p>
+      <div class="d-flex justify-content-end">
+        <div class="d-flex">
+          <strong class="d-flex align-self-center mr-1">Score:</strong>
+          <df-input-container class="d-flex">
+            <input type="number"
+                    class="score-box"
+                    (change)="updateAnswerValue($event, selectedCandidate, question.sequenceNumber - 1)"
+                    [value]="getAnswerValue(selectedCandidate, question.sequenceNumber - 1)">
+          </df-input-container>
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-template>

@@ -1,0 +1,32 @@
+<form [formGroup]="form" class="standard-form" (submit)="onSubmit()">
+  <div>
+    <label>Language</label>
+    <df-select formControlName="language" [filterable]="true" placeholder="Language...">
+      <df-option
+        *ngFor="let language of languages"
+        [value]="language"
+        [displayText]="language.name">{{language.name}}</df-option>
+    </df-select>
+    <df-validation-messages [control]="form.get('language')"></df-validation-messages>
+  </div>
+  <div>
+    <label>Proficiency</label>
+    <df-select formControlName="proficiency">
+        <df-option
+          *ngFor="let proficiency of proficiencies"
+          [value]="proficiency.id"
+          [displayText]="proficiency.name">{{proficiency.name}}</df-option>
+      </df-select>
+    <df-validation-messages [control]="form.get('proficiency')"></df-validation-messages>
+  </div>
+  <div class="d-flex">
+    <button class="mr-2" type="submit" df-button theme="info">Save</button>
+    <button class="mr-2" type="button" df-button theme="danger" (click)="cancel.emit()">Cancel</button>
+    <button
+      class="mr-2"
+      type="button"
+      df-button theme="danger"
+      (click)="onDelete(this.form.value)"
+      *ngIf="this.form.value.id !== null">Remove this language</button>
+  </div>
+</form>

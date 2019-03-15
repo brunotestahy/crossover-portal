@@ -1,0 +1,15 @@
+:host {
+  ::ng-deep {
+   .df-group-toggle__item {
+     width: 100px;
+   }
+   .df-group-toggle__btn {
+     width: 100%;
+   }
+
+ }
+}
+
+.daily-date-picker {
+  min-width: 236px;
+}

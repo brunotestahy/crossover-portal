@@ -1,0 +1,28 @@
+@import "variables";
+
+:host {
+  border-width: 1px;
+  border-color: $au-green;
+  border-style: solid;
+  display: flex;
+  flex-grow: 1;
+  background-color: #ffffff;
+}
+
+.page-alert {
+  &__icon {
+    display: flex;
+    align-items: center;
+    text-align: center;
+    padding: 15px;
+    background-color: $au-green;
+    color: #ffffff;
+  }
+  &__text {
+    padding: 15px;
+    align-items: center;
+    text-align: left;
+    color: $au-gray-main;
+    width: 90%;
+  }
+}

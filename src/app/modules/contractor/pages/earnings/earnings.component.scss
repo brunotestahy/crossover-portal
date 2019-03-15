@@ -1,0 +1,15 @@
+@import "variables";
+
+.earning-btn {
+  min-width: 215px;
+}
+
+::ng-deep {
+  .earnings-grid {
+    .df-grid__data {
+      tr {
+        cursor: pointer;
+      }
+    }
+  }
+}

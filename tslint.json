@@ -1,0 +1,17 @@
+{
+  "rulesDirectory": [
+    "node_modules/codelyzer",
+    "node_modules/tslint-lines-between-class-members"
+  ],
+  "extends": [
+    "@easier/ts-base-configs",
+    "tslint-config-prettier"
+  ],
+  "rules": {
+    "import-blacklist": [
+      true,
+      "rxjs",
+      "rxjs/Rx"
+    ]
+  }
+}

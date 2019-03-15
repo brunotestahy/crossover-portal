@@ -1,0 +1,128 @@
+<div class="au-modal-header p-3">
+  <div class="d-flex align-items-center justify-content-center row p-0 m-0">
+    <div class="col-2"></div>
+    <div class="col-8 d-flex justify-content-center"><h5 class="m-0">Workflows Launch Wizard</h5></div>
+    <div class="col-2 d-flex justify-content-end">
+      <i (click)="onClose()"
+         class="align-self-start cursor-pointer fa fa-times">
+      </i>
+    </div>
+  </div>
+</div>
+<div class="row p-0 m-0 p-3 p-lg-5">
+  <div class="col-12 col-md-6 d-flex flex-column">
+    <h6>This wizard will help you setup JIRA workflows for your team</h6>
+    <div class="{{getServerIconClass()}}">
+      <img [src]="getServerCheckIcon()"
+           class="mr-2">Select your JIRA server
+    </div>
+    <div class="mt-2 {{getProjectIconClass()}}">
+      <img [src]="getProjectCheckIcon()"
+           class="mr-2">Select your Project
+    </div>
+  </div>
+  <div *ngIf="step === SERVER"
+       class="col-12 col-md-6 d-flex flex-column mt-3 mt-md-0">
+    <h6>Please select your JIRA server from below list:</h6>
+    <div class="df-loader-container"
+         *ngIf="isLoading">
+      <i class="df-loader"></i>
+    </div>
+    <div class="alert alert-danger"
+         *ngIf="error !== ''">
+      {{error}}
+    </div>
+    <df-select *ngIf="!isLoading"
+                placeholder="Select a server..."
+                [formControl]="server">
+      <df-option *ngFor="let server of servers"
+                  [value]="server.id"
+                  [displayText]="server.name">
+      </df-option>
+    </df-select>
+    <div *ngIf="!isLoading"
+          class="d-flex justify-content-end mt-auto">
+      <button
+              df-button
+              df-large-button
+              class="w-100 w-md-75 mt-2"
+              theme="primary"
+              [disabled]="isGoToProjectDisabled()"
+              (click)="goToProjectsStep()"
+              type="button">
+        Next
+      </button>
+    </div>
+  </div>
+  <div *ngIf="step === PROJECT"
+       class="col-12 col-md-6 d-flex flex-column mt-3 mt-md-0">
+    <h6>Select your Project:</h6>
+    <div class="df-loader-container"
+        *ngIf="isLoading">
+      <i class="df-loader"></i>
+    </div>
+    <div class="alert alert-danger"
+         *ngIf="error !== ''">
+      {{error}}
+    </div>
+    <div class="d-flex">
+      <df-radio-group *ngIf="!isLoading"
+                      [formControl]="projectCheck">
+          <df-radio-input [value]="CHECK_DEFAULT">
+        </df-radio-input>
+      </df-radio-group>
+      <df-select *ngIf="!isLoading"
+                 class="w-100"
+                 placeholder="Select a project..."
+                 [formControl]="project">
+        <df-option *ngFor="let project of projects"
+                   [value]="project.jiraKey"
+                   [displayText]="project.jiraName">
+        </df-option>
+      </df-select>
+    </div>
+    <div *ngIf="!isLoading"
+          class="d-flex justify-content-end mt-auto">
+      <button
+            df-button
+            df-large-button
+            class="w-100 w-md-75 mt-2"
+            theme="primary"
+            [disabled]="isGoToFinishDisabled()"
+            (click)="goToFinish()"
+            type="button">
+      Next
+      </button>
+    </div>
+  </div>
+  <div *ngIf="step === FINISH"
+       class="col-12 col-md-6 d-flex flex-column mt-3 mt-md-0">
+    <h6>Thank you!</h6>
+    <div class="df-loader-container"
+        *ngIf="isLoading">
+      <i class="df-loader"></i>
+    </div>
+    <div class="alert alert-danger"
+         *ngIf="error !== ''">
+      {{error}}
+    </div>
+    <div class="d-flex flex-column">
+      <h6>You have successfully connected Workflows App to your JIRA project. Open app "settings" to configure it.</h6>
+      <span class="finish-process align-self-center text-center">
+        <i class="align-self-center fa fa-check"></i>
+      </span>
+    </div>
+    <div *ngIf="!isLoading"
+          class="d-flex justify-content-end mt-auto">
+      <button
+            df-button
+            df-large-button
+            class="w-100 w-md-75 mt-4"
+            theme="primary"
+            (click)="finalizeProcess()"
+            type="button">
+      Finish
+      </button>
+    </div>
+  </div>
+</div>

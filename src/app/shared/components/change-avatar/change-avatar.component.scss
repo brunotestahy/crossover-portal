@@ -1,0 +1,17 @@
+@import "~@devfactory/ngx-df/core/theming/aurea-skin/theming";
+@import "variables";
+
+.blank-preview {
+  background: $au-white;
+  border: $border;
+  top: 0;
+  left: 68px;
+}
+
+:host {
+  ::ng-deep {
+    .df-drop-zone {
+      height: 1px; /* Fix ""drag file here" position on IE */
+    }
+  }
+}

@@ -1,0 +1,216 @@
+<div class="df-loader-container"
+     *ngIf="isLoading">
+  <i class="df-loader"></i>
+</div>
+<div [class.d-none]="isLoading">
+  <div class="row justify-content-between">
+    <div class="col-12 col-md-8 d-flex justify-content-start mt-2"
+         id="group-toggle-container"
+         [ngClass]="timePov === timeZoneLabels.MANAGER_LABEL ? 'tooltip-manager' : 'tooltip-contractor'">
+      <df-group-toggle #displayModeElement
+                       [items]="displayModeItems"
+                       [(ngModel)]="displayToggle"
+                       (change)="onDisplayModeToggleChange($event)"
+                       class="mr-2"
+                       id="displayMode">
+      </df-group-toggle>
+      <df-group-toggle [class.d-none]="!displayToggle || displayToggle.text === buttonLabels.PERCENTAGE"
+                       [(ngModel)]="timePov"
+                       [items]="[timeZoneLabels.MANAGER_LABEL, timeZoneLabels.CONTRACTOR_LABEL]"
+                       [dfToolTip]="timePov === timeZoneLabels.MANAGER_LABEL ? timeZoneLabels.MANAGER_TEXT : timeZoneLabels.CONTRACTOR_TEXT"
+                       (change)="onManagerToggleChange($event)"
+                       id="timePov">
+      </df-group-toggle>
+    </div>
+    <div class="col-12 col-md-4 d-flex mt-2">
+      <df-group-toggle [items]="[buttonLabels.DAILY, buttonLabels.WEEKLY]"
+                       class="period-toggle"
+                       (change)="onPeriodToggleChange($event)">
+      </df-group-toggle>
+    </div>
+  </div>
+  <div class="d-flex mt-5 mb-4">
+    <h4>Manager's {{period}} Plan</h4>
+  </div>
+  <div *ngIf="displayMode?.text === buttonLabels.PERCENTAGE"
+       class="top-section-bar my-1 px-3 tooltip-daily">
+    <div *ngFor="let section of plannedSections"
+         class="section-bar__element
+                d-flex
+                flex-md-column
+                justify-content-center
+                text-white
+                section-width-{{section.percentageRounded}}
+                section-height-{{section.percentageRounded}}"
+         [style.background]="getElementBackground(section)"
+         dfToolTipColor="dark"
+         dfToolTip="empty"
+         [dftoolTipTemplate]="tootlipPlannedSection"
+         [dftoolTipData]="section"
+         dfToolTipPlacement="top">
+      <div class="align-self-center mx-2">
+        {{section?.sectionName}}
+      </div>
+      <div class="align-self-center mx-2">
+        {{showSpentTimeInHoursFormat(showSpentTimeForManagerPlan(section?.spentTime))}}
+      </div>
+      <div class="align-self-center mx-2">
+        {{section?.percentageRounded}}%
+      </div>
+    </div>
+  </div>
+  <div *ngIf="displayMode?.text === buttonLabels.TIME"
+       class="time-box-container"
+       id="plannedTimeSlotsBar"
+       (scroll)="setTimeBarScroll()">
+    <div class="time-box-header d-flex mx-auto">
+      <div class="col h-100 px-0 py-0 text-center"
+           *ngFor="let header of timeSlotsHeaders">
+        {{header}}
+      </div>
+    </div>
+    <div class="time-box d-flex mx-auto position-relative">
+      <div class="time-slot h-100 d-flex"
+           *ngFor="let slot of timeSlotsGrid; let i = index">
+        <div *ngIf="plannedTimeSlots[i] && plannedTimeSlots[i]?.plannedSectionName"
+             class="h-75 w-100 align-self-center"
+             [style.background]="getSlotColor(plannedTimeSlots[i])"
+             dfToolTipColor="dark"
+             dfToolTip="empty"
+             [dftoolTipTemplate]="timeTooltipPlanned"
+             [dftoolTipData]="plannedTimeSlots[i]"
+             dfToolTipPlacement="right">
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row mt-5">
+    <h4 class="col-12 col-md-3">Activity</h4>
+    <div class="col-6 col-md-3 d-flex pr-1 mb-2 justify-content-md-end">
+      <div class="mr-2 align-self-center" [dfToolTip]="scoreMessages.intensityScore">Intensity Score:</div>
+      <div class="align-self-center">
+        <df-label *ngIf="currentActivity && currentActivity?.grouping"
+                  [theme]="getIntensityTheme()">
+          {{currentActivity?.grouping?.intensityScore}}%
+        </df-label>
+      </div>
+    </div>
+    <div class="col-6 col-md-3 d-flex mb-2 justify-content-md-end">
+      <div class="mr-2 align-self-center" [dfToolTip]="scoreMessages.focusScore">Focus Score:</div>
+      <div class="align-self-center">
+        <df-label *ngIf="currentActivity && currentActivity?.grouping"
+                  [theme]="getFocusTheme()"
+                  class="align-self-center">
+          {{currentActivity?.grouping?.focusScore}}%
+        </df-label>
+      </div>
+    </div>
+    <div class="col-12 col-md-3 d-flex mb-2 justify-content-md-end">
+      <div class="mr-2 align-self-center" [dfToolTip]="scoreMessages.alignmentScore">Alignment Score:</div>
+      <div class="align-self-center">
+        <df-label *ngIf="currentActivity && currentActivity?.grouping"
+                  [theme]="getAlignmentTheme()">
+          {{currentActivity?.grouping?.alignmentScore}}%
+        </df-label>
+      </div>
+    </div>
+  </div>
+  <div *ngIf="displayMode?.text === buttonLabels.PERCENTAGE"
+       class="section-bar my-1 px-3"
+       [class.tooltip-daily]="period === buttonLabels.DAILY">
+    <div *ngFor="let section of sections"
+         class="section-bar__element
+                d-flex
+                flex-md-column
+                justify-content-center
+                text-white
+                section-width-{{section.percentageRounded}}
+                section-height-{{section.percentageRounded}}"
+         [style.background]="getElementBackground(section)"
+         dfToolTipColor="dark"
+         dfToolTip="empty"
+         [dftoolTipTemplate]="tootlipSection"
+         [dftoolTipData]="section"
+         dfToolTipPlacement="top">
+      <div class="align-self-center mx-2">
+        {{section?.sectionName}}
+      </div>
+      <div class="align-self-center mx-2">
+        {{showSpentTimeInHoursFormat(section?.spentTime)}}
+      </div>
+      <div class="align-self-center mx-2">
+        {{section?.percentageRounded}}%
+      </div>
+    </div>
+  </div>
+  <div *ngIf="displayMode?.text === buttonLabels.TIME"
+       class="time-box-container d-flex flex-column"
+       id="timeSlotsBar"
+       (scroll)="setPlannedTimeBarScroll()">
+    <div class="time-box-header d-flex mx-auto">
+      <div class="col h-100 px-0 py-0 text-center"
+           *ngFor="let header of timeSlotsHeaders">
+        {{header}}
+      </div>
+    </div>
+    <div class="time-box d-flex mx-auto position-relative">
+      <div class="time-slot h-100 d-flex"
+           *ngFor="let slot of timeSlotsGrid; let i = index">
+
+        <div *ngIf="timeSlots[i] && timeSlots[i]?.actName"
+             class="h-75 w-100 align-self-center"
+             [style.background]="getSlotColor(timeSlots[i])"
+             dfToolTipColor="dark"
+             dfToolTip="empty"
+             [dftoolTipTemplate]="timeTooltip"
+             [dftoolTipData]="timeSlots[i]"
+             dfToolTipPlacement="right">
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<ng-template #tootlipPlannedSection
+             let-data="data">
+  <div class="section-tooltip-text">
+    {{showSpentTimeInHoursFormat(showSpentTimeForManagerPlan(data?.spentTime))}} ({{data?.percentageRounded}}% of the
+    {{totalTimeLabel}})
+  </div>
+</ng-template>
+
+<ng-template #tootlipSection
+             let-data="data">
+  <div class="d-flex flex-column section-tooltip-text">
+    <span class="section-tooltip-title">{{data?.sectionName}}</span>
+    <span class="mb-2">{{showSpentTimeInHoursFormat(data?.spentTime)}} ({{data?.percentageRounded}}% of the {{totalTimeLabel}})</span>
+
+    <span class="section-tooltip-title">Most Used Applications</span>
+    <table>
+      <tbody>
+      <tr *ngFor="let item of data?.groupItems | slice:0:10">
+        <td>{{item?.applicationName}}</td>
+        <td class="tooltip-spent-time">{{showSpentTimeInHoursFormat(item?.spentTime)}}</td>
+        <td class="tooltip-percentage">{{item?.percentage}}%</td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+</ng-template>
+
+<ng-template #timeTooltip
+             let-data="data">
+  <div class="d-flex flex-column section-tooltip-text">
+    <span class="mb-2">{{data?.timeSlot}}</span>
+    <span *ngIf="activityIntersectsWithPlanned(data)">Planned: {{data?.plannedSectionName}}</span>
+    <span class="mb-2">Real: {{data?.actName}}</span>
+    <span>Application: {{data?.appName}}</span>
+  </div>
+</ng-template>
+
+<ng-template #timeTooltipPlanned
+             let-data="data">
+  <div class="d-flex flex-column section-tooltip-text">
+    <span class="mb-2">{{data?.timeSlot}}</span>
+    <span>Planned: {{data?.plannedSectionName}}</span>
+  </div>
+</ng-template>

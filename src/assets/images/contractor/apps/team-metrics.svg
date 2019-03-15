@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg width="66px" height="66px" viewBox="0 0 66 66" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 39 (31667) - http://www.bohemiancoding.com/sketch -->
+    <title>Metrics Icon</title>
+    <desc>Created with Sketch.</desc>
+    <defs>
+        <linearGradient x1="50%" y1="0%" x2="50%" y2="100%" id="linearGradient-1">
+            <stop stop-color="#F9BE01" offset="0%"></stop>
+            <stop stop-color="#FF9F02" offset="100%"></stop>
+        </linearGradient>
+        <rect id="path-2" x="0" y="0" width="66" height="66" rx="14.625"></rect>
+    </defs>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="07-Apps" transform="translate(-565.000000, -102.000000)">
+            <g id="Apps-01" transform="translate(80.000000, 80.000000)">
+                <g id="Row-1">
+                    <g id="04" transform="translate(450.000000, 0.000000)">
+                        <g id="Metrics-Icon" transform="translate(35.000000, 22.000000)">
+                            <mask id="mask-3" fill="white">
+                                <use xlink:href="#path-2"></use>
+                            </mask>
+                            <use id="Mask" fill="url(#linearGradient-1)" xlink:href="#path-2"></use>
+                            <polyline id="Path-35" fill="#FFFFFF" opacity="0.28" mask="url(#mask-3)" points="-0.316813497 44.1615552 5.33582687 41.0947548 9.33652899 45.4328883 14.8672238 41.9169365 21.3574286 43.0363791 25.3762458 37.2417119 28.1165314 37.8145342 32.4504512 34.1863236 34.4266381 36.0960671 37.0420907 34.1198802 39.8397593 38.9501118 42.3887685 26.4728524 45.4532173 24.3627721 49.7206937 14.9982838 52.9663516 31.0363038 55.2093187 24.3627721 58.0734306 27.4090999 60.5559965 21.5469826 66.4654295 19.694622 66.4654295 73.5017528 -11.4483702 73.5017528 -14.8504423 48.931993 -3.25872526 44.4493447"></polyline>
+                            <polyline id="line-chart" stroke="#FFFFFF" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round" fill-opacity="0" fill="#D8D8D8" mask="url(#mask-3)" points="-0.110826767 43.9546688 5.61717619 41.009813 9.4455654 45.4161143 14.7857674 41.6812682 21.453589 43.0313455 25.4724062 37.2366783 28.2126918 37.8095007 32.5466116 34.18129 34.5227985 36.0910335 37.1382511 34.1148466 39.9359196 38.9450782 42.4849289 26.4678188 45.5493777 24.3577385 49.8168541 14.9932502 53.062512 31.0312702 55.3054791 24.3577385 58.169591 27.4040663 60.6521569 21.541949 66.5615899 19.6895884"></polyline>
+                        </g>
+                    </g>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

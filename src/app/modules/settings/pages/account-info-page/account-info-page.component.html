@@ -1,0 +1,421 @@
+<div class="page-content">
+  <form [formGroup]="form"
+        class="standard-form"
+        (submit)="onSubmit()">
+    <app-page-alert *ngIf="error"
+                    [text]="error"
+                    class="my-2"></app-page-alert>
+    <div class="row">
+      <div class="col-md-12"
+           formGroupName="accountInfo">
+        <div class="row">
+          <div class="col-12 col-md-4 col-xl-4">
+            <p class="user-id">User ID: {{currentUser?.id}}</p>
+            <app-profile-image-selector [(photoUrl)]="photoUrl"
+                                        (photoUrlChange)="updateProfilePhoto($event)"
+                                        (remove)="deleteProfilePhoto()"></app-profile-image-selector>
+          </div>
+          <div class="col-12 col-md-8 col-xl-4">
+            <div class="form-row">
+              <div class="col-12">
+                <label>Name</label>
+              </div>
+              <div class="col-12">
+                <df-input-container>
+                  <input type="text"
+                         name="input-first-name"
+                         placeholder="Name..."
+                         formControlName="firstName">
+                </df-input-container>
+                <df-validation-messages [control]="form.get(['accountInfo', 'firstName'])"></df-validation-messages>
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="col-12">
+                <label>Last Name</label>
+              </div>
+              <div class="col-12">
+                <df-input-container>
+                  <input type="text"
+                         name="input-last-name"
+                         placeholder="Last Name..."
+                         formControlName="lastName">
+                </df-input-container>
+                <df-validation-messages [control]="form.get(['accountInfo', 'lastName'])"></df-validation-messages>
+              </div>
+            </div>
+            <div class="form-row form-group">
+              <div class="col-12">
+                <label>Email</label>
+              </div>
+              <div class="col">
+                <df-input-container>
+                  <input type="text"
+                         placeholder="Email..."
+                         [value]="currentUser?.email"
+                         readonly>
+                </df-input-container>
+              </div>
+              <div class="col-auto">
+                <button type="button"
+                        df-button
+                        theme="primary"
+                        (click)="changeEmail()"
+                        class="fixed-button-width">
+                  <i class="fa fa-edit mr-2"></i>
+                  Change Email
+                </button>
+              </div>
+            </div>
+          </div>
+          <!-- connect accounts -->
+          <div class="col-12 col-md-12 col-xl-4">
+            <div>
+              <p>
+                <strong>Connect your accounts</strong>
+              </p>
+              <app-page-alert [text]="connectError"
+                              *ngIf="connectError"></app-page-alert>
+              <div>
+                <div class="d-flex my-2 align-items-center connect-item">
+                  <div class="connect-icon slack-icon"></div>
+                  <div class="mx-3 text-truncate"
+                       *ngIf="slack">
+                    <strong>Slack</strong>
+                    <br>
+                    <span [dfToolTip]="slack.slackTeamName">{{slack.slackTeamName}}</span>
+                  </div>
+                  <div class="mx-3"
+                       *ngIf="!slack">
+                    <span>Slack</span>
+                  </div>
+                  <div class="ml-auto text-right account-buttons">
+                    <ng-container *ngIf="slack">
+                      <button type="button"
+                              class=""
+                              df-button
+                              theme="primary"
+                              dfToolTip="Unlink"
+                              dfToolTipPlacement="top"
+                              container="body"
+                              (click)="unlinkSlack()">
+                        <i class="fa fa-unlink"></i>
+                      </button>
+                      <button type="button"
+                              class="fixed-button-width"
+                              df-button
+                              theme="primary"
+                              (click)="testSlackConnection()"
+                              [loading]="testingSlack"
+                              loaderPosition="after">
+                        {{ testingSlack ? 'Testing' : 'Test Connection' }}
+                      </button>
+                    </ng-container>
+                    <ng-container *ngIf="!slack">
+                      <button type="button"
+                              class="fixed-button-width"
+                              df-button
+                              theme="primary"
+                              (click)="connectSlack()"
+                              [loading]="connectingSlack"
+                              loaderPosition="after">
+                        <i class="fa fa-link mr-2"></i>
+                        {{ connectingSlack ? 'Connecting' : 'Connect' }}
+                      </button>
+                    </ng-container>
+                  </div>
+                </div>
+                <div class="d-flex my-2 align-items-center connect-item">
+                  <div class="connect-icon google-icon grayscale"></div>
+                  <div class="mx-3"
+                       *ngIf="!google">
+                    <span>Google</span>
+                  </div>
+                  <div class="mx-3 text-truncate"
+                       *ngIf="google">
+                    <strong>Google</strong>
+                    <br>
+                    <span class="connection-section"
+                          [dfToolTip]="google.googleUserEmail">{{google.googleUserEmail}}</span>
+                  </div>
+                  <div class="ml-auto text-right account-buttons">
+                    <ng-container *ngIf="google">
+                      <button type="button"
+                              class=""
+                              df-button
+                              theme="primary"
+                              dfToolTip="Unlink"
+                              dfToolTipPlacement="top"
+                              container="body"
+                              (click)="unlinkGoogle()">
+                        <i class="fa fa-unlink"></i>
+                      </button>
+                      <button type="button"
+                              class="fixed-button-width"
+                              df-button
+                              theme="primary"
+                              (click)="testGoogleConnection()"
+                              [loading]="testingGoogle"
+                              loaderPosition="after">
+                        {{ testingGoogle ? 'Testing' : 'Test Connection' }}
+                      </button>
+                    </ng-container>
+                    <ng-container *ngIf="!google">
+                      <button type="button"
+                              df-button
+                              theme="primary"
+                              class="fixed-button-width"
+                              (click)="connectGoogle()"
+                              [loading]="connectingGoogle"
+                              loaderPosition="after">
+                        <i class="fa fa-link mr-2"></i>
+                        {{ connectingGoogle ? 'Connecting' : 'Connect' }}
+                      </button>
+                    </ng-container>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- end connect -->
+        </div>
+
+      </div>
+      <div class="col-md-12"
+           formGroupName="residenceInfo">
+        <div class="working-through-entity d-flex">
+          <label class="working-through-entity-label">I am working through an entity</label>
+          <df-slide-toggle formControlName="workingThroughEntity"></df-slide-toggle>
+        </div>
+        <div *ngIf="!form.value.residenceInfo.workingThroughEntity"
+             formGroupName="personalInfo"
+             class="row">
+          <div class="col-md-6 pr-md-4">
+            <div>
+              <label>Title</label>
+              <df-select formControlName="title">
+                <df-option value="Mr"
+                           displayText="Mr.">Mr.</df-option>
+                <df-option value="Ms"
+                           displayText="Ms.">Ms.</df-option>
+                <df-option value="Dr"
+                           displayText="Dr.">Dr.</df-option>
+              </df-select>
+              <df-validation-messages [control]="form.get(['residenceInfo', 'personalInfo', 'title'])"></df-validation-messages>
+            </div>
+            <div>
+              <label>Primary Citizenship</label>
+              <df-select formControlName="primaryCitizenshipId"
+                         filterable="true"
+                         filterPlaceholder="Search Country">
+                <df-option *ngFor="let country of countries"
+                           [value]="country.id"
+                           [selected]="primaryCitizenshipId === country.id"
+                           [displayText]="country.name">{{country.name}}</df-option>
+              </df-select>
+              <df-validation-messages [control]="form.get(['residenceInfo', 'personalInfo', 'primaryCitizenshipId'])"></df-validation-messages>
+            </div>
+            <div *ngIf="secondaryCitizenshipControl">
+              <label>Secondary Citizenship</label>
+              <div class="d-flex">
+                <df-select formControlName="secondaryCitizenshipId"
+                           filterable="true"
+                           filterPlaceholder="Search Country">
+                  <df-option *ngFor="let country of countries"
+                             [value]="country.id"
+                             [selected]="secondaryCitizenshipId === country.id"
+                             [displayText]="country.name">{{country.name}}</df-option>
+                </df-select>
+                <button type="button"
+                        class="ml-2"
+                        df-button
+                        theme="danger"
+                        (click)="removeCitizenship()">
+                  <i class="fa fa-trash"></i>
+                </button>
+              </div>
+              <df-validation-messages [control]="form.get(['residenceInfo', 'personalInfo', 'secondaryCitizenship'])"></df-validation-messages>
+            </div>
+            <div *ngIf="tertiaryCitizenshipControl">
+              <label>Tertiary Citizenship</label>
+              <div class="d-flex">
+                <df-select formControlName="tertiaryCitizenshipId"
+                           filterable="true"
+                           filterPlaceholder="Search Country">
+                  <df-option *ngFor="let country of countries"
+                             [value]="country.id"
+                             [selected]="tertiaryCitizenshipId === country.id"
+                             [displayText]="country.name">{{country.name}}</df-option>
+                </df-select>
+                <button type="button"
+                        class="ml-2"
+                        df-button
+                        theme="danger"
+                        (click)="removeCitizenship()">
+                  <i class="fa fa-trash"></i>
+                </button>
+              </div>
+              <df-validation-messages [control]="form.get(['residenceInfo', 'personalInfo', 'tertiaryCitizenship'])"></df-validation-messages>
+            </div>
+            <button type="button"
+                    df-button
+                    theme="success"
+                    class="d-block ml-auto my-2 fixed-button-width"
+                    *ngIf="!tertiaryCitizenshipControl"
+                    (click)="addCitizenship()">
+              <i class="fa fa-plus mr-2"></i> Add citizenship
+            </button>
+          </div>
+          <div class="col-md-6 pl-md-4">
+            <div>
+              <label>Country of Residence</label>
+              <df-select formControlName="countryId"
+                         filterable="true"
+                         filterPlaceholder="Search Country">
+                <df-option *ngFor="let ctry of countries"
+                           [value]="ctry.id"
+                           [selected]="countryId === ctry.id"
+                           [displayText]="ctry.name">{{ctry.name}}</df-option>
+              </df-select>
+              <df-validation-messages [control]="personalInfoGroup.get('countryId')"></df-validation-messages>
+            </div>
+            <div>
+              <label>Address Line 1</label>
+              <df-input-container>
+                <input type="text"
+                       formControlName="address1">
+              </df-input-container>
+              <df-validation-messages [control]="personalInfoGroup.get('address1')"></df-validation-messages>
+            </div>
+            <div>
+              <label>Address Line 2</label>
+              <df-input-container>
+                <input type="text"
+                       formControlName="address2">
+              </df-input-container>
+              <df-validation-messages [control]="personalInfoGroup.get('address2')"></df-validation-messages>
+            </div>
+            <div>
+              <label>City</label>
+              <df-input-container>
+                <input type="text"
+                       formControlName="city"
+                       ngx-google-places-autocomplete
+                       [options]="placesRef.options"
+                       #placesRef="ngx-places"
+                       (onAddressChange)="handleAddressChange($event)">
+              </df-input-container>
+              <df-validation-messages [control]="personalInfoGroup.get('city')"></df-validation-messages>
+            </div>
+            <div>
+              <label>State of Residence</label>
+              <df-input-container>
+                <input type="text"
+                       formControlName="state">
+              </df-input-container>
+              <df-validation-messages [control]="personalInfoGroup.get('state')"></df-validation-messages>
+            </div>
+            <div>
+              <label>ZIP</label>
+              <df-input-container>
+                <input type="text"
+                       formControlName="zip">
+              </df-input-container>
+              <df-validation-messages [control]="personalInfoGroup.get('zip')"></df-validation-messages>
+            </div>
+          </div>
+        </div>
+        <div *ngIf="form.value.residenceInfo.workingThroughEntity"
+             formGroupName="entityInfo"
+             class="row">
+          <div class="col-md-6">
+            <div>
+              <label>Legal Name of Entity</label>
+              <df-input-container>
+                <input type="text"
+                       formControlName="name">
+              </df-input-container>
+              <df-validation-messages [control]="entityInfoGroup.get('name')"></df-validation-messages>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div>
+              <label>Country where incorporated</label>
+              <df-select formControlName="countryId"
+                         filterable="true"
+                         filterPlaceholder="Search Country">
+                <df-option *ngFor="let ctry of countries"
+                           [value]="ctry.id"
+                           [selected]="countryId === ctry.id"
+                           [displayText]="ctry.name">{{ctry.name}}</df-option>
+              </df-select>
+              <df-validation-messages [control]="entityInfoGroup.get('countryId')"></df-validation-messages>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div>
+              <label>Address Line 1</label>
+              <df-input-container>
+                <input type="text"
+                       formControlName="address1">
+              </df-input-container>
+              <df-validation-messages [control]="entityInfoGroup.get('address1')"></df-validation-messages>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div>
+              <label>Address Line 2</label>
+              <df-input-container>
+                <input type="text"
+                       formControlName="address2">
+              </df-input-container>
+              <df-validation-messages [control]="entityInfoGroup.get('address2')"></df-validation-messages>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div>
+              <label>City</label>
+              <df-input-container>
+                <input type="text"
+                       formControlName="city"
+                       ngx-google-places-autocomplete
+                       [options]="placesRef.options"
+                       #placesRef="ngx-places"
+                       (onAddressChange)="handleEntityAddressChange($event)">
+              </df-input-container>
+              <df-validation-messages [control]="entityInfoGroup.get('city')"></df-validation-messages>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div>
+              <label>State where incorporated</label>
+              <df-input-container>
+                <input type="text"
+                       formControlName="state">
+              </df-input-container>
+              <df-validation-messages [control]="entityInfoGroup.get('state')"></df-validation-messages>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div>
+              <label>ZIP</label>
+              <df-input-container>
+                <input type="text"
+                       formControlName="zip">
+              </df-input-container>
+              <df-validation-messages [control]="entityInfoGroup.get('zip')"></df-validation-messages>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div>
+      <button type="submit"
+              class="d-block ml-auto"
+              df-button
+              theme="success"
+              [loading]="saving"
+              loaderPosition="after">Save Changes</button>
+    </div>
+  </form>
+</div>

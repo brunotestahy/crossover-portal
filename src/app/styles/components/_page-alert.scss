@@ -1,0 +1,12 @@
+.page-alert {
+  border-width: 2px;
+  border-color: $au-red;
+  display: flex;
+  flex-grow: 1;
+  &__icon {
+    display: flex;
+    align-items: center;
+    padding: 15px;
+    background-color: $au-red;
+  }
+}

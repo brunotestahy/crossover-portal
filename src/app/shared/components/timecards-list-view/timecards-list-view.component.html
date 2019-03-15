@@ -1,0 +1,172 @@
+<df-grid [value]="workDiaryRows"
+         [responsive]="isResponsive"
+         (selectionChange)="selectionChange($event)"
+         expandableRows="true"
+         class="table-responsive-50-50 table-responsive-left-selector"
+         dataKey="id"
+         [(selection)]="selection"
+         #mainGrid>
+  <df-grid-column selectionMode="multiple"
+                  *ngIf="isCurrentWeek"
+                  styleClass="icon-column">
+  </df-grid-column>
+  <df-grid-column expander="true"
+                  styleClass="icon-column"
+                  *ngIf="!isResponsive">
+  </df-grid-column>
+  <df-grid-column field="time"
+                  header="Time"
+                  styleClass="time-column"
+                  [sortable]="true">
+    <ng-template dfGridTemplate="body"
+                 let-col
+                 let-item="rowData">
+      <strong class="text-nowrap">{{item.time | date : is12hFormat ? 'hh:mm a' : 'HH:mm'}}</strong>
+    </ng-template>
+  </df-grid-column>
+  <df-grid-column field="title"
+                  header="Title"
+                  styleClass="column-main"
+                  [sortable]="true">
+    <ng-template dfGridTemplate="body"
+                 let-col
+                 let-item="rowData">
+      {{item.title}}
+    </ng-template>
+  </df-grid-column>
+  <df-grid-column field="application"
+                  header="Application"
+                  styleClass="column-sm"
+                  [sortable]="true">
+    <ng-template dfGridTemplate="body"
+                 let-col
+                 let-item="rowData">
+      {{item.application}}
+    </ng-template>
+  </df-grid-column>
+  <df-grid-column field="keyboard"
+                  header="Keyboard"
+                  styleClass="actions-column"
+                  [sortable]="true">
+    <ng-template dfGridTemplate="body"
+                 let-col
+                 let-item="rowData">
+      <i class="fa fa-fw fa-keyboard-o au-blue"></i> {{item.keyboard}}
+    </ng-template>
+  </df-grid-column>
+  <df-grid-column field="mouse"
+                  header="Mouse"
+                  styleClass="actions-column"
+                  [sortable]="true">
+    <ng-template dfGridTemplate="body"
+                 let-col
+                 let-item="rowData">
+      <i class="fa fa-fw fa-mouse-pointer au-blue"></i> {{item.mouse}}
+    </ng-template>
+  </df-grid-column>
+  <df-grid-column field="activity"
+                  header="Activity"
+                  styleClass="column-xl"
+                  [sortable]="true">
+    <ng-template dfGridTemplate="body"
+                 let-col
+                 let-item="rowData">
+      <app-activity-level-bar [workDiary]="item.workDiary"
+                              [dfToolTip]="'Intensity Score: ' + item.activity + '%'"
+                              class="pointer"
+                              (click)="openTimecardDetails(item.workDiary)"></app-activity-level-bar>
+    </ng-template>
+  </df-grid-column>
+  <df-grid-column field="hasScreenshot"
+                  header="Screenshot"
+                  styleClass="column-sm"
+                  [sortable]="true">
+    <ng-template dfGridTemplate="body"
+                 let-col
+                 let-item="rowData">
+      <a [href]="item.screenshotUrl"
+         target="_blank"
+         *ngIf="item.hasScreenshot; else noScreenshot">Screenshot</a>
+      <ng-template #noScreenshot>
+        <span>No image</span>
+      </ng-template>
+    </ng-template>
+  </df-grid-column>
+  <df-grid-column field="hasWebcam"
+                  header="Webcam"
+                  styleClass="column-sm"
+                  [sortable]="true">
+    <ng-template dfGridTemplate="body"
+                 let-col
+                 let-item="rowData">
+      <a [href]="item.webCamUrl"
+         target="_blank"
+         *ngIf="item.hasWebCam; else noWebcam">Webcam</a>
+      <ng-template #noWebcam>
+        <span>No image</span>
+      </ng-template>
+    </ng-template>
+  </df-grid-column>
+  <ng-template let-data
+               dfGridTemplate="rowexpansion">
+    <div df-row-detail
+         *ngIf="!isResponsive">
+      <div class="pl-4">
+        <df-grid [value]="data.details"
+                 [responsive]="isResponsive"
+                 expandableRows="true">
+          <df-grid-column field="date"
+                          header="Time"
+                          styleClass="time-column"
+                          [sortable]="true">
+            <ng-template dfGridTemplate="body"
+                         let-col
+                         let-item="rowData">
+              <span class="text-nowrap">{{item.date | date : is12hFormat ? 'hh:mm a' : 'HH:mm'}}</span>
+            </ng-template>
+          </df-grid-column>
+          <df-grid-column field="windowTitle"
+                          header="Title"
+                          [sortable]="true">
+            <ng-template dfGridTemplate="body"
+                         let-col
+                         let-item="rowData">
+              {{item.windowTitle}}
+            </ng-template>
+          </df-grid-column>
+          <df-grid-column field="processName"
+                          header="Application"
+                          styleClass="column-xl"
+                          [sortable]="true">
+            <ng-template dfGridTemplate="body"
+                         let-col
+                         let-item="rowData">
+              {{item.processName}}
+            </ng-template>
+          </df-grid-column>
+          <df-grid-column field="keyboard"
+                          header="Keyboard"
+                          styleClass="actions-column"
+                          [sortable]="true">
+            <ng-template dfGridTemplate="body"
+                         let-col
+                         let-item="rowData">
+              <i class="fa fa-fw fa-keyboard-o au-blue"></i> {{item.keyboard}}
+            </ng-template>
+          </df-grid-column>
+          <df-grid-column field="mouse"
+                          header="Mouse"
+                          styleClass="actions-column"
+                          [sortable]="true">
+            <ng-template dfGridTemplate="body"
+                         let-col
+                         let-item="rowData">
+              <i class="fa fa-fw fa-mouse-pointer au-blue"></i> {{item.mouse}}
+            </ng-template>
+          </df-grid-column>
+        </df-grid>
+      </div>
+      <hr>
+    </div>
+  </ng-template>
+</df-grid>

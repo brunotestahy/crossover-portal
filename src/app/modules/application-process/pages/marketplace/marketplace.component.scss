@@ -1,0 +1,12 @@
+@import "variables";
+
+.marketplace__title {
+  border-bottom: $border;
+}
+
+.success-alert {
+  border-width: 1px;
+  border-color: $au-green;
+  border-style: solid;
+  background-color: #ffffff;
+}

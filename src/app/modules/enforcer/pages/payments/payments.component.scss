@@ -1,0 +1,6 @@
+@import 'variables';
+@import '~@devfactory/ngx-df/core/theming/aurea-skin/theming';
+
+:host {
+  overflow: auto;
+}

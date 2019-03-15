@@ -1,0 +1,31 @@
+<div class="section__header section__header--aligned">
+  5Q Rubric
+</div>
+
+<div class="page-content padding-aligned page-scroll">
+  <div *ngFor="let question of questions; let i = index"
+       class="d-flex flex-column mb-4">
+    <df-accordion>
+      <df-accordion-panel>
+        <df-accordion-header>
+          <df-accordion-header-title 
+            class="d-flex">
+            <div class="d-flex justify-content-between w-100">
+              <h4 class="header-text">Q{{i + 1}}.</h4>
+              <div class="description-link header-text d-flex align-items-center">Description</div>
+            </div>
+          </df-accordion-header-title>
+        </df-accordion-header>
+        <df-accordion-content>
+          <p [innerHTML]="question.question">
+          </p>
+        </df-accordion-content>
+      </df-accordion-panel>
+    </df-accordion>
+    <div class="d-flex mt-3 mb-4">
+      <div
+        class="px-3 d-flex align-items-center mr-4 rubric-label">Rubric</div>
+      <div class="d-flex align-items-center rubric-text">{{question.rubric}}</div>
+    </div>
+  </div>
+</div>

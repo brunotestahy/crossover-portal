@@ -1,0 +1,30 @@
+:host {
+  .row.ie-fix {
+    /*This will work for IE10+*/
+    @media screen and (-ms-high-contrast: active), screen and (-ms-high-contrast: none) {
+      min-width: 80vw;
+    }
+  }
+}
+
+.residence-icon {
+  margin: 50px auto;
+  background-image: url('/assets/images/candidate/onboarding-process/location-details.svg');
+  height: 113px;
+  width: 100%;
+  background-size: contain;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+.working-through-entity-label {
+  font-size: 14px;
+  min-width: auto;
+}
+
+df-select.ie-fix {
+  /*This will work for IE10+*/
+  @media screen and (-ms-high-contrast: active), screen and (-ms-high-contrast: none) {
+    width: 72%;
+  }
+}

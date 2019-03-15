@@ -1,0 +1,184 @@
+<div class="section__header section__header--aligned d-flex align-items-center">
+  <span class="mr-2">Pipeline Tracker</span>
+</div>
+<div class="container-fluid padding-aligned page-scroll">
+  <app-page-alert class="my-3"
+                  *ngIf="error"
+                  [text]="error"></app-page-alert>
+  <div class="df-loader-container"
+       *ngIf="isLoading.screen; else loadedContent">
+    <i class="df-loader"></i>
+  </div>
+  <ng-template #loadedContent>
+    <df-card class="my-3 pipeline-tracker">
+      <df-card-content>
+        <div class="row">
+          <div class="col-md-6 col-lg-3 form-group">
+            <div class="form-group">
+              <label>Pipeline:</label>
+              <br>
+              <df-select class="w-100"
+                         placeholder="Select a pipeline"
+                         [formControl]="pipelineControl">
+                <df-option value="All"
+                           displayText="All - Last 7 Days">All - Last 7 Days
+                </df-option>
+                <df-option *ngFor="let job of jobs"
+                           [value]="job"
+                           [displayText]="job.title">{{job.title}}
+                </df-option>
+              </df-select>
+            </div>
+            <div *ngIf="pipelineControl.value === 'All'">
+              <button type="button"
+                      df-button
+                      (click)="downloadCSV()"
+                      theme="info">Download CSV
+              </button>
+            </div>
+            <div *ngIf="details.job">
+              <div class="fake-link"
+                   (click)="openJobDescription()">Job Description
+              </div>
+              <a class="fake-link"
+                   [href]="details.test?.testUrl"
+                   target="_blank"
+                   *ngIf="details.job?.flowType.indexOf('HACKERRANK') >= 0">Technical Screen
+              </a>
+              <div class="fake-link"
+                   (click)="openProjectEvaluation()"
+                   *ngIf="details.job?.flowType.indexOf('ASSIGNMENT') >= 0">Project Evaluation
+              </div>
+              <div class="fake-link"
+                   (click)="openWrittenEvaluation()"
+                   *ngIf="details.job?.flowType.indexOf('FIVEQ') >= 0">
+                Written Evaluation
+              </div>
+            </div>
+          </div>
+          <div class="col-md-6 col-lg-3 form-group"
+               *ngIf="details.job">
+            <div>Type:
+              <span *ngIf="details.job?.flowType === 'HACKERRANK_ASSIGNMENT'">Technical Screen + Assignment</span>
+              <span *ngIf="details.job?.flowType === 'HACKERRANK_FIVEQ'">Technical Screen + 5Q</span>
+              <span *ngIf="details.job?.flowType === 'FIVEQ'">5Q</span>
+            </div>
+            <div *ngIf="details.job">
+              <div>Hiring Managers:</div>
+              <df-list-panel [items]="hiringManagers"></df-list-panel>
+            </div>
+          </div>
+          <div class="col-md-6 col-lg-3 form-group"
+               *ngIf="details.job">
+            <div>Account Manager: {{details.job?.accountManager?.printableName}}</div>
+            <div>Recruiter: {{details.job?.recruiter?.printableName}}</div>
+            <div>Recruiter Analyst: Not yet available</div>
+          </div>
+          <div class="col-md-6 col-lg-3 form-group"
+               *ngIf="details.job">
+            <div> Opened: {{(details.job?.calibration?.activatedOn | date:'MMM dd, yyyy') || 'Not yet available'}}</div>
+            <div>Demand: {{details.job?.demand || 'Not yet available'}}</div>
+            <div>Est. Delivery: Not yet available</div>
+          </div>
+        </div>
+        <h4 class="text-center"
+            *ngIf="pipelineControl.value === undefined">
+          Please select a pipeline
+        </h4>
+        <div class="df-loader-container"
+             *ngIf="isSearching; else loadedGrid">
+          <i class="df-loader"></i>
+        </div>
+        <ng-template #loadedGrid>
+          <df-grid [value]="jobData"
+                   *ngIf="pipelineControl.value !== 'All'; else allGrid"
+                   [responsive]="true">
+            <df-grid-column>
+              <ng-template dfGridTemplate="body"
+                           let-col
+                           let-item="rowData">
+                <div class="position-relative">
+                  <strong [dfToolTip]="item.metric.description"
+                          [dfToolTipPlacement]="isResponsive ? 'top' : 'right'"
+                          container=".page-scroll">{{item.metric.name}}
+                    <i class="fa fa-question-circle"></i>
+                  </strong>
+                </div>
+              </ng-template>
+            </df-grid-column>
+            <df-grid-column *ngFor="let header of headers"
+                            [header]="header.printableName">
+              <ng-template dfGridTemplate="body"
+                           let-col
+                           let-item="rowData"
+                           let-index="rowIndex">
+                <span *ngIf="!isFirstRow(index)">
+                  {{ checkTasksNumber(item.tasks[header.task]) }}
+                </span>
+                <a *ngIf="isFirstRow(index) && details.job"
+                   routerLink="/applicants/tracking"
+                   [queryParams]="{jobId: details.job.id, status: header.task}"
+                   target="_blank">{{checkTasksNumber(item.tasks[header.task])}}
+                </a>
+              </ng-template>
+            </df-grid-column>
+          </df-grid>
+          <ng-template #allGrid>
+            <df-grid [value]="allData"
+                     [responsive]="true">
+              <df-grid-column header="Job Title"
+                              field="jobTitle"
+                              [sortable]="true"></df-grid-column>
+              <df-grid-column *ngFor="let header of headers"
+                              [header]="header.printableName">
+                <ng-template dfGridTemplate="body"
+                             let-col
+                             let-item="rowData">
+                  <a routerLink="/applicants/tracking"
+                     *ngIf="item.count[header.task] !== 'N/A'"
+                     [queryParams]="{jobId: item.jobId, status: header.task}"
+                     target="_blank">
+                    {{item.count[header.task]}}
+                  </a>
+                  <div *ngIf="item.count[header.task] === 'N/A'">
+                    {{item.count[header.task]}}
+                  </div>
+                </ng-template>
+              </df-grid-column>
+            </df-grid>
+          </ng-template>
+        </ng-template>
+      </df-card-content>
+    </df-card>
+  </ng-template>
+</div>
+
+<ng-template #modalTemplate
+             let-close="close">
+  <div class="au-modal-header p-3">
+    <div class="d-flex align-items-center m-0">
+      <h5>{{modal.title}}</h5>
+      <i (click)="close()"
+         class="au-modal-close fa fa-times">
+      </i>
+    </div>
+
+  </div>
+  <app-page-alert class="m-3"
+                  *ngIf="modalError"
+                  [text]="modalError"></app-page-alert>
+  <ng-container>
+    <div class="df-loader-container"
+         *ngIf="isLoading.modal; else loadedModalContent">
+      <i class="df-loader"></i>
+    </div>
+    <ng-template #loadedModalContent>
+      <div class="p-3 text-left">
+        <div [innerHTML]="modal.content"
+             *ngIf="modal.content">
+        </div>
+
+      </div>
+    </ng-template>
+  </ng-container>
+</ng-template>

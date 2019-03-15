@@ -1,0 +1,21 @@
+<div class="page-content">
+  <df-card>
+    <df-card-content>
+      <h3>Cookie Preferences</h3>
+      <p>Please choose if Crossover can use Analytics and/or Advertising cookies.</p>
+      <form (submit)="submit()">
+        <app-cookie-preferences-form
+          [value]="value"
+          (valueChange)="onValueChange($event)">
+        </app-cookie-preferences-form>
+        <div class="d-flex w-100 mt-3">
+          <button class="ml-auto w-100 w-md-auto"
+                  df-button
+                  theme="success"
+                  loaderPosition="after"
+                  type="submit">Save</button>
+        </div>
+      </form>
+    </df-card-content>
+  </df-card>
+</div>

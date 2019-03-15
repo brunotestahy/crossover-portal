@@ -1,0 +1,189 @@
+<df-topbar (hamburgerClick)="onSidebarToggle()"
+           #topbar="topbar">
+  <div class="left-group">
+    <div class="product-logo"
+         routerLink="/dashboard">
+      <img class="crossover-logo"
+           src="/assets/crossover-white.svg">
+    </div>
+  </div>
+  <div class="center-group d-none d-md-block">
+    <div class="df-topbar-links">
+      <a routerLinkActive="active"
+         *ngFor="let link of topbarLinks"
+         [routerLink]="link.link">
+        <span class="df-topbar-link__text">{{link.label}}</span>
+      </a>
+    </div>
+  </div>
+  <div class="right-group d-flex align-items-center">
+    <ng-container *ngIf="user; else loggedOut">
+      <app-notification-badge [notifications]="tasks$ | async"
+                              [maxEntries]="3"
+                              (navigation)="checkNavigation($event)">
+      </app-notification-badge>
+      <df-user-profile [showMessage]="false"
+                       [image]="user?.photoUrl || '/assets/images/user.png'"
+                       class="mr-4"
+                       (click)="closeSidebar()">
+        <button class="dropdown-item"
+                type="button"
+                routerLink="/profile/user-profile">
+          <i class="fa fa-fw fa-briefcase"></i> Carrer Profile
+        </button>
+        <button class="dropdown-item"
+                type="button"
+                routerLink="/settings/account-info">
+          <i class="fa fa-fw fa-cog"></i> Settings
+        </button>
+        <button class="dropdown-item"
+                type="button"
+                routerLink="/contractor/assignments">
+          <i class="fa fa-fw fa-cog"></i> Assignments
+        </button>
+        <button class="dropdown-item"
+                type="button"
+                routerLink="/contractor/earnings">
+          <i class="fa fa-fw fa-cog"></i> Earnings
+        </button>
+        <button class="dropdown-item"
+                type="button"
+                routerLink="/candidate/dashboard/hiring">
+          <i class="fa fa-fw fa-cog"></i> Hiring
+        </button>
+        <button class="dropdown-item"
+                type="button"
+                *ngIf="isManager"
+                routerLink="/applicants/tracking">
+          <i class="fa fa-fw fa-cog"></i> Applicants
+        </button>
+        <button class="dropdown-item"
+                type="button"
+                routerLink="/job-dashboard">
+          <i class="fa fa-fw fa-cog"></i> Marketplace
+        </button>
+        <button class="dropdown-item"
+                type="button"
+                routerLink="/marketplace-approval">
+          <i class="fa fa-fw fa-cog"></i> Marketplace Approval
+        </button>
+        <button class="dropdown-item"
+                type="button"
+                routerLink="/grading">
+          <i class="fa fa-fw fa-cog"></i> Grading
+        </button>
+        <button class="dropdown-item"
+                type="button"
+                routerLink="/talent-advocacy">
+          <i class="fa fa-fw fa-cog"></i> Talent Advocacy
+        </button>
+        <button class="dropdown-item"
+                type="button"
+                *ngIf="isManager"
+                routerLink="/pipeline-tracker">
+          <i class="fa fa-fw fa-cog"></i> Pipeline Tracker
+        </button>
+        <button class="dropdown-item"
+                type="button"
+                routerLink="/pipeline-sourcing">
+          <i class="fa fa-fw fa-cog"></i> Pipeline Sourcing
+        </button>
+        <button class="dropdown-item"
+                type="button"
+                routerLink="/pipeline-health">
+          <i class="fa fa-fw fa-cog"></i> Pipeline Health
+        </button>
+        <button class="dropdown-item"
+                type="button"
+                (click)="logout()">
+          <i class="fa fa-fw fa-sign-out"></i> Sign Out
+        </button>
+      </df-user-profile>
+    </ng-container>
+    <ng-template #loggedOut>
+      <div class="df-topbar-links df-topbar-links--right">
+        <a routerLinkActive="active"
+           routerLink="/auth/login">
+          <span class="df-topbar-link__text">Login</span>
+        </a>
+        <!-- <a routerLinkActive="active" routerLink="/marketplace/available-jobs">
+          <span class="df-topbar-link__text">Available Jobs</span>
+        </a> -->
+      </div>
+    </ng-template>
+  </div>
+</df-topbar>
+<div class="d-flex flex-grow h-100">
+  <df-sidebar [disableButton]="true"
+              [open]="sidebarOpen === true"
+              class="sidebar-mobile-fixed"
+              #sidebar>
+    <df-sidebar-item
+      (click)="toggleTeamSelector()"
+      [hasIcon]="false"
+      [hasNestedMenu]="false"
+      [isActive]="false"
+      [class.team-selector-disabled]="teamSelector?.isEnabled === false"
+      [dfToolTip]="teamSelector?.strategy?.navigationDisabledMessage"
+      dfToolTipPlacement="right"
+      [disabled]="!(teamSelector?.isEnabled === false)"
+      container="df-sidebar"
+      *ngIf="isManager">
+      <a class="h4 team-selector-link">
+        <i class="fa fa-fw fa-users"></i>
+        <span
+          class="sidemenu-item-text"
+          [class.team-selector]="sidebarOpen === true">
+          {{ getTeamDescription() }}
+        </span>
+      </a>
+    </df-sidebar-item>
+    <df-sidebar-item *ngFor="let item of sidebarLinks"
+                     [hasIcon]="false"
+                     [hasNestedMenu]="item.nodes"
+                     [link]="item.link"
+                     [isActive]="rla.isActive">
+      <a class="h4"
+         #rla="routerLinkActive"
+         [routerLink]="item.link"
+         routerLinkActive="active">
+        <i [class]="item.icon"></i>
+        <span class="sidemenu-item-text">
+          {{item.label}}
+        </span>
+      </a>
+      <df-sidebar-item [hasIcon]="false"
+                       *ngFor="let subitem of item.nodes"
+                       [isActive]="rla.isActive"
+                       [hasNestedMenu]="subitem.nodes"
+                       [link]="subitem.link">
+        <a class="h5"
+           #rla="routerLinkActive"
+           [routerLink]="subitem.link"
+           routerLinkActive="active">
+          {{subitem.label}}
+        </a>
+        <df-sidebar-item [hasIcon]="false"
+                         *ngFor="let thirdItem of subitem.nodes"
+                         [isActive]="rla.isActive"
+                         [link]="subitem.link">
+          <a class="h5"
+             #rla="routerLinkActive"
+             [routerLink]="thirdItem.link"
+             routerLinkActive="active"
+             [routerLinkActiveOptions]="{exact: true}">
+            {{thirdItem.label}}
+          </a>
+        </df-sidebar-item>
+      </df-sidebar-item>
+    </df-sidebar-item>
+  </df-sidebar>
+  <div class="main-content">
+    <div [class.d-flex]="showTeamSelector"
+         [class.d-none]="!showTeamSelector"
+         *ngIf="isManager">
+      <app-team-selector #teamSelectorEntry (enabledChange)="teamSelectorVisibilityChange($event)"></app-team-selector>
+    </div>
+    <router-outlet></router-outlet>
+  </div>
+</div>

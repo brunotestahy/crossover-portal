@@ -1,0 +1,51 @@
+@import "variables";
+
+:host {
+  ::ng-deep {
+    @media screen and (max-width: $breakpoint-md - 1px) {
+      .df-grid-expanded-row__content {
+        display: none;
+      }
+    }
+    @media screen and (min-width: $breakpoint-md) {
+      .icon-column {
+        width: 30px;
+      }
+      .time-column {
+        width: 70px;
+      }
+      .column-main {
+        width: 300px;
+      }
+      .actions-column {
+        width: 84px;
+      }
+      .column-xl {
+        width: 250px;
+      }
+      .column-lg {
+        width: 160px;
+      }
+      .column-md {
+        width: 120px;
+      }
+      .column-sm {
+        width: 100px;
+      }
+      .column-xs {
+        width: 60px;
+      }
+    }
+
+    .df-tooltip--top {
+      -webkit-transform: translateX(-50%) translateY(-100%) translateY(0) !important;
+      transform: translateX(-50%) translateY(-100%) translateY(0) !important;
+    }
+  }
+
+  app-activity-level-bar {
+    position: relative;
+  }
+}
+
+

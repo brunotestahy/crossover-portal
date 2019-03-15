@@ -1,0 +1,214 @@
+<div class="row ie-fix">
+  <div *ngFor="let contractor of contractors; let i = index"
+       class="col-12 col-sm-6 d-flex px-0"
+       [class.justify-content-end]="i % 2 === 0">
+    <div class="d-flex d-sm-none">
+      <df-card class="contractor-card align-self-center mr-2 overflow-visible">
+        <df-card-content class="d-block p-2 p-lg-3 team-member">
+          <div class="online-status
+                      {{ getOnlineStatusClass(contractor) }}
+                      d-flex
+                      justify-content-center
+                      mx-auto
+                      position-relative">
+            <img class="align-self-center"
+                 [class.pointer]="showContractorTooltip(contractor)"
+                 (click)="navigateToContractor(contractor)"
+                 dfToolTip="empty"
+                 [dftoolTipTemplate]="contractorCard"
+                 [dftoolTipData]="contractor"
+                 dfToolTipPlacement="top"
+                 [src]="contractor.candidate.photoUrl || 'assets/images/user.png'"
+                 (error)="contractor.candidate.photoUrl = undefined">
+            <app-skype-modal class="align-self-center skype-modal"
+                             [container]="df-card"
+                             [assignment]="contractor"
+                             [includeChangeAvatar]="showContractorTooltip(contractor)"
+                             [skypeId]="contractor.candidate.skypeId"></app-skype-modal>
+          </div>
+          <div *ngIf="managerMode"
+               class="text-center mx-auto contractor-card__name">
+            <small class="font-weight-bold">{{contractor.candidate.printableName}}</small>
+          </div>
+          <hr *ngIf="!managerMode || (managerMode && !contractor.scheduledTerminationDate)"
+              class="mb-0"
+              [class.mt-0]="managerMode">
+          <div *ngIf="!managerMode || (managerMode && !contractor.scheduledTerminationDate)"
+               class="au-neutral-3 text-center mx-auto contractor-card__name">
+            <small>{{contractor.jobTitle}}</small>
+          </div>
+          <div *ngIf="managerMode && contractor.scheduledTerminationDate"
+               class="contract-ending text-center mx-auto">
+            <small>Contract Ending</small>
+          </div>
+        </df-card-content>
+      </df-card>
+      <div *ngIf="showContractorTooltip(contractor)"
+           (click)="navigateToLogbook(contractor)"
+           class="align-self-center
+                  contractor-desk
+                  contractor-desk__{{getDesk(contractor)}}
+                  contractor-desk__right"
+           [class.pointer]="showContractorTooltip(contractor)"
+           dfToolTip="empty"
+           [dftoolTipTemplate]="contractorScreen"
+           [dftoolTipData]="contractor"
+           dfToolTipColor="light"
+           dfToolTipPlacement="left"></div>
+      <div *ngIf="!showContractorTooltip(contractor)"
+           (click)="navigateToLogbook(contractor)"
+           class="align-self-center
+                  contractor-desk
+                  contractor-desk__{{getDesk(contractor)}}
+                  contractor-desk__right"
+           [class.pointer]="showContractorTooltip(contractor)"></div>
+    </div>
+    <div class="d-none d-sm-flex">
+      <df-card *ngIf="i % 2 === 0"
+               class="contractor-card align-self-center mr-2 overflow-visible">
+        <df-card-content class="d-block p-2 p-lg-3 team-member">
+          <div class="online-status
+                      {{ getOnlineStatusClass(contractor) }}
+                      d-flex
+                      justify-content-center
+                      mx-auto
+                      position-relative">
+            <img class="align-self-center position-relative"
+                 [class.pointer]="showContractorTooltip(contractor)"
+                 (click)="navigateToContractor(contractor)"
+                 dfToolTip="empty"
+                 [dftoolTipTemplate]="contractorCard"
+                 [dftoolTipData]="contractor"
+                 dfToolTipPlacement="top"
+                 [src]="contractor.candidate.photoUrl || 'assets/images/user.png'"
+                 (error)="contractor.candidate.photoUrl = undefined">
+            <app-skype-modal class="align-self-center skype-modal"
+                             [container]="df-card"
+                             [assignment]="contractor"
+                             [includeChangeAvatar]="showContractorTooltip(contractor)"
+                             [skypeId]="contractor.candidate.skypeId"></app-skype-modal>
+          </div>
+          <div *ngIf="managerMode"
+               class="text-center mx-auto contractor-card__name">
+            <small class="font-weight-bold">{{contractor.candidate.printableName}}</small>
+          </div>
+          <hr *ngIf="!managerMode || (managerMode && !contractor.scheduledTerminationDate)"
+              class="mb-0"
+              [class.mt-0]="managerMode">
+          <div *ngIf="!managerMode || (managerMode && !contractor.scheduledTerminationDate)"
+               class="au-neutral-3 text-center mx-auto contractor-card__name">
+            <small>{{contractor.jobTitle}}</small>
+          </div>
+          <div *ngIf="managerMode && contractor.scheduledTerminationDate"
+               class="contract-ending text-center mx-auto">
+            <small>Contract Ending</small>
+          </div>
+        </df-card-content>
+      </df-card>
+      <div *ngIf="showContractorTooltip(contractor)"
+           (click)="navigateToLogbook(contractor)"
+           class="align-self-center
+                  contractor-desk
+                  contractor-desk__{{getDesk(contractor)}}
+                  contractor-desk__{{getDeskOrientation(i)}}"
+           [class.pointer]="showContractorTooltip(contractor)"
+           dfToolTip="empty"
+           [dftoolTipTemplate]="contractorScreen"
+           [dftoolTipData]="contractor"
+           dfToolTipColor="light"
+           [dftoolTipData]="contractor"
+           [dfToolTipPlacement]="getDeskOrientation(i + 1)"></div>
+      <div *ngIf="!showContractorTooltip(contractor)"
+           (click)="navigateToLogbook(contractor)"
+           class="align-self-center
+                  contractor-desk
+                  contractor-desk__{{getDesk(contractor)}}
+                  contractor-desk__{{getDeskOrientation(i)}}"
+           [class.pointer]="showContractorTooltip(contractor)"></div>
+      <df-card *ngIf="i % 2 === 1"
+               class="contractor-card align-self-center ml-2 overflow-visible">
+        <df-card-content class="d-block p-2 p-lg-3 team-member">
+          <div class="online-status
+                      {{ getOnlineStatusClass(contractor) }}
+                      d-flex
+                      justify-content-center
+                      mx-auto
+                      position-relative">
+            <img class="align-self-center"
+                 [class.pointer]="showContractorTooltip(contractor)"
+                 (click)="navigateToContractor(contractor)"
+                 dfToolTip="empty"
+                 [dftoolTipTemplate]="contractorCard"
+                 [dftoolTipData]="contractor"
+                 dfToolTipPlacement="top"
+                 [src]="contractor.candidate.photoUrl || 'assets/images/user.png'"
+                 (error)="contractor.candidate.photoUrl = undefined">
+            <app-skype-modal class="align-self-center skype-modal-left"
+                             [container]="df-card"
+                             [assignment]="contractor"
+                             [includeChangeAvatar]="showContractorTooltip(contractor)"
+                             [skypeId]="contractor.candidate.skypeId"></app-skype-modal>
+          </div>
+          <div *ngIf="managerMode"
+               class="text-center mx-auto contractor-card__name">
+            <small class="font-weight-bold">{{contractor.candidate.printableName}}</small>
+          </div>
+          <hr *ngIf="!managerMode || (managerMode && !contractor.scheduledTerminationDate)"
+              class="mb-0"
+              [class.mt-0]="managerMode">
+          <div *ngIf="!managerMode || (managerMode && !contractor.scheduledTerminationDate)"
+               class="au-neutral-3 text-center mx-auto contractor-card__name">
+            <small>{{contractor.jobTitle}}</small>
+          </div>
+          <div *ngIf="managerMode && contractor.scheduledTerminationDate"
+               class="contract-ending text-center mx-auto">
+            <small>Contract Ending</small>
+          </div>
+          <div *ngIf="managerMode && contractor.scheduledTerminationDate"
+               class="contract-ending text-center mx-auto">
+            <small>Contract Ending</small>
+          </div>
+        </df-card-content>
+      </df-card>
+    </div>
+  </div>
+</div>
+
+<ng-template #contractorCard let-data="data">
+  <app-contractor-card
+    [assignment]="data"
+    [workDiaries]="workDiaries"
+    [manager]="data.manager.printableName"></app-contractor-card>
+</ng-template>
+
+<ng-template #contractorScreen let-data="data">
+  <app-contractor-screen-card
+    [assignment]="data"
+    [workDiaries]="workDiaries">
+  </app-contractor-screen-card>
+</ng-template>
+
+<ng-template #profileModal
+             let-close="close">
+  <div class="text-left">
+    <app-my-dashboard-page [includeProfile]="true"
+                           [option]="SUMMARY"
+                           (close)="close()"
+                           [managerControl]="true"
+                           [assignmentId]="currentUserAssignmentId"
+                           [manager]="currentUserManager"
+                           [teamId]="currentUserTeamId"
+                           [userDetail]="currentContractor">
+    </app-my-dashboard-page>
+  </div>
+</ng-template>
+
+<ng-template #contractorActivityModal
+              let-close="close">
+  <app-contractor-activity
+    [assignment]="currentAssignment"
+    [currentWorkDiaries]="workDiaries"
+    (close)="close()">
+  </app-contractor-activity>
+</ng-template>
+

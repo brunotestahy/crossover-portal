@@ -1,0 +1,30 @@
+@import "variables";
+
+.grading-form-control {
+  width: 100%;
+  @media (min-width: $breakpoint-md) {
+    width: 47.5%;
+  }
+  @media (min-width: $breakpoint-lg) {
+    width: 23%;
+  }
+}
+
+.email-form-control {
+  width: 100%;
+  @media (min-width: $breakpoint-lg) {
+      width: 23%;
+  }
+}
+
+::ng-deep {
+  app-grading-page {
+    .df-input__wrapper {
+      height: 100% !important;
+    }
+
+    .df-select__placeholder {
+      font-size: 12px !important;
+    }
+  }
+}

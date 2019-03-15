@@ -1,0 +1,22 @@
+@import "variables";
+
+.note {
+  background: #ffffff;
+  padding: 10px;
+  display: block;
+  margin: 25px 0;
+  border-left-width: 3px;
+  border-left-style: solid;
+}
+
+.note--success {
+  border-left-color: $au-green;
+}
+
+.note--info {
+  border-left-color: $au-blue;
+}
+
+.note--danger {
+  border-left-color: $au-red;
+}

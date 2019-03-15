@@ -1,0 +1,167 @@
+@import "~@devfactory/ngx-df/core/theming/aurea-skin/theming";
+@import "variables";
+
+:host {
+  min-width: $breakpoint-xs;
+}
+
+.application-process__header {
+  background: $au-gray-main;
+  color: $au-white;
+}
+
+.highway-wrapper {
+  height: 680px;
+  min-height: 680px;
+  max-height: 680px;
+  max-width: 404px;
+  min-width: 404px;
+
+  &.step-5 {
+    min-height: auto;
+    height: auto;
+
+    .highway {
+      transform: scaleX(-1);
+
+      &__step {
+        transform: scaleX(-1);
+      }
+    }
+  }
+}
+
+.highway {
+  background: url('/assets/images/candidate/application-process/highway.svg');
+  background-repeat: no-repeat;
+  background-position: 50% 100%;
+  background-size: 158px 860px;
+  min-width: 404px;
+
+  &__step {
+    &:nth-child(1) {
+      margin-top: 3rem;
+    }
+    &:nth-child(2) {
+      margin-top: 1.8rem;
+    }
+    &:nth-child(3) {
+      margin-top: 1.8rem;
+    }
+    &:nth-child(4) {
+      margin-top: 1.6rem;
+    }
+    &:nth-child(5) {
+      margin-top: 1.9rem;
+    }
+    &:nth-child(6) {
+      margin-top: 1.7rem;
+    }
+
+    &__image {
+      opacity: .25;
+      filter: grayscale(100%) contrast(200%);
+    }
+
+    &__number {
+      font-size: 60px;
+    }
+
+    &__title {
+      min-width: 90px;
+      width: 90px;
+      font-size: 12px;
+      text-transform: uppercase;
+    }
+
+    &__number,
+    &__title {
+      color: map-get($au-gray, 2);
+    }
+
+    &__status {
+      background-image: url('/assets/images/candidate/application-process/steps/status-locked.svg');
+      min-width: 32px;
+      width: 32px;
+      min-height: 32px;
+      height: 32px;
+    }
+
+    &.current {
+      .highway__step__number,
+      .highway__step__title {
+        color: $au-blue;
+      }
+      .highway__step__status {
+        background-image: url('/assets/images/candidate/application-process/steps/status-current.svg');
+      }
+      .highway__step__image {
+        filter: none;
+        opacity: 1;
+      }
+    }
+
+    &.done {
+      .highway__step__status {
+        background-image: url('/assets/images/candidate/application-process/steps/status-done.svg');
+      }
+      .highway__step__image {
+        filter: none;
+        opacity: 0.5;
+      }
+    }
+  }
+}
+
+.highway-mobile-notice {
+  border-bottom: $border;
+}
+
+.highway-mobile-trigger {
+  border-top: $border;
+}
+
+@media screen and (max-width: $breakpoint-lg) {
+  .highway-wrapper {
+    min-height: auto;
+    max-width: none;
+    height: auto;
+
+    &.visible {
+      max-height: none;
+
+      .highway {
+        height: auto;
+        background: none;
+
+        &__step {
+          margin-top: 0 !important;
+
+          &__number {
+            order: 1;
+          }
+          &__title {
+            order: 2;
+          }
+          &__image {
+            order: 3;
+            transform: scale(0.75);
+          }
+        }
+      }
+    }
+
+    .highway {
+      height: 0;
+      overflow: hidden;
+    }
+  }
+}
+
+@media screen and (min-width: $breakpoint-lg) {
+  .highway-wrapper {
+    &.step-5 {
+      height: 577px;
+    }
+  }
+}

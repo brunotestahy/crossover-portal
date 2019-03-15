@@ -1,0 +1,32 @@
+@import "variables";
+
+.right-bottom-border {
+  border-right: 1px solid #f1f2f5;
+  border-bottom: 1px solid #f1f2f5;
+}
+
+.left-border {
+  border-left: 1px solid #f1f2f5;
+}
+
+.top-border {
+  border-top: 1px solid #f1f2f5;
+}
+
+.left-border-md {
+  @media (min-width: $breakpoint-md) {
+    border-left: 1px solid #f1f2f5;
+  }
+}
+
+.top-border-md {
+  @media (min-width: $breakpoint-md) {
+    border-top: 1px solid #f1f2f5;
+  }
+}
+
+.left-border-smartphone {
+  @media (max-width: $breakpoint-md) {
+    border-left: 1px solid #f1f2f5;
+  }
+}

@@ -1,0 +1,9 @@
+@import 'variables';
+
+:host {
+  .clickable-text {
+    display: inline-block;
+    color: $au-blue;
+    cursor: pointer;
+  }
+}

@@ -1,0 +1,15 @@
+<div class="section__header section__header--aligned">
+  Video Conference
+</div>
+<div class="df-loader-container"
+     *ngIf="isLoading">
+  <i class="df-loader"></i>
+</div>
+<div class="container-fluid"
+     *ngIf="!isLoading">
+  <h5 class="note note--info">Interview with {{interview.selection.manager.printableName}} from {{interview.selection.manager.company.name}} for Account
+    Executive
+  </h5>
+  <a href="{{interview.zoomJoinUrl}}"
+     target="_blank">Start Interview</a>
+</div>

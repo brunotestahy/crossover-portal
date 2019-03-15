@@ -1,0 +1,119 @@
+<div class="row team-selector pt-2 mt-2">
+  <div class="df-loader-container"
+       *ngIf="isLoading; else loadedContent">
+    <i class="df-loader"></i>
+  </div>
+  <ng-template #loadedContent>
+    <app-page-alert *ngIf="error; else noErrorTemplate"
+                    [text]="error"></app-page-alert>
+    <ng-template #noErrorTemplate>
+      <div
+        class="col-12 pr-0 d-flex flex-column team-panel h-100"
+        [class.col-sm-8]="isManagerSelectionEnabled === true">
+        <div class="team-panel-content h-100">
+          <div class="row">
+            <div class="col-12 search-box-mobile d-flex mb-3">
+              <df-input-container label="">
+                <input type="text"
+                       placeholder="Team search"
+                       [formControl]="searchKey"
+                       (keyup)="searchTeam($event)">
+              </df-input-container>
+              <i class="fa fa-th pointer team-selector__icon mx-1"
+                 [class.selected]="selectedLayout === layoutModes.TILE_LAYOUT"
+                 (click)="selectedLayout = layoutModes.TILE_LAYOUT"></i>
+              <i class="fa fa-th-list pointer team-selector__icon mx-1"
+                 [class.selected]="selectedLayout === layoutModes.LIST_LAYOUT"
+                 (click)="selectedLayout = layoutModes.LIST_LAYOUT"></i>
+            </div>
+            <div
+              class="col-12 col-md-6 d-flex ml-auto search-box-lg"
+              [class.justify-content-end]="isManagerSelectionEnabled === false">
+              <div class=d-flex>
+                <df-input-container label=""
+                                    class="w-lg-50">
+                  <input type="text"
+                         placeholder="Team search"
+                         [formControl]="searchKey"
+                         (keyup)="searchTeam()">
+                </df-input-container>
+              </div>
+              <div>
+                <i class="fa fa-th pointer team-selector__icon mx-1"
+                   [class.selected]="selectedLayout === layoutModes.TILE_LAYOUT"
+                   (click)="selectedLayout = layoutModes.TILE_LAYOUT"></i>
+                <i class="fa fa-th-list pointer team-selector__icon ml-1 mr-2"
+                   [class.selected]="selectedLayout === layoutModes.LIST_LAYOUT"
+                   (click)="selectedLayout = layoutModes.LIST_LAYOUT"></i>
+              </div>
+            </div>
+          </div>
+          <div *ngFor="let teamType of teamTypesFiltered">
+            <div class="w-100 mt-3 mb-1 text-uppercase font-weight-bold"
+                 *ngIf="teamType.team.length">
+              {{teamType.name}}
+            </div>
+            <div class="row">
+              <div *ngFor="let team of teamType.team"
+                   (click)="switchTeam(team.id)"
+                   class="col-12 pointer d-flex m-2 p-2 team"
+                   [class.col-lg-2]="isManagerSelectionEnabled === false"
+                   [class.col-md-3]="isManagerSelectionEnabled === false"
+                   [class.col-lg-3]="isManagerSelectionEnabled === true"
+                   [class.col-md-4]="isManagerSelectionEnabled === true"
+                   [class.team-card__selected]="isTeamSelected(team.id)"
+                   [class.team-card]="selectedLayout === layoutModes.TILE_LAYOUT"
+                   [class.justify-content-center]="selectedLayout === layoutModes.TILE_LAYOUT">
+                <div class="align-self-center mw-100">
+                  <div [class.text-center]="selectedLayout === layoutModes.TILE_LAYOUT"
+                       [class.text-left]="selectedLayout === layoutModes.LIST_LAYOUT">
+                    <div *ngIf="selectedLayout === layoutModes.TILE_LAYOUT && team.members && team.members.length">
+                      <i class="team-assignment"
+                         *ngFor="let member of team.members | slice:0:numberOfMember;">
+                        <img [src]="member?.photoUrl || 'assets/images/user.png'"
+                             class="mw-100">
+                      </i>
+                    </div>
+                    <img src="assets/images/users.png"
+                         class="tablet-cell"
+                         *ngIf="showUsersIcon(team, teamType)">
+                    <div class="badge-container w-100"
+                         *ngIf="showBadge(team, teamType)">
+                      <df-badge placement="top-center"
+                                [count]="getTeamMemberCount(team)"
+                                theme="info"></df-badge>
+                    </div>
+                    <div [class.selected]="selectedTeam.id === team.id">{{team.name}}</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div
+        class="col-12 pr-0 col-sm-4 flex-column manager-panel h-100"
+        [class.d-flex]="isManagerSelectionEnabled === true"
+        [class.d-none]="isManagerSelectionEnabled === false">
+        <div class="manager-panel-content h-100">
+          <div class="row">
+            <div class="mb-3 col-12">Managers of
+              <span class="text-uppercase">{{selectedTeam.name}}</span>
+            </div>
+          </div>
+          <div class="row"
+               *ngFor="let manager of selectedTeam.reportingManagers">
+            <div class="pointer user-cell my-1 manager-card col-12 d-flex justify-content-start"
+                 (click)="switchManager(manager)"
+                 [class.manager-card__selected]="selectedManager && manager.id === selectedManager!.id">
+              <div class="align-self-center px-1 py-1 ml-1">
+                <img [src]="manager?.photoUrl || 'assets/images/user.png'"
+                     class="tablet-cell"> {{manager.printableName}}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </ng-template>
+  </ng-template>
+</div>

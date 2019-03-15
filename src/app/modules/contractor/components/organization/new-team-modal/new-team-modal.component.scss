@@ -1,0 +1,86 @@
+@import 'variables';
+@import '~@devfactory/ngx-df/core/theming/aurea-skin/theming';
+
+:host {
+  .new-team-modal {
+    text-align: left;
+    &__header {
+    }
+    &__content {
+      padding: 30px;
+      .row {
+        margin-top: 15px;
+        .col-6 {
+          padding: 0 10px;
+        }
+      }
+      .wizard-btn {
+        text-align: center;
+        border: $border;
+        padding: 10px;
+        height: 168px;
+        font-size: .85rem;
+        user-select: none;
+        cursor: pointer;
+        &__header {
+          &__icon {
+            display: inline-flex;
+            justify-content: center;
+            align-items: center;
+            height: 45px;
+            width: 45px;
+            border-radius: 50%;
+            margin-bottom: 5px;
+            df-icon {
+              font-size: 1.75rem;
+            }
+          }
+        }
+
+        &--disabled {
+          border-color: map-get($au-gray, 3);
+          color: map-get($au-gray, 3);
+
+          .wizard-btn {
+            &__header {
+              &__icon {
+                background-color: map-get($au-gray, 3);
+                df-icon {
+                  color: #fff;
+                }
+              }
+            }
+          }
+        }
+        &--selected {
+          border-color: $au-blue;
+          .wizard-btn {
+            &__header {
+              color: $au-blue;
+              &__icon {
+                background-color: $au-blue;
+                df-icon {
+                  color: #fff;
+                }
+              }
+            }
+          }
+        }
+        &--selected:active {
+          transform: scale(.99);
+        }
+      }
+    }
+    &__footer {
+      border-top: 1px solid rgba(0, 0, 0, .1);
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      .right {
+        display: inline-flex;
+        align-self: flex-end;
+        line-height: 33px;
+      }
+    }
+  }
+}

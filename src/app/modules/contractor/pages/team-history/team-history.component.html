@@ -1,0 +1,108 @@
+<div class="section__header section__header--aligned">
+  Team History
+</div>
+
+<div class="page-content padding-aligned page-scroll">
+  <app-page-alert
+    *ngIf="error !== ''"
+    [text]="error"
+    class="my-3"></app-page-alert>
+
+  <df-card class="overflow-visible">
+    <df-card-content>
+      <form [formGroup]="formGroup">
+        <div class="row">
+          <div class="d-flex col-12 col-lg-5 flex-wrap">
+            <df-group-toggle class="align-self-center mx-auto mx-lg-0"
+                            [items]="dimensionItems"
+                            formControlName="dimension">
+            </df-group-toggle>
+          </div>
+          <div class="d-flex col-12 col-lg-7 flex-wrap justify-content-center justify-content-md-end ml-sm-auto mt-3 mt-lg-0">
+            <df-group-toggle class="align-self-center ml-0 mr-3"
+                             [items]="viewModeItems"
+                             formControlName="viewMode">
+            </df-group-toggle>
+            <button df-button
+                    theme="light"
+                    class="mr-3 align-self-center"
+                    type="button"
+                    (click)="downloadCsv()"
+                    [disabled]="error">
+              <i class="fa fa-download"></i>
+              <span class="d-none d-md-inline">Export</span>
+            </button>
+            <df-group-toggle class="align-self-center mr-3 mt-3 mt-sm-0"
+                             [items]="periodItems"
+                             formControlName="period">
+            </df-group-toggle>
+            <div class="d-flex justify-content-between align-items-center year-selector mt-3 mt-sm-0 mt-lg-3 mt-xl-0">
+              <i class="fa fa-chevron-left"
+                 [class.invisible]="!isPreviousYearAvailable()"
+                 [class.pointer]="isPreviousYearAvailable()"
+                 (click)="previousYear()">
+              </i>
+              <span>{{selectedYear}}</span>
+              <i class="fa fa-chevron-right"
+                 [class.invisible]="!isNextYearAvailable()"
+                 [class.pointer]="isNextYearAvailable()"
+                 (click)="nextYear()">
+              </i>
+            </div>
+          </div>
+        </div>
+      </form>
+    </df-card-content>
+  </df-card>
+  <df-card class="mt-2 overflow-visible">
+    <div class="df-loader-container"
+         *ngIf="isLoading">
+      <i class="df-loader"></i>
+    </div>
+    <df-card-content>
+      <div [class.d-none]="isLoading === true">
+        <small class="au-neutral-3 mt-2 mt-lg-0">
+          Description : The values represent the
+          <span class="text-lowercase">{{formGroup.controls.period.value.text}}</span>
+          average of the team.
+        </small>
+        <df-line-chart
+          [data]="teamHistory"
+          [tooltipTemplate]="chartTooltip"
+          [xAxisTickFormatter]="xAxisTickFormatter"
+          [yAxisTickFormatter]="yAxisTickFormatter"
+          [options]="chartConfig"
+          [mobileOptions]="chartConfig">
+        </df-line-chart>
+      </div>
+    </df-card-content>
+  </df-card>
+</div>
+
+<ng-template #chartTooltip
+             let-data="data">
+  <div class="chart-tooltip d-block">
+    <div>
+      <div class="text-center mb-3">
+        {{ getTooltipInfo(data.xKey).label }}
+      </div>
+      <div *ngIf="getTooltipInfo(data.xKey).previousValue !== undefined"
+           class="d-flex justify-content-between px-2">
+        <div class="mr-2">
+          {{ formGroup.value.dimension }}:
+          <strong>{{ yAxisTickFormatter(data.yKey) }}</strong>
+        </div>
+        <div class="ml-2">
+          <strong>{{ getTooltipInfo(data.xKey).delta }}%</strong>
+          from {{ yAxisTickFormatter(getTooltipInfo(data.xKey)?.previousValue) }}
+        </div>
+      </div>
+      <div *ngIf="getTooltipInfo(data.xKey).previousValue === undefined"
+           class="d-flex justify-content-center px-2">
+        <div class="mr-2">
+          {{ formGroup.value.dimension }}: <strong>{{ yAxisTickFormatter(data.yKey) }}</strong>
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-template>

@@ -1,0 +1,112 @@
+@import "variables";
+@import "~@devfactory/ngx-df/core/theming/aurea-skin/theming";
+
+:host {
+  ::ng-deep {
+    .df-grid-column--sortable__icon {
+      top: 50% !important;
+      transform: translateY(-50%);
+    }
+
+    .loading-opacity .df-grid__data {
+      opacity: 0.5;
+    }
+
+    @media screen and (min-width: $breakpoint-sm) {
+      .icon-column {
+        width: 40px;
+      }
+      .time-column {
+        width: 70px;
+      }
+      .column-main {
+        width: 300px;
+      }
+      .actions-column {
+        width: 84px;
+      }
+      .column-xl {
+        width: 250px;
+      }
+      .column-lg {
+        width: 160px;
+      }
+      .column-md {
+        width: 120px;
+      }
+      .column-sm {
+        width: 100px;
+      }
+      .column-xs {
+        width: 60px;
+      }
+    }
+  }
+}
+
+df-card {
+  overflow: unset;
+}
+
+.job {
+  min-width: 300px;
+
+  @media screen and (max-width: $breakpoint-sm) {
+    min-width: unset;
+    width: 100%;
+  }
+}
+
+.comment-overflow {
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+.label-success,
+.label-warning,
+.label-default {
+  display: inline;
+  padding: .2em .6em .3em;
+  color: #fff;
+  border-radius: .25em;
+}
+
+.label-success {
+  background-color: $au-green;
+}
+.label-warning {
+  background-color: $au-amber;
+}
+.label-default {
+  background-color: $au-gray-main;
+}
+
+.link {
+  cursor: pointer;
+
+  &:hover {
+    text-decoration: underline;
+  }
+}
+
+@media screen and (max-width: $breakpoint-sm) {
+  .standard-form {
+    width: 100%;
+  }
+  :host {
+    ::ng-deep .df-grid-table-body__cell-data {
+      padding: 0 !important;
+      margin-left: -20px !important;
+
+      .df-button {
+        width: 100% !important;
+
+        &:nth-of-type(2) {
+          padding: 0 10px !important;
+          margin-top: 1rem !important;
+        }
+      }
+    }
+  }
+}

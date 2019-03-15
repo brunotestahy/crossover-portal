@@ -1,0 +1,47 @@
+<div class="section__header padding-aligned">
+  <form [formGroup]="form" (submit)="submit()" novalidate>
+    <div class="form-row">
+      <div class="col-12 col-sm-6 col-md-4 col-lg-3 col-xl-2">
+        <df-input-container class="job-search__text my-2">
+          <input type="text" formControlName="text" placeholder="Job title, Keywords">
+        </df-input-container>
+      </div>
+      <div class="col-12 col-sm-6 col-md-4 col-lg-3 col-xl-2">
+        <df-select formControlName="label" class="job-search__category my-2 w-100" (change)="onLabelChange($event)">
+          <df-option displayText="All Job Categories" [value]="null">All Job Categories</df-option>
+          <df-option *ngFor="let label of jobLabels$ | async" [displayText]="label.name" [value]="label">
+            <div [style.padding-left]="label.level * 15 + 'px'">{{label.name}}</div>
+          </df-option>
+        </df-select>
+      </div>
+      <div class="col-md-4 col-lg-3 col-xl-2">
+        <button type="submit" class="w-100 my-2" df-button theme="success" [disabled]="!form.valid">Search Jobs</button>
+      </div>
+    </div>
+  </form>
+</div>
+<div class="df-loader-container" *ngIf="isLoading">
+  <i class="df-loader"></i>
+</div>
+<div class="page-content padding-aligned" *ngIf="!isLoading">
+  <app-page-alert *ngIf="error" [text]="error" class="mb-2"></app-page-alert>
+  <div *ngIf="message" class="note note--info">
+    {{ message }}
+    <button type="button" class="mx-3" df-button theme="info" (click)="reset()">Reset</button>
+  </div>
+  <div></div>
+  <div class="jobs-container" infiniteScroll [infiniteScrollDistance]="2" [infiniteScrollThrottle]="50" (scrolled)="onScroll()"
+    [scrollWindow]="false">
+    <a [routerLink]="'/marketplace/' + job.type + '/' + job.id" [queryParams]="{utm_campaign: 'AvailableJobs'}" class="panel panel-default" *ngFor="let job of jobs">
+      <div class="panel-body clearfix">
+        <div class="cell cell--title">{{job.title}}</div>
+        <div class="cell cell--work-time">{{job.workingHoursPerWeek}}h/week</div>
+        <div class="cell cell--salary-hr">
+          <span class="cell--value">${{job.salary | number:0}}</span>/{{job.salaryType === 'WEEKLY' ? 'hr' : 'month'}}</div>
+        <div class="cell cell--salary-year">
+          <span class="cell--value">${{job.yearSalary}},000</span>/year</div>
+      </div>
+      <span class="job-is-new badge" *ngIf="checkIfJobIsNew(job.activationDate)">NEW</span>
+    </a>
+  </div>
+</div>

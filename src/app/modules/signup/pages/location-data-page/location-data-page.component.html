@@ -1,0 +1,105 @@
+<div class="section__header">
+  Populate Location Data
+</div>
+<div class="page-content page-scroll">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-6 offset-md-3">
+        <app-page-alert
+          *ngIf="error"
+          class="mb-3"
+          [text]="error"></app-page-alert>
+        <df-card>
+          <df-card-content>
+            <form
+              [formGroup]="form"
+              class="standard-form"
+              (submit)="save()">
+              <div>
+                <label class="required">Country</label>
+                <df-select filterable="true"
+                           filterPlaceholder="Search country"
+                           placeholder="Please select a country"
+                           (change)="countryChange($event); cityStateClear();"
+                           formControlName="country">
+                  <df-option
+                    *ngFor="let country of countries$ | async"
+                    [value]="country"
+                    [displayText]="country.name">{{country.name}}</df-option>
+                </df-select>
+                <df-validation-messages controlName="country"></df-validation-messages>
+              </div>
+              <div>
+                <label class="required">Timezone</label>
+                <df-select
+                  formControlName="timeZone"
+                  (change)="timezoneChange($event)"
+                  placeholder="Please select a timezone">
+                  <df-option
+                    *ngFor="let timezone of timezones$ | async"
+                    [value]="timezone"
+                    [displayText]="timezone.name">{{timezone.name}} {{timezone.hourlyOffset}}</df-option>
+                </df-select>
+                <df-validation-messages controlName="timeZone"></df-validation-messages>
+              </div>
+              <div>
+                <label class="required">City</label>
+                <df-input-container>
+                  <input
+                    type="text"
+                    formControlName="city"
+                    ngx-google-places-autocomplete
+                    #cityAutocomplete="ngx-places"
+                    placeholder="City"
+                    (onAddressChange)="cityChange($event)"
+                    (keydown.enter)="$event.preventDefault()"
+                  />
+                </df-input-container>
+                <df-validation-messages controlName="city"></df-validation-messages>
+              </div>
+              <div>
+                <label>Address</label>
+                <df-input-container>
+                  <input type="text"
+                         placeholder="Address"
+                         formControlName="address">
+                </df-input-container>
+                <df-validation-messages controlName="address"></df-validation-messages>
+              </div>
+              <div>
+                <label>State/Province</label>
+                <df-input-container>
+                  <input type="text"
+                         placeholder="State/Province"
+                         formControlName="state">
+                </df-input-container>
+                <df-validation-messages controlName="state"></df-validation-messages>
+              </div>
+              <div>
+                <label>Zip code</label>
+                <df-input-container>
+                  <input type="text"
+                         placeholder="Zip code"
+                         formControlName="zip">
+                </df-input-container>
+                <df-validation-messages controlName="zip"></df-validation-messages>
+              </div>
+              <div>
+                <button type="submit"
+                        df-button
+                        class="d-block ml-auto w-100 w-md-auto"
+                        loaderPosition="after"
+                        [loading]="saving"
+                        [disabled]="!form.valid || saving"
+                        theme="info">
+                  Proceed
+                </button>
+              </div>
+            </form>
+          </df-card-content>
+        </df-card>
+      </div>
+    </div>
+  </div>
+
+</div>

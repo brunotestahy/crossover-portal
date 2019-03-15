@@ -1,0 +1,57 @@
+<!doctype HTML>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>Crossover</title>
+  <base href="/" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta http-equiv="X-UA-Compatible" content="IE=10" />
+  <link rel="icon" type="image/x-icon" href="favicon.ico" />
+  <link
+    type="text/css"
+    rel="stylesheet"
+    href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700" />
+  <script
+    type="text/javascript"
+    src="https://apis.google.com/js/client:platform.js?onload=start"
+    async="async"
+    defer="defer"></script>
+  <script type="text/javascript">
+    function start() {
+      gapi.load('auth2', function() {
+          window.auth2 = gapi.auth2.init({
+          client_id: '39888742328-4mdp8mvgccdqsqqpeslpirndvvolf85o.apps.googleusercontent.com',
+          /*
+            Scopes to request in addition to 'profile' and 'email';
+            scopes can be seen here: https://developers.google.com/identity/protocols/googlescopes
+          */
+          scope: 'https://www.googleapis.com/auth/calendar.readonly https://www.googleapis.com/auth/gmail.readonly'
+        });
+        /*
+          Handles authentication errors,
+          preventing console errors due to unhandled promise rejection
+        */
+        window.auth2
+          .then(
+            function () { /* Successfully authenticated */ },
+            function (error) { console.log(error); }
+        );
+      });
+    }
+
+    // It fixes IE issues regarding freed scripts on Zone.js
+    window['__Zone_enable_cross_context_check'] = true;
+  </script>
+</head>
+<body>
+  <app-root>
+    <div class="df-index-container">
+      <i class="df-loader"></i>
+    </div>
+  </app-root>
+  <script
+    async="async"
+    src="//maps.googleapis.com/maps/api/js?key=AIzaSyC_Cpj-gEF5IOBdaPr8aMp4WVOeZE8mxoY&libraries=places">
+  </script>
+</body>
+</html>

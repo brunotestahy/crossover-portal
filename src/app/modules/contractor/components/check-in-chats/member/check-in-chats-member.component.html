@@ -1,0 +1,412 @@
+<div *ngIf="managerMode"
+     class="d-flex flex-wrap justify-content-end mb-2">
+  <span class="mr-3 mt-1">Metrics &amp; Hours of:</span>
+  <df-group-toggle [items]="teamPeriodToggleItems"
+                   (change)="onTeamPeriodChange($event)">
+  </df-group-toggle>
+</div>
+<app-page-alert *ngIf="error" [text]="error" class="my-3"></app-page-alert>
+<df-card class="d-flex">
+  <df-card-content>
+    <df-grid *ngIf="periodMode === periodConstants.DAILY"
+             class="check-ins-grid"
+             [value]="teamCheckinsDaily"
+             id="dailyCheckinsGrid">
+      <df-grid-column header="Team Member">
+        <ng-template dfGridTemplate="body"
+                     let-col
+                     let-item="rowData">
+          <div class="d-flex user-cell">
+            <app-skype-modal class="align-self-center"
+                             [skypeId]="item.skypeId"></app-skype-modal>
+            <div class="d-inline-block">
+              <img [src]="item.photoUrl || 'assets/images/user.png'">
+              {{item.fullName}}
+            </div>
+          </div>
+          <div class="tablet-cell">
+            <app-skype-modal class="align-self-center"
+                             [skypeId]="item.skypeId"></app-skype-modal>
+            <div class="align-self-center">{{item.fullName}}</div>
+          </div>
+        </ng-template>
+      </df-grid-column>
+      <df-grid-column header="Local Time"
+                      field="localTime">
+      </df-grid-column>
+      <df-grid-column header="Metric">
+        <ng-template dfGridTemplate="body"
+                     let-col
+                     let-item="rowData">
+          <button type="button"
+                  class="btn btn-light btn-sm"
+                  (click)=openScreensReleased(item)>{{getMetrics(item)}}</button>
+        </ng-template>
+      </df-grid-column>
+      <df-grid-column header="Hours">
+        <ng-template dfGridTemplate="body"
+                     let-col
+                     let-item="rowData">
+          <button type="button"
+                  class="btn btn-light btn-sm"
+                  (click)=openHoursLogged(item)>{{getHoursLogged(item)}}</button>
+        </ng-template>
+      </df-grid-column>
+      <df-grid-column header="Block Streak">
+        <ng-template dfGridTemplate="body"
+                     let-col
+                     let-item="rowData">
+          {{item.blockStreak}}
+        </ng-template>
+      </df-grid-column>
+      <df-grid-column header="Status">
+        <ng-template dfGridTemplate="body"
+                     let-col
+                     let-item="rowData">
+              <span *ngIf="item.today"
+                    class="badge badge-secondary {{item?.today?.state}}"
+                    [class.cursor-pointer]="item?.today?.isEditable"
+                    [dfToolTip]="item.today?.comment"
+                    dfToolTipPlacement="top"
+                    container="body"
+                    (click)="openCheckInModal(item, item.today, periodConstants.WEEK_DAYS.indexOf('Monday'))">
+                {{item?.today?.name}}
+              </span>
+        </ng-template>
+      </df-grid-column>
+      <df-grid-column header="Blockage">
+        <ng-template dfGridTemplate="body"
+                     let-col
+                     let-item="rowData">
+              <span *ngIf="item.blockage"
+                (click)="openCheckInModal(item, item.today, periodConstants.WEEK_DAYS.indexOf('Monday'))"
+                class="cursor-pointer">{{item.blockage | enumToString:false:true}}
+              </span>
+        </ng-template>
+      </df-grid-column>
+      <df-grid-column header="Comments">
+        <ng-template dfGridTemplate="body"
+                     let-col
+                     let-item="rowData">
+              <span (click)="openCheckInModal(item, item.today, periodConstants.WEEK_DAYS.indexOf('Monday'))"
+                    class="cursor-pointer"
+                    [dfToolTip]="item.today?.comment"
+                    dfToolTipPlacement="top"
+                    container="body">{{item?.comments}}</span>
+        </ng-template>
+      </df-grid-column>
+    </df-grid>
+    <df-grid *ngIf="periodMode === periodConstants.WEEKLY"
+             class="check-ins-grid"
+             [value]="teamCheckinsWeekly"
+             id="weeklyCheckinsGrid">
+      <df-grid-column header="Team Member">
+        <ng-template dfGridTemplate="body"
+                     let-col
+                     let-item="rowData">
+          <div class="d-flex user-cell">
+            <app-skype-modal class="align-self-center"
+                             [skypeId]="item.skypeId"></app-skype-modal>
+            <div class="d-inline-block">
+              <img [src]="item.photoUrl || 'assets/images/user.png'">
+              {{item.fullName}}
+            </div>
+          </div>
+          <div class="tablet-cell">
+            <app-skype-modal class="align-self-center"
+                             [skypeId]="item.skypeId"></app-skype-modal>
+            <div class="align-self-center">{{item.fullName}}</div>
+          </div>
+        </ng-template>
+      </df-grid-column>
+      <df-grid-column header="Local Time"
+                      field="localTime">
+      </df-grid-column>
+      <df-grid-column header="Metric">
+        <ng-template dfGridTemplate="body"
+                     let-col
+                     let-item="rowData">
+          <button type="button"
+                  class="btn btn-light btn-sm"
+                  (click)=openScreensReleased(item)>{{getMetrics(item)}}</button>
+        </ng-template>
+      </df-grid-column>
+      <df-grid-column header="Hours">
+        <ng-template dfGridTemplate="body"
+                     let-col
+                     let-item="rowData">
+          <button type="button"
+                  class="btn btn-light btn-sm"
+                  (click)=openHoursLogged(item)>{{getHoursLogged(item)}}</button>
+        </ng-template>
+      </df-grid-column>
+      <df-grid-column header="Block Streak"
+                      field="blockStreak">
+      </df-grid-column>
+      <df-grid-column [header]="'Mon ' + weekDayHeaders[0]">
+        <ng-template dfGridTemplate="body"
+                     let-col
+                     let-item="rowData">
+          <span *ngIf="!item.monday">-</span>
+          <span *ngIf="item.monday"
+                class="badge badge-secondary {{item.monday?.state}}"
+                [class.cursor-pointer]="item.monday.isEditable"
+                [dfToolTip]="item.monday?.comment"
+                dfToolTipPlacement="top"
+                container="body"
+                (click)="openCheckInModal(item, item.monday, periodConstants.WEEK_DAYS.indexOf('Monday'))">
+            {{item.monday.name}}
+          </span>
+        </ng-template>
+      </df-grid-column>
+      <df-grid-column [header]="'Tue ' + weekDayHeaders[1]">
+        <ng-template dfGridTemplate="body"
+                     let-col
+                     let-item="rowData">
+          <span *ngIf="!item.tuesday">-</span>
+          <span *ngIf="item.tuesday"
+                class="badge badge-secondary {{item.tuesday?.state}}"
+                [class.cursor-pointer]="item.tuesday.isEditable"
+                [dfToolTip]="item.tuesday?.comment"
+                dfToolTipPlacement="top"
+                container="body"
+                (click)="openCheckInModal(item, item.tuesday, periodConstants.WEEK_DAYS.indexOf('Tuesday'))">
+            {{item.tuesday.name}}
+          </span>
+        </ng-template>
+      </df-grid-column>
+      <df-grid-column [header]="'Wed ' + weekDayHeaders[2]">
+        <ng-template dfGridTemplate="body"
+                     let-col
+                     let-item="rowData">
+          <span *ngIf="!item.wednesday">-</span>
+          <span *ngIf="item?.wednesday"
+                class="badge badge-secondary {{item.wednesday?.state}}"
+                [class.cursor-pointer]="item.wednesday.isEditable"
+                [dfToolTip]="item.wednesday?.comment"
+                dfToolTipPlacement="top"
+                container="body"
+                (click)="openCheckInModal(item, item.wednesday, periodConstants.WEEK_DAYS.indexOf('Wednesday'))">
+            {{item.wednesday.name}}
+          </span>
+        </ng-template>
+      </df-grid-column>
+      <df-grid-column [header]="'Thurs ' + weekDayHeaders[3]">
+        <ng-template dfGridTemplate="body"
+                     let-col
+                     let-item="rowData">
+          <span *ngIf="!item.thursday">-</span>
+          <span *ngIf="item?.thursday"
+                class="badge badge-secondary {{item.thursday?.state}}"
+                [class.cursor-pointer]="item.thursday.isEditable"
+                [dfToolTip]="item.thursday?.comment"
+                dfToolTipPlacement="top"
+                container="body"
+                (click)="openCheckInModal(item, item.thursday, periodConstants.WEEK_DAYS.indexOf('Thursday'))">
+            {{item.thursday.name}}
+          </span>
+        </ng-template>
+      </df-grid-column>
+      <df-grid-column [header]="'Fri ' + weekDayHeaders[4]">
+        <ng-template dfGridTemplate="body"
+                     let-col
+                     let-item="rowData">
+          <span *ngIf="!item.friday">-</span>
+          <span *ngIf="item?.friday"
+                class="badge badge-secondary {{item.friday?.state}}"
+                [class.cursor-pointer]="item.friday.isEditable"
+                [dfToolTip]="item.friday?.comment"
+                dfToolTipPlacement="top"
+                container="body"
+                (click)="openCheckInModal(item, item.friday, periodConstants.WEEK_DAYS.indexOf('Friday'))">
+            {{item.friday.name}}
+          </span>
+        </ng-template>
+      </df-grid-column>
+    </df-grid>
+    <df-grid *ngIf="periodMode === periodConstants.MONTHLY"
+             [value]="teamCheckinsMonthly"
+             class="check-ins-grid"
+             id="monthlyCheckinsGrid">
+      <df-grid-column header="Team Member">
+        <ng-template dfGridTemplate="body"
+                     let-col
+                     let-item="rowData">
+          <div class="d-flex user-cell">
+            <app-skype-modal class="align-self-center"
+                             [skypeId]="item.skypeId"></app-skype-modal>
+            <div class="d-inline-block">
+              <img [src]="item.photoUrl || 'assets/images/user.png'">
+              {{item.fullName}}
+            </div>
+          </div>
+          <div class="tablet-cell">
+            <app-skype-modal class="align-self-center"
+                             [skypeId]="item.skypeId"></app-skype-modal>
+            <div class="align-self-center">{{item.fullName}}</div>
+          </div>
+        </ng-template>
+      </df-grid-column>
+      <df-grid-column header="Local Time"
+                      field="localTime">
+      </df-grid-column>
+      <df-grid-column header="Metric">
+        <ng-template dfGridTemplate="body"
+                     let-col
+                     let-item="rowData">
+          <button type="button"
+                  class="btn btn-light btn-sm"
+                  (click)=openScreensReleased(item)>{{getMetrics(item)}}</button>
+        </ng-template>
+      </df-grid-column>
+      <df-grid-column header="Hours">
+        <ng-template dfGridTemplate="body"
+                     let-col
+                     let-item="rowData">
+          <button type="button"
+                  class="btn btn-light btn-sm"
+                  (click)=openHoursLogged(item)>{{getHoursLogged(item)}}</button>
+        </ng-template>
+      </df-grid-column>
+      <df-grid-column header="Block Streak"
+                      field="blockStreak">
+      </df-grid-column>
+      <df-grid-column *ngFor="let day of monthDays"
+                      [header]="day">
+        <ng-template dfGridTemplate="body"
+                     let-item="rowData">
+          <div *ngIf="item.monthDaysStatuses[day-1]"
+               class="monthly-check-in-background {{item.monthDaysStatuses[day-1].state}}"
+               [class.cursor-pointer]="item.monthDaysStatuses[day-1].isEditable"
+               (click)="openCheckInModal(item, item.monthDaysStatuses[day-1], day)"
+               [dfToolTip]="getMonthlyStatusTooltip(item.monthDaysStatuses[day-1])"
+               dfToolTipPlacement="top"
+               container="body">&nbsp;</div>
+        </ng-template>
+      </df-grid-column>
+    </df-grid>
+  </df-card-content>
+</df-card>
+
+<ng-template #hoursLoggedModal
+             let-close="close">
+  <div class="au-modal-header p-3">
+    <div class="d-flex align-items-center m-0">
+      <i class="fa fa-calendar mr-2 mb-1"></i>
+      <h5>Hours Logged Trend</h5>
+      <span class="ml-auto mr-2">Last 4 weeks</span>
+      <i (click)="close()"
+         class="cursor-pointer fa fa-times">
+      </i>
+    </div>
+  </div>
+  <ng-container>
+    <div class="px-3 pt-3 text-left">
+      <df-line-chart [data]="contractorHoursLogged"
+                     [showDots]="true"
+                     [showValues]="true"
+                     [smoothLine]="false"
+                     [showLegend]="false"
+                     [xAxisTickFormatter]="xAxisTickFormatter"
+                     [numTicks]=4>
+
+      </df-line-chart>
+    </div>
+  </ng-container>
+</ng-template>
+
+<ng-template #screensReleasedModal
+             let-close="close">
+  <div class="au-modal-header p-3">
+    <div class="d-flex align-items-center m-0">
+      <i class="fa fa-check-square mr-2 mb-1"></i>
+      <h5>Screens Released Trend</h5>
+      <span class="ml-auto mr-2">Last 4 weeks</span>
+      <i (click)="close()"
+         class="cursor-pointer fa fa-times">
+      </i>
+    </div>
+  </div>
+  <ng-container>
+    <div class="px-3 pt-3 text-left">
+      <df-line-chart [data]="contractorMetrics"
+                     [showDots]="true"
+                     [showValues]="true"
+                     [smoothLine]="false"
+                     [showLegend]="false"
+                     [xAxisTickFormatter]="xAxisTickFormatter"
+                     [numTicks]=4>
+      </df-line-chart>
+    </div>
+  </ng-container>
+</ng-template>
+
+<ng-template #checkInModal
+             let-close="close">
+  <div class="au-modal-header p-3">
+    <div class="d-flex align-items-center m-0">
+      <div class="user flex-1">
+        <div class="user-name">
+          <img class="mr-1"
+               [src]="selectedTeamMemberCheckin.photoUrl || 'assets/images/user.png'">
+          <h5 class="mt-2 d-inline-block">{{selectedTeamMemberCheckin.fullName}}</h5>
+        </div>
+      </div>
+      <span class="ml-auto mr-2">{{selectedTeamMemberCheckin.date}}</span>
+      <i (click)="close()"
+         class="cursor-pointer fa fa-times">
+      </i>
+    </div>
+  </div>
+  <ng-container>
+    <form [formGroup]="checkInForm">
+      <div class="px-3 pt-3 text-left">
+        <p *ngIf="managerMode">
+          Was the worker on track to achieve his productivity goal for the week?
+        </p>
+        <p *ngIf="!managerMode">
+          Are you on track to achieve your productivity goal for the current week?
+        </p>
+        <div class="d-flex mx-1 justify-content-between mb-3 flex-wrap">
+          <df-select formControlName="status"
+                     class="wide-element mt-1">
+            <df-option *ngFor="let status of statuses"
+                       [value]="status.key"
+                       [displayText]="status.name">
+            </df-option>
+          </df-select>
+          <div class="d-flex mt-1" *ngIf="isUnblockedToggleEnabled()">
+            <span *ngIf="managerMode" class="au-neutral-3 mt-1 mr-2">
+              Did you unblock the worker?
+            </span>
+            <span *ngIf="!managerMode" class="au-neutral-3 mt-1 mr-2">
+              Did you unblock yourself?
+            </span>
+            <df-group-toggle [items]="['Yes', 'No']"
+                             formControlName="unblocked">
+            </df-group-toggle>
+          </div>
+        </div>
+        <df-input-container>
+          <textarea formControlName="checkInComments"></textarea>
+        </df-input-container>
+      </div>
+      <div class="w-100 d-flex align-items-center justify-content-end p-3">
+        <button df-button
+                class="mr-2"
+                type="button"
+                theme="danger"
+                (click)="close()">
+          <span>Cancel</span>
+        </button>
+        <button df-button
+                theme="success"
+                [loading]="isSaving"
+                (click)="modifyCheckins(close)"
+                loaderPosition="after">
+          <span>Save</span>
+        </button>
+      </div>
+    </form>
+  </ng-container>
+</ng-template>

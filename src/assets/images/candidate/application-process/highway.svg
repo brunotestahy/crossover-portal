@@ -1,0 +1,436 @@
+<svg width="157" height="941" viewBox="0 0 157 941" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:figma="http://www.figma.com/figma/ns">
+<title>highway FIXED</title>
+<desc>Created using Figma</desc>
+<g id="Canvas" transform="translate(30 190)" figma:type="canvas">
+<g id="highway FIXED" figma:type="frame">
+<g id="07" figma:type="frame">
+<g id="half-circle" figma:type="frame">
+<g id="outter-line-+-inner-line-+-dashed-line-Mask" figma:type="frame">
+<mask id="mask0_alpha" mask-type="alpha">
+<g id="mask-4" figma:type="frame">
+<g id="Vector" figma:type="vector">
+<use xlink:href="#path0_fill" transform="translate(59 503)" fill="#FFFFFF"/>
+</g>
+</g>
+</mask>
+<g id="Mask" mask="url(#mask0_alpha)" figma:type="vector">
+<use xlink:href="#path1_fill" transform="translate(59 503)" fill="#DBE3EA"/>
+</g>
+<g id="outter-line" mask="url(#mask0_alpha)" figma:type="frame">
+<g id="Vector" figma:type="vector">
+<use xlink:href="#path2_stroke" transform="translate(-6 505)" fill="#FFFFFF"/>
+</g>
+</g>
+<g id="inner-line" mask="url(#mask0_alpha)" figma:type="frame">
+<g id="Vector" figma:type="vector">
+<use xlink:href="#path3_stroke" transform="translate(10 521)" fill="#FFFFFF"/>
+</g>
+</g>
+<g id="dashed-line" mask="url(#mask0_alpha)" figma:type="frame">
+<g id="Vector" figma:type="vector">
+<use xlink:href="#path4_stroke" transform="translate(2 513)" fill="#FFFFFF"/>
+</g>
+</g>
+</g>
+</g>
+</g>
+<g id="06" figma:type="frame">
+<g id="half-circle" figma:type="frame">
+<g id="outter-line-+-inner-line-+-dashed-line-Mask" figma:type="frame">
+<mask id="mask1_alpha" mask-type="alpha">
+<g id="mask-12" figma:type="frame">
+<g id="Vector" figma:type="vector">
+<use xlink:href="#path0_fill" transform="matrix(-1 0 0 1 38 389)" fill="#FFFFFF"/>
+</g>
+</g>
+</mask>
+<g id="Mask" mask="url(#mask1_alpha)" figma:type="vector">
+<use xlink:href="#path0_fill" transform="matrix(-1 0 0 1 38 390)" fill="#DBE3EA"/>
+</g>
+<g id="outter-line" mask="url(#mask1_alpha)" figma:type="frame">
+<g id="Vector" figma:type="vector">
+<use xlink:href="#path5_stroke" transform="matrix(-1 0 0 1 103 392)" fill="#FFFFFF"/>
+</g>
+</g>
+<g id="inner-line" mask="url(#mask1_alpha)" figma:type="frame">
+<g id="Vector" figma:type="vector">
+<use xlink:href="#path3_stroke" transform="matrix(-1 0 0 1 87 407)" fill="#FFFFFF"/>
+</g>
+</g>
+<g id="dashed-line" mask="url(#mask1_alpha)" figma:type="frame">
+<g id="Vector" figma:type="vector">
+<use xlink:href="#path4_stroke" transform="matrix(-1 0 0 1 95 399)" fill="#FFFFFF"/>
+</g>
+</g>
+</g>
+</g>
+<g id="box" figma:type="frame">
+<g id="Vector" figma:type="vector">
+<use xlink:href="#path6_fill" transform="matrix(-1 0 0 1 59 503)" fill="#DBE3EA"/>
+</g>
+<g id="line" figma:type="vector">
+<use xlink:href="#path7_fill" transform="matrix(-1 0 0 1 59 504)" fill="#FFFFFF"/>
+</g>
+<g id="line-copy" figma:type="vector">
+<use xlink:href="#path8_fill" transform="matrix(-1 0 0 1 53 512.6)" fill="#FFFFFF"/>
+</g>
+<g id="line" figma:type="vector">
+<use xlink:href="#path7_fill" transform="matrix(-1 0 0 1 59 520)" fill="#FFFFFF"/>
+</g>
+</g>
+</g>
+<g id="06" figma:type="frame">
+<g id="half-circle" figma:type="frame">
+<g id="outter-line-+-inner-line-+-dashed-line-Mask" figma:type="frame">
+<mask id="mask2_alpha" mask-type="alpha">
+<g id="mask-12" figma:type="frame">
+<g id="Vector" figma:type="vector">
+<use xlink:href="#path9_fill" transform="matrix(-1 0 0 1 38 616)" fill="#FFFFFF"/>
+</g>
+</g>
+</mask>
+<g id="Mask" mask="url(#mask2_alpha)" figma:type="vector">
+<use xlink:href="#path9_fill" transform="matrix(-1 0 0 1 38 616)" fill="#DBE3EA"/>
+</g>
+<g id="outter-line" mask="url(#mask2_alpha)" figma:type="frame">
+<g id="Vector" figma:type="vector">
+<use xlink:href="#path5_stroke" transform="matrix(-1 0 0 1 103 619)" fill="#FFFFFF"/>
+</g>
+</g>
+<g id="inner-line" mask="url(#mask2_alpha)" figma:type="frame">
+<g id="Vector" figma:type="vector">
+<use xlink:href="#path10_stroke" transform="matrix(-1 0 0 1 87 635)" fill="#FFFFFF"/>
+</g>
+</g>
+<g id="dashed-line" mask="url(#mask2_alpha)" figma:type="frame">
+<g id="Vector" figma:type="vector">
+<use xlink:href="#path4_stroke" transform="matrix(-1 0 0 1 95 626)" fill="#FFFFFF"/>
+</g>
+</g>
+</g>
+</g>
+<g id="box" figma:type="frame">
+<g id="Vector" figma:type="vector">
+<use xlink:href="#path11_fill" transform="matrix(-1 0 0 1 75 730)" fill="#DBE3EA"/>
+</g>
+<g id="Vector" figma:type="vector">
+<use xlink:href="#path12_fill" transform="matrix(-1 0 0 1 75 730)" fill="#C3CED7"/>
+</g>
+<g id="check_circle" figma:type="text">
+<use xlink:href="#path13_fill" transform="translate(55 733)" fill="#FFFFFF"/>
+</g>
+<g id="line" figma:type="vector">
+<use xlink:href="#path14_fill" transform="matrix(-1 0 0 1 50 731)" fill="#FFFFFF"/>
+</g>
+<g id="line-copy" figma:type="vector">
+<use xlink:href="#path8_fill" transform="matrix(-1 0 0 1 50 739.6)" fill="#FFFFFF"/>
+</g>
+<g id="line" figma:type="vector">
+<use xlink:href="#path14_fill" transform="matrix(-1 0 0 1 50 747)" fill="#FFFFFF"/>
+</g>
+</g>
+</g>
+<g id="05" figma:type="frame">
+<g id="half-circle" figma:type="frame">
+<g id="outter-line-+-inner-line-+-dashed-line-Mask" figma:type="frame">
+<mask id="mask3_alpha" mask-type="alpha">
+<g id="mask-20" figma:type="frame">
+<g id="Vector" figma:type="vector">
+<use xlink:href="#path0_fill" transform="translate(59 277)" fill="#FFFFFF"/>
+</g>
+</g>
+</mask>
+<g id="Mask" mask="url(#mask3_alpha)" figma:type="vector">
+<use xlink:href="#path15_fill" transform="translate(59 277)" fill="#DBE3EA"/>
+</g>
+<g id="outter-line" mask="url(#mask3_alpha)" figma:type="frame">
+<g id="Vector" figma:type="vector">
+<use xlink:href="#path16_stroke" transform="translate(-6 280)" fill="#FFFFFF"/>
+</g>
+</g>
+<g id="inner-line" mask="url(#mask3_alpha)" figma:type="frame">
+<g id="Vector" figma:type="vector">
+<use xlink:href="#path17_stroke" transform="translate(10 296)" fill="#FFFFFF"/>
+</g>
+</g>
+<g id="dashed-line" mask="url(#mask3_alpha)" figma:type="frame">
+<g id="Vector" figma:type="vector">
+<use xlink:href="#path18_stroke" transform="translate(2 288)" fill="#FFFFFF"/>
+</g>
+</g>
+</g>
+</g>
+<g id="box" figma:type="frame">
+<g id="Vector" figma:type="vector">
+<use xlink:href="#path6_fill" transform="translate(38 390)" fill="#DBE3EA"/>
+</g>
+<g id="line" figma:type="vector">
+<use xlink:href="#path7_fill" transform="translate(38 391)" fill="#FFFFFF"/>
+</g>
+<g id="line-copy" figma:type="vector">
+<use xlink:href="#path19_fill" transform="translate(44 398)" fill="#FFFFFF"/>
+</g>
+<g id="line" figma:type="vector">
+<use xlink:href="#path7_fill" transform="translate(38 406)" fill="#FFFFFF"/>
+</g>
+</g>
+</g>
+<g id="04" figma:type="frame">
+<g id="half-circle" figma:type="frame">
+<g id="outter-line-+-inner-line-+-dashed-line-Mask" figma:type="frame">
+<mask id="mask4_alpha" mask-type="alpha">
+<g id="mask-28" figma:type="frame">
+<g id="Vector" figma:type="vector">
+<use xlink:href="#path20_fill" transform="matrix(-1 0 0 1 38 163)" fill="#FFFFFF"/>
+</g>
+</g>
+</mask>
+<g id="Mask" mask="url(#mask4_alpha)" figma:type="vector">
+<use xlink:href="#path20_fill" transform="matrix(-1 0 0 1 38 163)" fill="#DBE3EA"/>
+</g>
+<g id="outter-line" mask="url(#mask4_alpha)" figma:type="frame">
+<g id="Vector" figma:type="vector">
+<use xlink:href="#path2_stroke" transform="matrix(-1 0 0 1 103 166)" fill="#FFFFFF"/>
+</g>
+</g>
+<g id="inner-line" mask="url(#mask4_alpha)" figma:type="frame">
+<g id="Vector" figma:type="vector">
+<use xlink:href="#path3_stroke" transform="matrix(-1 0 0 1 87 182)" fill="#FFFFFF"/>
+</g>
+</g>
+<g id="dashed-line" mask="url(#mask4_alpha)" figma:type="frame">
+<g id="Vector" figma:type="vector">
+<use xlink:href="#path4_stroke" transform="matrix(-1 0 0 1 95 174)" fill="#FFFFFF"/>
+</g>
+</g>
+</g>
+</g>
+<g id="box" figma:type="frame">
+<g id="Vector" figma:type="vector">
+<use xlink:href="#path21_fill" transform="matrix(-1 0 0 1 59 277)" fill="#DBE3EA"/>
+</g>
+<g id="line" figma:type="vector">
+<use xlink:href="#path7_fill" transform="matrix(-1 0 0 1 59 279)" fill="#FFFFFF"/>
+</g>
+<g id="line-copy" figma:type="vector">
+<use xlink:href="#path19_fill" transform="matrix(-1 0 0 1 53 287)" fill="#FFFFFF"/>
+</g>
+<g id="line" figma:type="vector">
+<use xlink:href="#path7_fill" transform="matrix(-1 0 0 1 59 295)" fill="#FFFFFF"/>
+</g>
+</g>
+</g>
+<g id="03" figma:type="frame">
+<g id="half-circle" figma:type="frame">
+<g id="outter-line-+-inner-line-+-dashed-line-Mask" figma:type="frame">
+<mask id="mask5_alpha" mask-type="alpha">
+<g id="mask-36" figma:type="frame">
+<g id="Vector" figma:type="vector">
+<use xlink:href="#path0_fill" transform="translate(59 50)" fill="#FFFFFF"/>
+</g>
+</g>
+</mask>
+<g id="Mask" mask="url(#mask5_alpha)" figma:type="vector">
+<use xlink:href="#path22_fill" transform="translate(59 50)" fill="#DBE3EA"/>
+</g>
+<g id="outter-line" mask="url(#mask5_alpha)" figma:type="frame">
+<g id="Vector" figma:type="vector">
+<use xlink:href="#path5_stroke" transform="translate(-6 53)" fill="#FFFFFF"/>
+</g>
+</g>
+<g id="inner-line" mask="url(#mask5_alpha)" figma:type="frame">
+<g id="Vector" figma:type="vector">
+<use xlink:href="#path23_stroke" transform="translate(10 69)" fill="#FFFFFF"/>
+</g>
+</g>
+<g id="dashed-line" mask="url(#mask5_alpha)" figma:type="frame">
+<g id="Vector" figma:type="vector">
+<use xlink:href="#path24_stroke" transform="translate(2 61)" fill="#FFFFFF"/>
+</g>
+</g>
+</g>
+</g>
+<g id="box" figma:type="frame">
+<g id="Vector" figma:type="vector">
+<use xlink:href="#path21_fill" transform="translate(38 163)" fill="#DBE3EA"/>
+</g>
+<g id="line" figma:type="vector">
+<use xlink:href="#path7_fill" transform="matrix(1 0 0 -1 38 167)" fill="#FFFFFF"/>
+</g>
+<g id="line-copy" figma:type="vector">
+<use xlink:href="#path19_fill" transform="translate(44 174)" fill="#FFFFFF"/>
+</g>
+<g id="line" figma:type="vector">
+<use xlink:href="#path7_fill" transform="translate(38 181)" fill="#FFFFFF"/>
+</g>
+</g>
+</g>
+<g id="02" figma:type="frame">
+<g id="half-circle" figma:type="frame">
+<g id="outter-line-+-inner-line-+-dashed-line-Mask" figma:type="frame">
+<mask id="mask6_alpha" mask-type="alpha">
+<g id="mask-44" figma:type="frame">
+<g id="Vector" figma:type="vector">
+<use xlink:href="#path0_fill" transform="matrix(-1 0 0 1 38 -63)" fill="#FFFFFF"/>
+</g>
+</g>
+</mask>
+<g id="Mask" mask="url(#mask6_alpha)" figma:type="vector">
+<use xlink:href="#path0_fill" transform="matrix(-1 0 0 1 38 -63)" fill="#DBE3EA"/>
+</g>
+<g id="outter-line" mask="url(#mask6_alpha)" figma:type="frame">
+<g id="Vector" figma:type="vector">
+<use xlink:href="#path2_stroke" transform="matrix(-1 0 0 1 103 -61)" fill="#FFFFFF"/>
+</g>
+</g>
+<g id="inner-line" mask="url(#mask6_alpha)" figma:type="frame">
+<g id="Vector" figma:type="vector">
+<use xlink:href="#path3_stroke" transform="matrix(-1 0 0 1 87 -45)" fill="#FFFFFF"/>
+</g>
+</g>
+<g id="dashed-line" mask="url(#mask6_alpha)" figma:type="frame">
+<g id="Vector" figma:type="vector">
+<use xlink:href="#path4_stroke" transform="matrix(-1 0 0 1 95 -53)" fill="#FFFFFF"/>
+</g>
+</g>
+</g>
+</g>
+<g id="box" figma:type="frame">
+<g id="Vector" figma:type="vector">
+<use xlink:href="#path21_fill" transform="matrix(-1 0 0 1 59 50)" fill="#DBE3EA"/>
+</g>
+<g id="line" figma:type="vector">
+<use xlink:href="#path7_fill" transform="matrix(-1 0 0 1 59 52)" fill="#FFFFFF"/>
+</g>
+<g id="line-copy" figma:type="vector">
+<use xlink:href="#path19_fill" transform="matrix(-1 0 0 1 53 60)" fill="#FFFFFF"/>
+</g>
+<g id="line" figma:type="vector">
+<use xlink:href="#path7_fill" transform="matrix(-1 0 0 1 59 68)" fill="#FFFFFF"/>
+</g>
+</g>
+</g>
+<g id="01" figma:type="frame">
+<g id="half-circle" figma:type="frame">
+<g id="outter-line-+-inner-line-+-dashed-line-Mask" figma:type="frame">
+<mask id="mask7_alpha" mask-type="alpha">
+<g id="mask-52" figma:type="frame">
+<g id="Vector" figma:type="vector">
+<use xlink:href="#path9_fill" transform="translate(59 -177)" fill="#FFFFFF"/>
+</g>
+</g>
+</mask>
+<g id="Mask" mask="url(#mask7_alpha)" figma:type="vector">
+<use xlink:href="#path25_fill" transform="translate(59 -177)" fill="#DBE3EA"/>
+</g>
+<g id="outter-line" mask="url(#mask7_alpha)" figma:type="frame">
+<g id="Vector" figma:type="vector">
+<use xlink:href="#path2_stroke" transform="translate(-6 -175)" fill="#FFFFFF"/>
+</g>
+</g>
+<g id="inner-line" mask="url(#mask7_alpha)" figma:type="frame">
+<g id="Vector" figma:type="vector">
+<use xlink:href="#path3_stroke" transform="translate(10 -159)" fill="#FFFFFF"/>
+</g>
+</g>
+<g id="dashed-line" mask="url(#mask7_alpha)" figma:type="frame">
+<g id="Vector" figma:type="vector">
+<use xlink:href="#path24_stroke" transform="translate(2 -166)" fill="#FFFFFF"/>
+</g>
+</g>
+</g>
+</g>
+<g id="box" figma:type="frame">
+<g id="Vector" figma:type="vector">
+<use xlink:href="#path21_fill" transform="translate(38 -63)" fill="#DBE3EA"/>
+</g>
+<g id="line" figma:type="vector">
+<use xlink:href="#path7_fill" transform="translate(38 -62)" fill="#FFFFFF"/>
+</g>
+<g id="line-copy" figma:type="vector">
+<use xlink:href="#path19_fill" transform="translate(44 -54)" fill="#FFFFFF"/>
+</g>
+<g id="line" figma:type="vector">
+<use xlink:href="#path7_fill" transform="translate(38 -46)" fill="#FFFFFF"/>
+</g>
+</g>
+</g>
+<g id="00" figma:type="frame">
+<mask id="mask8_alpha" mask-type="alpha">
+<g id="mask-60" figma:type="frame">
+<g id="Intersect" figma:type="vector-operation">
+<use xlink:href="#path26_fill" transform="translate(25 -190)" fill="#FFFFFF"/>
+</g>
+</g>
+</mask>
+<g id="Mask" mask="url(#mask8_alpha)" figma:type="vector">
+<use xlink:href="#path27_fill" transform="matrix(-0.999941 0.0108578 -0.0108578 -0.999941 80.0847 -156.098)" fill="#DBE3EA"/>
+</g>
+<g id="outter-line-+-inner-line-+-dashed-line-Mask" mask="url(#mask8_alpha)" figma:type="frame">
+<g id="outter-line" figma:type="frame">
+<g id="Vector" figma:type="vector">
+<use xlink:href="#path28_stroke" transform="translate(27 -223)" fill="#FFFFFF"/>
+</g>
+</g>
+<g id="inner-line" figma:type="frame">
+<g id="Vector" figma:type="vector">
+<use xlink:href="#path29_stroke" transform="translate(42.9999 -207)" fill="#FFFFFF"/>
+</g>
+</g>
+<g id="dashed-line" figma:type="frame">
+<g id="Vector" figma:type="vector">
+<use xlink:href="#path30_stroke" transform="matrix(0.999848 -0.0174524 0.0174524 0.999848 34.5848 -213.578)" fill="#FFFFFF"/>
+</g>
+</g>
+</g>
+</g>
+<g id="box" figma:type="frame">
+<g id="Vector" figma:type="vector">
+<use xlink:href="#path21_fill" transform="translate(38 616)" fill="#DBE3EA"/>
+</g>
+<g id="line" figma:type="vector">
+<use xlink:href="#path7_fill" transform="translate(38 618)" fill="#FFFFFF"/>
+</g>
+<g id="line-copy" figma:type="vector">
+<use xlink:href="#path19_fill" transform="translate(44 625)" fill="#FFFFFF"/>
+</g>
+<g id="line" figma:type="vector">
+<use xlink:href="#path7_fill" transform="translate(38 634)" fill="#FFFFFF"/>
+</g>
+</g>
+</g>
+</g>
+<defs>
+<path id="path0_fill" d="M 0 6.10623e-15C 37.0031 6.10623e-15 67 29.9969 67 67C 67 104.003 37.0031 134 0 134L 0 113C 25.4051 113 46 92.4051 46 67C 46 41.5949 25.4051 21 0 21L 0 4.56164e-24L 0 6.10623e-15Z"/>
+<path id="path1_fill" d="M 0 6.10623e-15C 37.0031 6.10623e-15 67 29.9969 67 67C 67 104.003 37.0031 134 0 134L 0 113C 25.4051 113 46 92.4051 46 67C 46 41.5949 25.4051 20 0 20L 0 6.10623e-15Z"/>
+<path id="path2_stroke" d="M 129 65C 129 100.346 100.346 129 65 129L 65 131C 101.451 131 131 101.451 131 65L 129 65ZM 65 129C 29.6538 129 1 100.346 1 65L -1 65C -1 101.451 28.5492 131 65 131L 65 129ZM 1 65C 1 29.6538 29.6538 1 65 1L 65 -1C 28.5492 -1 -1 28.5492 -1 65L 1 65ZM 65 1C 100.346 1 129 29.6538 129 65L 131 65C 131 28.5492 101.451 -1 65 -1L 65 1Z"/>
+<path id="path3_stroke" d="M 97 49C 97 75.5097 75.5097 97 49 97L 49 99C 76.6142 99 99 76.6142 99 49L 97 49ZM 49 97C 22.4903 97 1 75.5097 1 49L -1 49C -1 76.6142 21.3858 99 49 99L 49 97ZM 1 49C 1 22.4903 22.4903 1 49 1L 49 -1C 21.3858 -1 -1 21.3858 -1 49L 1 49ZM 49 1C 75.5097 1 97 22.4903 97 49L 99 49C 99 21.3858 76.6142 -1 49 -1L 49 1Z"/>
+<path id="path4_stroke" d="M 115.6 57C 115.6 55.9177 115.57 54.8204 115.512 53.7527L 112.316 53.9273C 112.372 54.9517 112.4 55.9616 112.4 57L 115.6 57ZM 113.663 42.0036C 113.11 39.9094 112.429 37.8189 111.657 35.8242L 108.673 36.981C 109.415 38.8929 110.04 40.8133 110.569 42.8204L 113.663 42.0036ZM 106.249 25.2311C 105.079 23.4214 103.785 21.6449 102.428 19.9803L 99.9486 22.0033C 101.251 23.5989 102.441 25.2324 103.562 26.9682L 106.249 25.2311ZM 94.0197 11.5719C 92.3551 10.2146 90.5786 8.9211 88.7689 7.75067L 87.0318 10.4381C 88.7676 11.5593 90.4011 12.7488 91.9967 14.0514L 94.0197 11.5719ZM 78.1758 2.3434C 76.1811 1.57073 74.0906 0.890349 71.9964 0.336849L 71.1796 3.43086C 73.1867 3.96002 75.1071 4.58512 77.019 5.32702L 78.1758 2.3434ZM 60.2473 -1.5115C 59.1796 -1.5697 58.0823 -1.59985 57 -1.6L 57 1.6C 58.0384 1.59985 59.0483 1.62761 60.0727 1.68373L 60.2473 -1.5115ZM 57 -1.6C 55.9177 -1.59985 54.8204 -1.5697 53.7527 -1.5115L 53.9273 1.68373C 54.9517 1.62761 55.9616 1.59985 57 1.6L 57 -1.6ZM 42.0036 0.336849C 39.9094 0.890349 37.8189 1.57073 35.8242 2.3434L 36.981 5.32702C 38.8929 4.58512 40.8133 3.96002 42.8204 3.43086L 42.0036 0.336849ZM 25.2311 7.75066C 23.4214 8.9211 21.6449 10.2146 19.9803 11.5719L 22.0033 14.0514C 23.5989 12.7488 25.2324 11.5593 26.9682 10.4381L 25.2311 7.75066ZM 11.5719 19.9803C 10.2146 21.6449 8.9211 23.4214 7.75067 25.2311L 10.4381 26.9682C 11.5593 25.2324 12.7488 23.5989 14.0514 22.0033L 11.5719 19.9803ZM 2.3434 35.8242C 1.57073 37.8189 0.890349 39.9094 0.336849 42.0036L 3.43086 42.8204C 3.96002 40.8133 4.58512 38.8929 5.32702 36.981L 2.3434 35.8242ZM -1.5115 53.7527C -1.5697 54.8204 -1.59985 55.9177 -1.6 57L 1.6 57C 1.59985 55.9616 1.62761 54.9517 1.68373 53.9273L -1.5115 53.7527ZM -1.6 57C -1.59985 58.0823 -1.5697 59.1796 -1.5115 60.2473L 1.68373 60.0727C 1.62761 59.0483 1.59985 58.0384 1.6 57L -1.6 57ZM 0.336849 71.9964C 0.890349 74.0906 1.57073 76.1811 2.3434 78.1758L 5.32702 77.019C 4.58512 75.1071 3.96002 73.1867 3.43086 71.1796L 0.336849 71.9964ZM 7.75066 88.7689C 8.9211 90.5786 10.2146 92.3551 11.5719 94.0197L 14.0514 91.9967C 12.7488 90.4011 11.5593 88.7676 10.4381 87.0318L 7.75066 88.7689ZM 19.9803 102.428C 21.6449 103.785 23.4214 105.079 25.2311 106.249L 26.9682 103.562C 25.2324 102.441 23.5989 101.251 22.0033 99.9486L 19.9803 102.428ZM 35.8242 111.657C 37.8189 112.429 39.9094 113.11 42.0036 113.663L 42.8204 110.569C 40.8133 110.04 38.8929 109.415 36.981 108.673L 35.8242 111.657ZM 53.7527 115.512C 54.8204 115.57 55.9177 115.6 57 115.6L 57 112.4C 55.9616 112.4 54.9517 112.372 53.9273 112.316L 53.7527 115.512ZM 57 115.6C 58.0823 115.6 59.1796 115.57 60.2473 115.512L 60.0727 112.316C 59.0483 112.372 58.0384 112.4 57 112.4L 57 115.6ZM 71.9964 113.663C 74.0906 113.11 76.1811 112.429 78.1758 111.657L 77.019 108.673C 75.1071 109.415 73.1867 110.04 71.1796 110.569L 71.9964 113.663ZM 88.7689 106.249C 90.5786 105.079 92.3551 103.785 94.0197 102.428L 91.9967 99.9486C 90.4011 101.251 88.7676 102.441 87.0318 103.562L 88.7689 106.249ZM 102.428 94.0197C 103.785 92.3551 105.079 90.5786 106.249 88.7689L 103.562 87.0318C 102.441 88.7676 101.251 90.4011 99.9486 91.9967L 102.428 94.0197ZM 111.657 78.1758C 112.429 76.1811 113.11 74.0906 113.663 71.9964L 110.569 71.1796C 110.04 73.1867 109.415 75.1071 108.673 77.019L 111.657 78.1758ZM 115.512 60.2473C 115.57 59.1796 115.6 58.0823 115.6 57L 112.4 57C 112.4 58.0384 112.372 59.0483 112.316 60.0727L 115.512 60.2473Z"/>
+<path id="path5_stroke" d="M 129 64.5C 129 99.5628 100.354 128 65 128L 65 130C 101.443 130 131 100.682 131 64.5L 129 64.5ZM 65 128C 29.6465 128 1 99.5628 1 64.5L -1 64.5C -1 100.682 28.5565 130 65 130L 65 128ZM 1 64.5C 1 29.4372 29.6465 1 65 1L 65 -1C 28.5565 -1 -1 28.3181 -1 64.5L 1 64.5ZM 65 1C 100.354 1 129 29.4372 129 64.5L 131 64.5C 131 28.3181 101.443 -1 65 -1L 65 1Z"/>
+<path id="path6_fill" d="M 21 0L 0 0L 0 20L 21 20L 21 0Z"/>
+<path id="path7_fill" d="M 21 0L 0 0L 0 2L 21 2L 21 0Z"/>
+<path id="path8_fill" d="M 6 0L 0 0L 0 1.6L 6 1.6L 6 0Z"/>
+<path id="path9_fill" d="M 0 6.1518e-15C 37.5554 6.1518e-15 68 30.2208 68 67.5C 68 104.779 37.5554 135 0 135L 0 113.843C 25.7843 113.843 46.6866 93.0947 46.6866 67.5C 46.6866 41.9053 25.7843 21.1567 0 21.1567L 0 4.59568e-24L 0 6.1518e-15Z"/>
+<path id="path10_stroke" d="M 97 48.5C 97 74.7239 75.5194 96 49 96L 49 98C 76.6045 98 99 75.8477 99 48.5L 97 48.5ZM 49 96C 22.4806 96 1 74.7239 1 48.5L -1 48.5C -1 75.8477 21.3955 98 49 98L 49 96ZM 1 48.5C 1 22.2761 22.4806 1 49 1L 49 -1C 21.3955 -1 -1 21.1523 -1 48.5L 1 48.5ZM 49 1C 75.5194 1 97 22.2761 97 48.5L 99 48.5C 99 21.1523 76.6045 -1 49 -1L 49 1Z"/>
+<path id="path11_fill" d="M 37 0L 10.5 0C 4.70101 0 0 4.70101 0 10.5C 0 16.299 4.70101 21 10.5 21L 37 21L 37 0Z"/>
+<path id="path12_fill" d="M 25 0L 10.5 0C 4.70101 0 0 4.70101 0 10.5C 0 16.299 4.70101 21 10.5 21L 25 21L 25 0Z"/>
+<path id="path13_fill" d="M 5.82422 9.92578L 11.0742 4.67578L 10.2539 3.82812L 5.82422 8.25781L 3.74609 6.17969L 2.92578 7L 5.82422 9.92578ZM 2.87109 2.89844C 4.01953 1.75 5.39583 1.17578 7 1.17578C 8.60417 1.17578 9.97135 1.75 11.1016 2.89844C 12.25 4.02865 12.8242 5.39583 12.8242 7C 12.8242 8.60417 12.25 9.98047 11.1016 11.1289C 9.97135 12.2591 8.60417 12.8242 7 12.8242C 5.39583 12.8242 4.01953 12.2591 2.87109 11.1289C 1.74089 9.98047 1.17578 8.60417 1.17578 7C 1.17578 5.39583 1.74089 4.02865 2.87109 2.89844Z"/>
+<path id="path14_fill" d="M 12 0L 0 0L 0 2L 12 2L 12 0Z"/>
+<path id="path15_fill" d="M 0 6.06066e-15C 37.0031 6.06066e-15 67 29.7731 67 66.5C 67 103.227 37.0031 133 0 133L 0 112.157C 25.4051 112.157 46 91.7155 46 66.5C 46 41.2845 25.4051 20.8433 0 20.8433L 0 4.5276e-24L 0 6.06066e-15Z"/>
+<path id="path16_stroke" d="M 129 63.5C 129 97.9959 100.368 126 65 126L 65 128C 101.429 128 131 99.1442 131 63.5L 129 63.5ZM 65 126C 29.6316 126 1 97.9959 1 63.5L -1 63.5C -1 99.1442 28.5713 128 65 128L 65 126ZM 1 63.5C 1 29.0041 29.6316 1 65 1L 65 -1C 28.5713 -1 -1 27.8558 -1 63.5L 1 63.5ZM 65 1C 100.368 1 129 29.0041 129 63.5L 131 63.5C 131 27.8558 101.429 -1 65 -1L 65 1Z"/>
+<path id="path17_stroke" d="M 97 48C 97 73.938 75.5292 95 49 95L 49 97C 76.5947 97 99 75.0813 99 48L 97 48ZM 49 95C 22.4708 95 1 73.938 1 48L -1 48C -1 75.0813 21.4053 97 49 97L 49 95ZM 1 48C 1 22.062 22.4708 1 49 1L 49 -1C 21.4053 -1 -1 20.9187 -1 48L 1 48ZM 49 1C 75.5292 1 97 22.062 97 48L 99 48C 99 20.9187 76.5947 -1 49 -1L 49 1Z"/>
+<path id="path18_stroke" d="M 115.6 56C 115.6 54.9263 115.569 53.8371 115.51 52.7779L 112.315 52.9572C 112.372 53.9719 112.4 54.9714 112.4 56L 115.6 56ZM 113.628 41.1293C 113.065 39.057 112.374 36.9878 111.589 35.0152L 108.616 36.199C 109.369 38.0873 110.002 39.9833 110.54 41.9667L 113.628 41.1293ZM 106.113 24.5669C 104.932 22.7883 103.627 21.0425 102.258 19.408L 99.8051 21.463C 101.118 23.0288 102.316 24.6319 103.447 26.3365L 106.113 24.5669ZM 93.8125 11.1817C 92.1468 9.85897 90.3699 8.59889 88.5605 7.45929L 86.8559 10.1674C 88.5913 11.2591 90.2252 12.4178 91.8218 13.6871L 93.8125 11.1817ZM 78.0052 2.21139C 76.0228 1.46361 73.9465 0.80553 71.8664 0.270227L 71.0698 3.36948C 73.0644 3.88155 74.9739 4.48681 76.875 5.20515L 78.0052 2.21139ZM 60.2174 -1.51462C 59.1593 -1.57078 58.0724 -1.59986 57 -1.6L 57 1.6C 58.0296 1.59986 59.0315 1.62667 60.0473 1.68086L 60.2174 -1.51462ZM 57 -1.6C 55.9276 -1.59986 54.8407 -1.57078 53.7826 -1.51462L 53.9527 1.68086C 54.9686 1.62667 55.9704 1.59986 57 1.6L 57 -1.6ZM 42.1336 0.270227C 40.0535 0.80553 37.9772 1.46361 35.9948 2.21139L 37.125 5.20515C 39.0261 4.48681 40.9356 3.88155 42.9302 3.36948L 42.1336 0.270227ZM 25.4395 7.45929C 23.6301 8.59889 21.8532 9.85897 20.1875 11.1817L 22.1782 13.6871C 23.7748 12.4178 25.4087 11.2591 27.1441 10.1674L 25.4395 7.45929ZM 11.742 19.408C 10.3735 21.0425 9.06817 22.7883 7.88689 24.5669L 10.553 26.3365C 11.6837 24.6319 12.8823 23.0288 14.1949 21.463L 11.742 19.408ZM 2.41088 35.0152C 1.62617 36.9878 0.934523 39.057 0.371975 41.1293L 3.46047 41.9667C 3.99752 39.9833 4.63133 38.0873 5.38389 36.199L 2.41088 35.0152ZM -1.50982 52.7779C -1.5691 53.8371 -1.59984 54.9263 -1.6 56L 1.6 56C 1.59984 54.9714 1.62806 53.9719 1.68515 52.9572L -1.50982 52.7779ZM -1.6 56C -1.59984 57.0737 -1.5691 58.1629 -1.50982 59.2221L 1.68515 59.0428C 1.62806 58.0281 1.59984 57.0286 1.6 56L -1.6 56ZM 0.371975 70.8707C 0.934522 72.943 1.62617 75.0122 2.41088 76.9848L 5.38389 75.801C 4.63133 73.9127 3.99752 72.0167 3.46047 70.0333L 0.371975 70.8707ZM 7.88689 87.4331C 9.06817 89.2117 10.3735 90.9575 11.742 92.592L 14.1949 90.537C 12.8823 88.9712 11.6837 87.368 10.553 85.6635L 7.88689 87.4331ZM 20.1875 100.818C 21.8532 102.141 23.6301 103.401 25.4395 104.541L 27.1441 101.833C 25.4087 100.741 23.7748 99.5822 22.1782 98.3129L 20.1875 100.818ZM 35.9948 109.789C 37.9772 110.536 40.0535 111.194 42.1336 111.73L 42.9302 108.631C 40.9356 108.118 39.0261 107.513 37.125 106.795L 35.9948 109.789ZM 53.7826 113.515C 54.8407 113.571 55.9276 113.6 57 113.6L 57 110.4C 55.9704 110.4 54.9685 110.373 53.9527 110.319L 53.7826 113.515ZM 57 113.6C 58.0724 113.6 59.1593 113.571 60.2174 113.515L 60.0473 110.319C 59.0314 110.373 58.0296 110.4 57 110.4L 57 113.6ZM 71.8664 111.73C 73.9465 111.194 76.0228 110.536 78.0052 109.789L 76.875 106.795C 74.9739 107.513 73.0644 108.118 71.0698 108.631L 71.8664 111.73ZM 88.5605 104.541C 90.3699 103.401 92.1468 102.141 93.8125 100.818L 91.8218 98.3129C 90.2252 99.5822 88.5913 100.741 86.8559 101.833L 88.5605 104.541ZM 102.258 92.592C 103.627 90.9575 104.932 89.2117 106.113 87.4331L 103.447 85.6635C 102.316 87.368 101.118 88.9712 99.8051 90.537L 102.258 92.592ZM 111.589 76.9848C 112.374 75.0122 113.065 72.943 113.628 70.8707L 110.54 70.0333C 110.002 72.0167 109.369 73.9127 108.616 75.801L 111.589 76.9848ZM 115.51 59.2221C 115.569 58.1629 115.6 57.0737 115.6 56L 112.4 56C 112.4 57.0286 112.372 58.0281 112.315 59.0428L 115.51 59.2221Z"/>
+<path id="path19_fill" d="M 6 0L 0 0L 0 3L 6 3L 6 0Z"/>
+<path id="path20_fill" d="M 0 6.1518e-15C 37.0031 6.1518e-15 67 30.2208 67 67.5C 67 104.779 37.0031 135 0 135L 0 113.843C 25.4051 113.843 46 93.0947 46 67.5C 46 41.9053 25.4051 21.1567 0 21.1567L 0 4.59568e-24L 0 6.1518e-15Z"/>
+<path id="path21_fill" d="M 21 0L 0 0L 0 21L 21 21L 21 0Z"/>
+<path id="path22_fill" d="M 0 6.10623e-15C 37.0031 6.10623e-15 67 29.9969 67 67C 67 104.003 37.0031 134 0 134L 0 113C 25.4051 113 46 92.4051 46 67C 46 41.5949 25.4051 21 0 21L 0 6.10623e-15Z"/>
+<path id="path23_stroke" d="M 97 48C 97 74.5097 75.5097 96 49 96L 49 98C 76.6142 98 99 75.6142 99 48L 97 48ZM 49 96C 22.4632 96 1 75.4829 1 49L -1 49C -1 76.641 21.4129 98 49 98L 49 96ZM 1 49C 1 22.4903 22.4903 1 49 1L 49 -1C 21.3858 -1 -1 21.3858 -1 49L 1 49ZM 49 1C 75.5368 1 97 21.5171 97 48L 99 48C 99 20.359 76.5871 -1 49 -1L 49 1Z"/>
+<path id="path24_stroke" d="M 115.6 56.5C 115.6 55.422 115.569 54.3288 115.511 53.2653L 112.316 53.4423C 112.372 54.4618 112.4 55.4665 112.4 56.5L 115.6 56.5ZM 113.646 41.5665C 113.088 39.4832 112.402 37.4034 111.623 35.4197L 108.645 36.5899C 109.392 38.49 110.021 40.3982 110.554 42.3935L 113.646 41.5665ZM 106.182 24.8988C 105.006 23.1046 103.707 21.3433 102.344 19.6938L 99.8773 21.7327C 101.185 23.3135 102.379 24.9318 103.505 26.652L 106.182 24.8988ZM 93.9165 11.3762C 92.2513 10.0363 90.4746 8.75945 88.665 7.60445L 86.9441 10.3023C 88.6797 11.4087 90.3135 12.5828 91.9096 13.8687L 93.9165 11.3762ZM 78.0905 2.27706C 76.102 1.51689 74.0186 0.847711 71.9314 0.303351L 71.1247 3.40001C 73.1256 3.92058 75.0405 4.53572 76.9471 5.26579L 78.0905 2.27706ZM 60.2323 -1.51307C 59.1694 -1.57024 58.0774 -1.59985 57 -1.6L 57 1.6C 58.034 1.59985 59.0399 1.62714 60.06 1.68229L 60.2323 -1.51307ZM 57 -1.6C 55.9226 -1.59985 54.8306 -1.57024 53.7677 -1.51307L 53.94 1.68229C 54.9601 1.62714 55.966 1.59985 57 1.6L 57 -1.6ZM 42.0686 0.303352C 39.9814 0.847712 37.898 1.51689 35.9095 2.27707L 37.0529 5.26579C 38.9595 4.53572 40.8744 3.92058 42.8753 3.40001L 42.0686 0.303352ZM 25.335 7.60445C 23.5254 8.75946 21.7487 10.0363 20.0835 11.3762L 22.0904 13.8687C 23.6865 12.5828 25.3203 11.4087 27.0559 10.3023L 25.335 7.60445ZM 11.6563 19.6938C 10.2935 21.3433 8.99404 23.1046 7.8182 24.8988L 10.4951 26.652C 11.621 24.9318 12.8151 23.3135 14.1227 21.7327L 11.6563 19.6938ZM 2.37678 35.4197C 1.59814 37.4034 0.912185 39.4832 0.354207 41.5665L 3.44551 42.3935C 3.97858 40.3982 4.60799 38.49 5.35517 36.5899L 2.37678 35.4197ZM -1.51067 53.2653C -1.5694 54.3288 -1.59985 55.422 -1.6 56.5L 1.6 56.5C 1.59985 55.4665 1.62783 54.4618 1.68443 53.4423L -1.51067 53.2653ZM -1.6 56.5C -1.59985 57.578 -1.5694 58.6712 -1.51067 59.7347L 1.68443 59.5577C 1.62783 58.5382 1.59985 57.5335 1.6 56.5L -1.6 56.5ZM 0.354207 71.4335C 0.912186 73.5168 1.59814 75.5966 2.37678 77.5803L 5.35517 76.4101C 4.60799 74.51 3.97858 72.6018 3.44551 70.6065L 0.354207 71.4335ZM 7.8182 88.1012C 8.99405 89.8954 10.2935 91.6567 11.6563 93.3062L 14.1227 91.2673C 12.8151 89.6865 11.621 88.0682 10.4951 86.348L 7.8182 88.1012ZM 20.0835 101.624C 21.7487 102.964 23.5254 104.241 25.335 105.396L 27.0559 102.698C 25.3203 101.591 23.6865 100.417 22.0904 99.1313L 20.0835 101.624ZM 35.9095 110.723C 37.898 111.483 39.9814 112.152 42.0686 112.697L 42.8753 109.6C 40.8744 109.079 38.9595 108.464 37.0529 107.734L 35.9095 110.723ZM 53.7677 114.513C 54.8306 114.57 55.9226 114.6 57 114.6L 57 111.4C 55.966 111.4 54.9601 111.373 53.94 111.318L 53.7677 114.513ZM 57 114.6C 58.0774 114.6 59.1694 114.57 60.2323 114.513L 60.06 111.318C 59.0399 111.373 58.034 111.4 57 111.4L 57 114.6ZM 71.9314 112.697C 74.0186 112.152 76.102 111.483 78.0905 110.723L 76.9471 107.734C 75.0405 108.464 73.1256 109.079 71.1247 109.6L 71.9314 112.697ZM 88.665 105.396C 90.4746 104.241 92.2513 102.964 93.9165 101.624L 91.9096 99.1313C 90.3135 100.417 88.6797 101.591 86.9441 102.698L 88.665 105.396ZM 102.344 93.3062C 103.707 91.6567 105.006 89.8954 106.182 88.1012L 103.505 86.348C 102.379 88.0682 101.185 89.6865 99.8773 91.2673L 102.344 93.3062ZM 111.623 77.5803C 112.402 75.5966 113.088 73.5168 113.646 71.4335L 110.554 70.6065C 110.021 72.6018 109.392 74.51 108.645 76.4101L 111.623 77.5803ZM 115.511 59.7347C 115.569 58.6712 115.6 57.578 115.6 56.5L 112.4 56.5C 112.4 57.5335 112.372 58.5382 112.316 59.5577L 115.511 59.7347Z"/>
+<path id="path25_fill" d="M 0 6.1518e-15C 37.5554 6.1518e-15 68 30.2208 68 67.5C 68 104.779 37.5554 135 0 135L 0 113.843C 25.7843 113.843 46.6866 93.0947 46.6866 67.5C 46.6866 41.9053 25.7843 21.1567 0 21.1567L 0 6.1518e-15Z"/>
+<path id="path26_fill" fill-rule="evenodd" d="M 34 34L 34 13L 34 0L 21 0L 0 0C 0 18.7777 15.2223 34 34 34Z"/>
+<path id="path27_fill" d="M 21.1151 0C 49.8092 0 55.4957 15.3871 55.4957 33.2358C 55.4957 51.0846 28.6941 65.2666 0 65.2666L 0 55.1371C 19.7004 55.1371 34.2231 46.3898 34.2231 34.1354C 33.5424 27.1578 27.9875 20.8491 20.8759 21.1184L 21.1151 0Z"/>
+<path id="path28_stroke" d="M 63 32C 63 49.1208 49.1208 63 32 63L 32 65C 50.2254 65 65 50.2254 65 32L 63 32ZM 32 63C 14.8792 63 1 49.1208 1 32L -1 32C -1 50.2254 13.7746 65 32 65L 32 63ZM 1 32C 1 14.8792 14.8792 1 32 1L 32 -1C 13.7746 -1 -1 13.7746 -1 32L 1 32ZM 32 1C 49.1208 1 63 14.8792 63 32L 65 32C 65 13.7746 50.2254 -1 32 -1L 32 1Z"/>
+<path id="path29_stroke" d="M 31 16C 31 24.2843 24.2843 31 16 31L 16 33C 25.3888 33 33 25.3888 33 16L 31 16ZM 16 31C 7.71573 31 1 24.2843 1 16L -1 16C -1 25.3888 6.61116 33 16 33L 16 31ZM 1 16C 1 7.71573 7.71573 1 16 1L 16 -1C 6.61116 -1 -1 6.61116 -1 16L 1 16ZM 16 1C 24.2843 1 31 7.71573 31 16L 33 16C 33 6.61116 25.3888 -1 16 -1L 16 1Z"/>
+<path id="path30_stroke" d="M 49.6 24C 49.599 22.8185 49.5139 21.6013 49.3575 20.4633L 46.1876 20.9016C 46.3311 21.9323 46.401 22.9302 46.4 24L 49.6 24ZM 44.4298 8.57105C 43.0208 6.71445 41.2856 4.97917 39.4289 3.57021L 37.4986 6.12243C 39.184 7.39239 40.6076 8.81597 41.8776 10.5014L 44.4298 8.57105ZM 27.5367 -1.35749C 26.3987 -1.51392 25.1815 -1.59902 24 -1.6L 24 1.6C 25.0698 1.59902 26.0677 1.66891 27.0984 1.81235L 27.5367 -1.35749ZM 24 -1.6C 22.8185 -1.59902 21.6013 -1.51392 20.4633 -1.35749L 20.9016 1.81235C 21.9323 1.66891 22.9302 1.59902 24 1.6L 24 -1.6ZM 8.57105 3.57021C 6.71445 4.97917 4.97917 6.71445 3.57021 8.57105L 6.12243 10.5014C 7.39239 8.81597 8.81597 7.39239 10.5014 6.12243L 8.57105 3.57021ZM -1.35749 20.4633C -1.51392 21.6013 -1.59902 22.8185 -1.6 24L 1.6 24C 1.59902 22.9302 1.66891 21.9323 1.81235 20.9016L -1.35749 20.4633ZM -1.6 24C -1.59902 25.1815 -1.51392 26.3987 -1.35749 27.5367L 1.81235 27.0984C 1.66891 26.0677 1.59902 25.0698 1.6 24L -1.6 24ZM 3.57021 39.4289C 4.97917 41.2856 6.71445 43.0208 8.57105 44.4298L 10.5014 41.8776C 8.81597 40.6076 7.39239 39.184 6.12243 37.4986L 3.57021 39.4289ZM 20.4633 49.3575C 21.6013 49.5139 22.8185 49.599 24 49.6L 24 46.4C 22.9302 46.401 21.9323 46.3311 20.9016 46.1876L 20.4633 49.3575ZM 24 49.6C 25.1815 49.599 26.3987 49.5139 27.5367 49.3575L 27.0984 46.1876C 26.0677 46.3311 25.0698 46.401 24 46.4L 24 49.6ZM 39.4289 44.4298C 41.2856 43.0208 43.0208 41.2856 44.4298 39.4289L 41.8776 37.4986C 40.6076 39.184 39.184 40.6076 37.4986 41.8776L 39.4289 44.4298ZM 49.3575 27.5367C 49.5139 26.3987 49.599 25.1815 49.6 24L 46.4 24C 46.401 25.0698 46.3311 26.0677 46.1876 27.0984L 49.3575 27.5367Z"/>
+</defs>
+</svg>

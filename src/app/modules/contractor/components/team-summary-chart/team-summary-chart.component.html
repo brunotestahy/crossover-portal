@@ -1,0 +1,35 @@
+<div (click)="onChartClick()">
+  <div class="d-flex justify-content-between">
+    <h4 class="mb-0">{{ metricName }}</h4>
+    <div class="align-self-center mt-2">
+      <div
+        [dfToolTip]="membersCount + ' team member' + (membersCount > 1 ? 's' : '')"
+        dfToolTipPlacement="bottomright">
+        {{membersCount}} <i class="fa fa-users font-18 text-muted"></i>
+      </div>
+    </div>
+  </div>
+  <div>
+    <df-bar
+    class="d-block w-100"
+    [data]="chartEntries"
+    [individualTooltips]="true"
+    [groupsData]="chartGroups"
+    [tooltipTemplate]="tooltipTemplate"
+    barLineColor="#03a9f4"
+    [padding]="0.4"
+    [showLineValues]="true"
+    [valueTickFormatter]="tickFormatter"
+    [showLegend]="false">
+    </df-bar>
+  </div>
+</div>
+
+<ng-template #tooltipTemplate
+             let-selected="selected">
+  <div class="df-bar__tooltip">
+    <div *ngIf="selected">
+      <div>Avg. {{selected.xKey}} Score: {{selected.score}}% </div>
+    </div>
+  </div>
+</ng-template>

@@ -1,0 +1,64 @@
+<div *ngIf="!uploadStarted">
+  <p class="message alert" *ngIf="!validFiles">Resume file type is unsupported</p>
+  <p>
+    <strong>Note:</strong> Only file with type
+    <strong>'.pdf, .md, .doc, .docx, .xml, .txt'</strong> is acceptable. Make sure the size of your file does not exceed
+    <strong>1 MB</strong>
+  </p>
+  <div class="row d-none d-md-flex">
+    <div class="col-md-4">
+      <h4>Role</h4>
+    </div>
+    <div class="col-md-4">
+      <h4>Resume</h4>
+    </div>
+    <div class="col-md-4">
+    </div>
+  </div>
+  <div
+    class="row entry"
+    [class.last]="last"
+    *ngFor="let application of applications;let index = index; let last = last;">
+    <div class="col-md-4">
+      <p>
+        <strong class="d-inline d-md-none">Role:</strong>
+        {{ application.job.title }}
+      </p>
+    </div>
+    <div class="col-md-4">
+      <strong class="d-inline d-md-none">Resume:</strong>
+      <button type="button" df-button (click)="onDownload(application.fileUrl)">
+        Download
+      </button>
+      {{ application.resumeFile.name }}
+    </div>
+    <div class="col-md-4 text-md-right">
+      <input
+        type="file"
+        [attr.id]="'resumeFile' + index"
+        class="hide"
+        (change)="onFileChange(application.id, application.resumeFile.id, $event)"
+      />
+      <label df-button [attr.for]="'resumeFile' + index" theme="info" class="label df-button d-inline-block">
+        Change
+      </label>
+    </div>
+  </div>
+  <div class="text-right my-4">
+    <button
+      type="button"
+      df-button theme="info"
+      [disabled]="!validFiles"
+      (click)="onSubmit($event)"
+      class="save">Save</button>
+    <button
+      type="button"
+      df-button
+      theme="danger"
+      (click)="onCancel($event)"
+      class="cancel">Cancel</button>
+  </div>
+</div>
+<div *ngIf="uploadStarted" class="message">
+  Uploading data, please wait.
+</div>

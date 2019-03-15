@@ -1,0 +1,81 @@
+<div class="w-100" *ngIf="error">
+  <app-page-alert [text]="error" class="my-3"></app-page-alert>
+</div>
+<div class="flex-column h-100 w-100"
+     [class.d-flex]="!error"
+     [class.d-none]="error">
+  <div class="d-flex">
+    <div class="w-50 d-block">
+      <span class="workflow-header">Current WIP Size</span>
+      <div class="chart-container">
+        <df-pie
+          *ngIf="!isLoading"
+          [data]="pieData"
+          [options]="chartOptions"
+          [colors]="wipColors"
+          [mobileOptions]="chartOptions">
+          <div class="df-pie-count" [style.color]="wipColors[0]">
+            {{wipSize}}
+          </div>
+          <div class="df-pie-badge">
+            <df-badge placement="top-center"
+              [count]="wipSizeGoal"
+              theme="info"></df-badge>
+          </div>
+        </df-pie>
+      </div>
+    </div>
+    <div class="w-50 chart-container">
+      <span class="workflow-header">Overdue Issues</span>
+      <df-pie
+        *ngIf="!isLoading"
+        [data]="pieData"
+        [options]="chartOptions"
+        [colors]="overdueIssuesColors"
+        [mobileOptions]="chartOptions">
+        <div class="df-pie-count" [style.color]="overdueIssuesColors[0]">
+          {{overdueIssues}}
+        </div>
+        <div class="df-pie-badge">
+          <df-badge placement="top-center"
+            [count]="leadTime"
+            theme="info"></df-badge>
+        </div>
+      </df-pie>
+    </div>
+  </div>
+  <div class="d-flex flex-column">
+    <span class="mb-3 workflow-header d-flex">Workflow stage breakdown</span>
+    <table>
+        <thead>
+          <tr>
+            <td *ngFor="let headerColumn of headerColumns; let i = index;"
+                class="position-relative"
+                [class.pre-work]="i === 0">
+              <div class="bars-holder d-flex flex-column">
+                <div class="bars w-100">
+                  <div *ngFor="let bar of getBars(headerColumn); first as isFirst"
+                       class="mx-auto"
+                       [class.count-circle]="headerColumn.count > 6 && isFirst">
+                    <span *ngIf="headerColumn.count > 6 && isFirst">{{headerColumn.count}}</span>
+                  </div>
+                </div>
+              </div>
+              <div class="text-center"
+                 dfToolTip="empty"
+                 [dftoolTipTemplate]="workflowTooltip"
+                 [dftoolTipData]="headerColumn"
+                 dfToolTipPlacement="bottom">
+                <small>{{headerColumn.shortName}}</small>
+              </div>
+            </td>
+          </tr>
+        </thead>
+      </table>
+  </div>
+</div>
+
+<ng-template #workflowTooltip
+             let-data="data">
+  {{data.name}}
+</ng-template>

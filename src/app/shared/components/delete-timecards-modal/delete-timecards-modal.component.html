@@ -1,0 +1,43 @@
+<div class="au-modal-header p-3">
+  <div class="d-flex align-items-center m-0">
+    <h5>Deleting Timecards</h5>
+    <i (click)="close()"
+       class="au-modal-close fa fa-times">
+    </i>
+  </div>
+</div>
+<app-page-alert class="mt-3 ml-3 mr-3 mb-0"
+                *ngIf="error"
+                [text]="error"></app-page-alert>
+<ng-container>
+    <div class="px-3 pt-3 text-left">
+      <p>You are deleting the following time cards. Are you sure?</p>
+      <div class="container-fluid">
+        <div class="row">
+          <div
+            class="col-6 col-md-4 col-lg-3"
+            *ngFor="let diary of diaries">
+            {{diary.localDate | date: getHourFormat()}}
+          </div>
+        </div>
+      </div>
+
+    </div>
+    <div class="w-100 d-flex align-items-center justify-content-end p-3">
+      <button df-button
+              type="button"
+              class="mr-2"
+              theme="success"
+              [loading]="isSaving"
+              loaderPosition="after"
+              (click)="deleteTimecards()">
+        <span>Yes</span>
+      </button>
+      <button df-button
+              type="button"
+              theme="danger"
+              (click)="close()">
+        <span>No</span>
+      </button>
+    </div>
+</ng-container>

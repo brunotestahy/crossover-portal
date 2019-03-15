@@ -1,0 +1,44 @@
+.df-alert__box__header {
+  padding: 15px;
+}
+
+.df-alert__box__buttons {
+  display: flex;
+  padding: 10px 15px;
+  border-top: 1px solid #eee;
+  justify-content: flex-end;
+}
+
+.df-alert__button {
+  margin-left: 5px;
+}
+
+@media (max-width: 767px) {
+  .df-alert__button-container {
+    display: table-cell;
+  }
+  body.aurea-skin .df-alert__button,
+  body.aurea-skin .df-alert__button.df-button {
+    height: 100%;
+    border-radius: 0;
+  }
+  .df-alert__box__buttons {
+    padding: 0;
+    margin: 0;
+    display: table;
+    table-layout: fixed;
+    height: 55px;
+    border-top: none;
+    width: 100%;
+  }
+  .df-alert__button {
+    margin: 0;
+    text-align: center;
+    width: 100%;
+    font-size: 16px;
+    border: 0;
+    -webkit-box-shadow: none;
+    box-shadow: none;
+  }
+}
+

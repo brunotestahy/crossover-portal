@@ -1,0 +1,48 @@
+@import "variables";
+
+.applicants-table {
+  max-height: 50vh;
+  overflow-y: auto;
+  display: block;
+}
+
+.filter-card {
+  overflow: visible;
+}
+
+.applicants-tracking {
+  @media (min-width: $breakpoint-md) {
+    overflow-y: hidden;
+  }
+}
+
+
+::ng-deep {
+  .df-grid-column--selectable {
+    width: 25px;
+  }
+
+  .fa-chevron-up, .fa-chevron-down {
+    margin-left: 10px;
+  }
+
+  td.df-grid-table-body__cell {
+    padding: 0 !important;
+  }
+
+  .df-button {
+    padding: unset !important;
+  }
+
+  .df-grid__table {
+    width: unset !important;
+
+    @media (min-width: $breakpoint-xl) {
+      width: 100% !important;
+    }
+
+    @media (max-width: $breakpoint-sm) {
+      width: 100% !important;
+    }
+  }
+}

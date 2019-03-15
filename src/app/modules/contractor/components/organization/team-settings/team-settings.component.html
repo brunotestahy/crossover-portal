@@ -1,0 +1,402 @@
+<ng-template [ngIf]="!isTeamLoading">
+  <app-page-alert
+    *ngIf="error && isSinglePageMode"
+    [text]="error"
+    class="my-3">
+  </app-page-alert>
+  <!--Metric-->
+  <df-card>
+    <df-card-header>
+      <df-card-title>
+        <span>Metric</span>
+
+        <df-icon name="question-circle"
+                 dfToolTip="You can see the metrics of your team here"
+                 dfToolTipPlacement="top"
+                 container="body">
+        </df-icon>
+      </df-card-title>
+    </df-card-header>
+
+    <df-card-content>
+      <div *ngIf="!isMetricsLoading"
+           class="row">
+        <div class="col-6 col-sm-4">
+          <h6>Metric</h6>
+          <p>{{metricUnit || 'No metric has been set'}}</p>
+        </div>
+        <div class="col-6 col-sm-4">
+          <h6>Source</h6>
+          <p *ngIf="metricSource === 'SPREADSHEET'">GOOGLE SHEETS</p>
+          <p *ngIf="metricSource !== 'SPREADSHEET'">{{metricSource || '-'}}</p>
+        </div>
+        <div class="col-6 col-sm-4">
+          <button theme="success"
+                  df-button>
+            Open Metrics Settings
+          </button>
+        </div>
+
+        <div *ngIf="isMetricsLoading"
+             class="loader">
+          <i class="df-loader"></i>
+        </div>
+      </div>
+
+    </df-card-content>
+  </df-card>
+
+  <!--Security-->
+  <df-card>
+    <df-card-header>
+      <df-card-title>
+        <span>Security</span>
+        <df-icon name="question-circle"
+                 dfToolTip="You can set individual parameters for each contractor"
+                 dfToolTipPlacement="top"
+                 container="body">
+        </df-icon>
+      </df-card-title>
+    </df-card-header>
+    <div class="mobile-select-all-panel">
+      <df-grid [value]="[1]"
+               [loading]="isSecurityLoading"
+               [rowExpandHandler]="undefined">
+        <df-grid-column header="">
+          <ng-template dfGridTemplate="body">
+            All Members
+          </ng-template>
+        </df-grid-column>
+        <df-grid-column header="Webcam">
+          <ng-template dfGridTemplate="body">
+            <df-slide-toggle [ngModel]="allCounter['webCamCount'] >  0 && teamAssignments.length"
+                             (change)="toggleAllWebCam()"
+                             [class.df-slide-toggle--half-checked]="allCounter['webCamCount'] != teamAssignments.length &&
+                              allCounter['webCamCount']">
+            </df-slide-toggle>
+          </ng-template>
+        </df-grid-column>
+        <df-grid-column header="Screenshots">
+          <ng-template dfGridTemplate="body">
+            <df-slide-toggle [ngModel]="allCounter['screenshotsCount'] >  0 && teamAssignments.length"
+                             (change)="toggleAllScreenshot()"
+                             [class.df-slide-toggle--half-checked]="allCounter['screenshotsCount'] != teamAssignments.length &&
+                              allCounter['screenshotsCount']">
+            </df-slide-toggle>
+          </ng-template>
+        </df-grid-column>
+        <df-grid-column header="Applications">
+          <ng-template dfGridTemplate="body">
+            <df-slide-toggle [ngModel]="allCounter['applicationsCount'] >  0 && teamAssignments.length"
+                             (change)="toggleAllApplications()"
+                             [class.df-slide-toggle--half-checked]="allCounter['applicationsCount'] != teamAssignments.length &&
+                              allCounter['applicationsCount']">
+            </df-slide-toggle>
+          </ng-template>
+        </df-grid-column>
+        <df-grid-column header="Review">
+          <ng-template dfGridTemplate="body">
+            <df-slide-toggle [ngModel]="allCounter['reviewsCount'] >  0 && teamAssignments.length"
+                             (change)="toggleAllReview()"
+                             [class.df-slide-toggle--half-checked]="allCounter['reviewsCount'] != teamAssignments.length &&
+                             allCounter['reviewsCount']">
+            </df-slide-toggle>
+          </ng-template>
+        </df-grid-column>
+      </df-grid>
+    </div>
+
+    <df-card-content>
+      <div *ngIf="!isSecurityLoading">
+        <df-grid [value]="teamAssignments"
+                 [loading]="isSecurityLoading"
+                 [rowExpandHandler]="undefined">
+          <df-grid-header-column-group>
+            <df-grid-row>
+              <df-grid-column>
+              </df-grid-column>
+              <df-grid-column>
+                <ng-template dfGridTemplate="header">
+                  <div class="d-flex flex-column align-items-center"
+                       dfToolTip="Take webcam photos every 10 minutes"
+                       container="df-grid-column"
+                       dfToolTipPlacement="top">
+                    <df-icon name="camera"></df-icon>
+                    <p>Webcam</p>
+                  </div>
+                </ng-template>
+              </df-grid-column>
+              <df-grid-column>
+                <ng-template dfGridTemplate="header">
+                  <div class="d-flex flex-column align-items-center"
+                       dfToolTip="Set the frequency of screenshoots"
+                       container="df-grid-column"
+                       dfToolTipPlacement="top">
+                    <df-icon name="desktop"></df-icon>
+                    <p>Screenshots</p>
+                  </div>
+                </ng-template>
+              </df-grid-column>
+              <df-grid-column>
+                <ng-template dfGridTemplate="header">
+                  <div class="d-flex flex-column align-items-center"
+                       dfToolTip="Capture the name of the applications/website used"
+                       container="df-grid-column"
+                       dfToolTipPlacement="top">
+                    <df-icon name="th"></df-icon>
+                    <p>Applications</p>
+                  </div>
+                </ng-template>
+              </df-grid-column>
+              <df-grid-column>
+                <ng-template dfGridTemplate="header">
+                  <div class="d-flex flex-column align-items-center"
+                       dfToolTip="Let Crossover's Productivity Team review the activity and dispute timecards"
+                       container="df-grid-column"
+                       dfToolTipPlacement="top">
+                    <df-icon name="eye"></df-icon>
+                    <p>Review</p>
+                  </div>
+                </ng-template>
+              </df-grid-column>
+            </df-grid-row>
+            <df-grid-row>
+              <df-grid-column header="All Team"></df-grid-column>
+              <df-grid-column>
+                <ng-template dfGridTemplate="header">
+                  <div class="text-center">
+                    <df-slide-toggle [ngModel]="allCounter['webCamCount'] >  0 && teamAssignments.length"
+                                     (change)="toggleAllWebCam()"
+                                     [class.df-slide-toggle--half-checked]="allCounter['webCamCount'] != teamAssignments.length && allCounter['webCamCount']"></df-slide-toggle>
+                  </div>
+                </ng-template>
+              </df-grid-column>
+              <df-grid-column>
+                <ng-template dfGridTemplate="header">
+                  <div class="text-center">
+                    <df-slide-toggle [ngModel]="allCounter['screenshotsCount'] >  0 && teamAssignments.length"
+                                     (change)="toggleAllScreenshot()"
+                                     [class.df-slide-toggle--half-checked]="allCounter['screenshotsCount'] != teamAssignments.length && allCounter['screenshotsCount']"></df-slide-toggle>
+                  </div>
+                </ng-template>
+              </df-grid-column>
+              <df-grid-column>
+                <ng-template dfGridTemplate="header">
+                  <div class="text-center">
+                    <df-slide-toggle [ngModel]="allCounter['applicationsCount'] >  0 && teamAssignments.length"
+                                     (change)="toggleAllApplications()"
+                                     [class.df-slide-toggle--half-checked]="allCounter['applicationsCount'] != teamAssignments.length && allCounter['applicationsCount']"></df-slide-toggle>
+                  </div>
+                </ng-template>
+              </df-grid-column>
+              <df-grid-column>
+                <ng-template dfGridTemplate="header">
+                  <div class="text-center">
+                    <df-slide-toggle [ngModel]="allCounter['reviewsCount'] >  0 && teamAssignments.length"
+                                     (change)="toggleAllReview()"
+                                     [class.df-slide-toggle--half-checked]="allCounter['reviewsCount'] != teamAssignments.length && allCounter['reviewsCount']"></df-slide-toggle>
+                  </div>
+                </ng-template>
+              </df-grid-column>
+            </df-grid-row>
+          </df-grid-header-column-group>
+
+          <df-grid-column header="Name">
+            <ng-template dfGridTemplate="body"
+                         let-member="rowData">
+              <div class="member-cell">
+                <div class="member-cell__avatar">
+                  <img [src]="member.candidate.photoUrl"
+                       (error)="$event.target.src = 'assets/images/user.png'">
+                </div>
+                <span class="member-cell__name">{{member.candidate.printableName}}</span>
+              </div>
+            </ng-template>
+          </df-grid-column>
+
+          <df-grid-column header="Webcam">
+            <ng-template dfGridTemplate="body"
+                         let-rowIndex="rowIndex">
+              <div class="text-center">
+                <df-slide-toggle [ngModel]="teamAssignments[rowIndex].disabledFeatures.indexOf('WEBCAM_PICTURES') < 0"
+                                 (change)="toggleDisabledWebCam(rowIndex, 'WEBCAM_PICTURES'); changeAllCounter($event.checked, 'webCamCount')">
+                </df-slide-toggle>
+              </div>
+            </ng-template>
+          </df-grid-column>
+
+          <df-grid-column header="Screenshots">
+            <ng-template dfGridTemplate="body"
+                         let-rowIndex="rowIndex">
+              <df-select [ngModel]="teamAssignments[rowIndex].featureValues.screenshotFrequency"
+                         (change)="toggleDisabledScreenShot(rowIndex, 'SCREENSHOTS', $event); changeAllCounter($event, 'screenshotsCount')"
+
+                         placeholder="Frequency"
+                         [background]="'dark'"
+                         autoSize="false"
+                         selectType="inline">
+                <df-option [value]="0">Disabled</df-option>
+                <df-option [value]="1">1x</df-option>
+                <df-option [value]="2">2x</df-option>
+                <df-option [value]="5">5x</df-option>
+                <df-option [value]="10">10x</df-option>
+              </df-select>
+            </ng-template>
+          </df-grid-column>
+
+          <df-grid-column header="Applications">
+
+            <ng-template dfGridTemplate="body"
+                         let-rowIndex="rowIndex">
+              <div class="text-center">
+                <df-slide-toggle [ngModel]="teamAssignments[rowIndex].disabledFeatures.indexOf('APPLICATION_TRACKING') < 0"
+                                 (change)="toggleDisabledFeatures(rowIndex, 'APPLICATION_TRACKING'); changeAllCounter($event.checked, 'applicationsCount')"></df-slide-toggle>
+              </div>
+            </ng-template>
+          </df-grid-column>
+
+          <df-grid-column header="Review">
+            <ng-template dfGridTemplate="body"
+                         let-rowIndex="rowIndex">
+              <div class="text-center">
+                <df-slide-toggle [ngModel]="teamAssignments[rowIndex].disabledFeatures.indexOf('ENFORCER_REVIEW') < 0"
+                                 (change)="toggleDisabledFeatures(rowIndex, 'ENFORCER_REVIEW'); changeAllCounter($event.checked, 'reviewsCount')"></df-slide-toggle>
+              </div>
+            </ng-template>
+          </df-grid-column>
+        </df-grid>
+      </div>
+
+      <div *ngIf="isSecurityLoading"
+           class="loader">
+        <i class="df-loader"></i>
+      </div>
+    </df-card-content>
+  </df-card>
+
+  <!-- Watchers -->
+  <df-card>
+    <df-card-header>
+      <df-card-title>
+        <span>Watchers</span>
+        <df-icon name="question-circle"
+                 dfToolTip="Managers who can see the performance of the team"
+                 dfToolTipPlacement="top"
+                 container="body">
+        </df-icon>
+      </df-card-title>
+    </df-card-header>
+
+    <df-card-content>
+      <div *ngIf="!isSecurityLoading">
+        <df-grid [value]="watchers"
+                 [loading]="isWatchersLoading"
+                 [editable]="true">
+          <df-grid-column header="Name">
+            <ng-template dfGridTemplate="body"
+                         let-member="rowData">
+              <div class="member-cell">
+                <div class="member-cell__avatar">
+                  <img [src]="member.photoUrl"
+                       (error)="$event.target.src = 'assets/images/user.png'">
+                </div>
+                <span class="member-cell__name">{{member.printableName}}</span>
+              </div>
+            </ng-template>
+          </df-grid-column>
+          <df-grid-column>
+            <ng-template dfGridTemplate="body"
+                         let-member="rowData"
+                         let-rowIndex="rowIndex">
+              <div *ngIf="!member.logicalWatcher"
+                   class="d-flex justify-content-center">
+                <button type="button"
+                        df-button
+                        df-clear-button
+                        theme="danger"
+                        (click)="removeWatcher(rowIndex)">
+                  <df-icon name="trash"></df-icon>
+                </button>
+              </div>
+            </ng-template>
+          </df-grid-column>
+        </df-grid>
+        <div class="add-watcher-panel mt-3">
+          <button *ngIf="!isAddingWatcher"
+                  type="button"
+                  df-button
+                  df-clear-button
+                  theme="primary"
+                  (click)="isAddingWatcher = true">
+            <df-icon name="plus"></df-icon>
+            Add Watcher
+          </button>
+
+          <div *ngIf="isAddingWatcher"
+               class="row">
+            <div class="col-12 col-md-6">
+              <df-select class="w-100"
+                         placeholder="Choose a new watcher"
+                         background="dark"
+                         selectType="inline"
+                         [autoSize]="false"
+                         (change)="newWatcher = managers[$event]">
+
+                <ng-template ngFor
+                             let-managerId
+                             [ngForOf]="filterManagerNotWatcher(managersIds)">
+                  <ng-template [ngIf]="isNewManagersCompany(managers[managerId].company)">
+                    <df-option class="df-option--category">
+                      {{managers[managerId].company.name}}
+                    </df-option>
+                  </ng-template>
+                  <df-option [value]="managerId"
+                             class="pl-3">
+                    {{managers[managerId].printableName}}
+                  </df-option>
+                </ng-template>
+              </df-select>
+            </div>
+            <div class="col-3 col-md-3">
+              <button type="button"
+                      df-button
+                      (click)="isAddingWatcher = false; addNewWatchers(newWatcher)">
+                Add
+              </button>
+            </div>
+            <div class="col-3 col-md-3">
+              <button type="button"
+                      df-button
+                      theme="light"
+                      (click)="isAddingWatcher = false; newWatcher = null">
+                Cancel
+              </button>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <div *ngIf="isSecurityLoading"
+           class="loader">
+        <i class="df-loader"></i>
+      </div>
+    </df-card-content>
+  </df-card>
+
+  <div class="mt-5 d-flex justify-content-center">
+    <button type="button"
+            df-button
+            df-clear-button
+            theme="danger"
+            (click)="deleteTeam()">
+      <df-icon name="trash"></df-icon>
+      Delete Team
+    </button>
+  </div>
+</ng-template>
+
+<div *ngIf="isTeamLoading"
+     class="d-flex justify-content-center align-items-center text-center">
+  <i class="df-loader"></i>
+</div>

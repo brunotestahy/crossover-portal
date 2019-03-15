@@ -1,0 +1,114 @@
+<ng-container *ngIf="data">
+  <div class="step step-1 d-flex flex-column w-100 h-100 position-relative"
+       [class.visible]="currentStep === 1">
+    <div class="px-5 pt-5 pb-4 w-100">
+      <div class="px-3 py-2 au-primary-background pull-left">
+        <img src="assets/crossover-white.svg"
+             width="90" />
+      </div>
+    </div>
+    <div class="col px-5 pb-5 d-flex flex-column position-relative">
+      <p class="welcome__title mb-4 mb-lg-2">
+        Thank you for applying for
+        <b>{{ data.job.title }}</b>.
+      </p>
+      <div class="col p-0 d-flex align-items-center">
+        <h1 class="big au-gray-main font-weight-bold w-100">
+          <b class="au-neutral-3 pull-left w-100">HERE’S WHAT</b>
+          <b class="au-blue font-weight-bold position-relative pull-left w-100">
+            TO EXPECT
+          </b>
+        </h1>
+      </div>
+      <div class="img-wrapper mb-4 d-none d-lg-flex flex-wrap align-items-center justify-content-center justify-content-md-start position-relative mt-md-4">
+        <div *ngFor="let step of steps"
+             class="step__image p-2 px-md-4 py-md-0 col-md-4 col-lg-2 {{ step.clazz }} mr-3">
+        </div>
+      </div>
+      <p class="bottom-text">Not interested?
+        <a class="au-blue font-weight-bold"
+           [routerLink]="'job/' + data.job.id + '/create-basic-profile'">
+          Return to application
+        </a>
+      </p>
+    </div>
+    <div class="next p-3 pt-5 au-white d-flex flex-column align-items-center justify-content-center position-relative"
+         (click)="currentStep = 2"
+         [class.z-index-9]="currentStep === 1">
+      <i class="fa fa-chevron-down au-black p-3 rounded-circle position-absolute">
+      </i>
+      <h3 class="m-0">
+        See What's Next
+      </h3>
+    </div>
+  </div>
+  <div class="step step-2 d-flex flex-column w-100 h-100 position-relative"
+       [class.visible]="currentStep === 2">
+    <div class="next p-3 pb-5 au-white d-flex flex-column align-items-center justify-content-center position-relative"
+         (click)="currentStep = 1"
+         [class.z-index-9]="currentStep === 2">
+      <h3 class="m-0">
+        Hiring Process Roadmap
+      </h3>
+      <i class="fa fa-chevron-up au-black p-3 rounded-circle position-absolute">
+      </i>
+    </div>
+    <div class="col p-0 position-relative overflow-y">
+      <div class="p-5 w-100 mb-3">
+        <div class="px-3 py-2 au-primary-background pull-left">
+          <img src="assets/crossover-white.svg" width="90"/>
+        </div>
+      </div>
+      <h1 class="big au-gray-main font-weight-bold w-100 pull-left mb-5 px-5">
+        <b class="pull-left w-100">
+          THE ROAD TO YOUR REMOTE JOB
+          <b class="au-blue font-weight-bold">
+            STARTS RIGHT HERE
+          </b>
+        </b>
+      </h1>
+      <div class="highway pull-left w-100 d-flex flex-column align-items-center px-5">
+        <div *ngFor="let step of steps; index as i; odd as isOdd; first as isFirst"
+             class="highway__step d-flex flex-column flex-md-row flex-nowrap align-items-center odd mb-5"
+             [class.mt-5]="!isFirst">
+          <div class="highway__step__image step__image mr-md-4 {{ step.clazz }}"
+               [class.d-md-none]="isOdd"
+               [class.d-block]="isOdd">
+          </div>
+          <div class="d-flex flex-nowrap">
+            <h1 class="au-gray-2 highway__step__number step__image font-weight-bold">
+              0{{ i + 1 }}
+            </h1>
+            <div class="highway__step__text position-relative">
+              <h2 class="au-black font-weight-bold mb-4">
+                {{ step.title }}
+              </h2>
+              <p class="au-neutral-4">
+                {{ step.description }}
+              </p>
+            </div>
+          </div>
+          <div *ngIf="isOdd"
+               class="highway__step__image step__image ml-4 d-none d-md-block {{ step.clazz }}"
+               [class.d-none]="isOdd"
+               [class.d-md-block]="isOdd">
+          </div>
+        </div>
+      </div>
+      <div class="hired pull-left w-100 p-5 text-center">
+        <h1 class="au-white">HIRED</h1>
+        <h3 class="au-white">Join the ranks of the top 1% talent in the world.</h3>
+        <button df-button
+                type="button"
+                theme="light"
+                class="mt-5 px-3 py-2"
+                [routerLink]="'job/' + data.job.id + '/create-basic-profile'">
+          Start the Challenge
+        </button>
+      </div>
+    </div>
+  </div>
+</ng-container>
+<div class="df-loader-container" *ngIf="isLoading">
+  <i class="df-loader"></i>
+</div>

@@ -1,0 +1,21 @@
+<div class="row">
+  <div class="df-loader-container"
+       *ngIf="isLoading; else chartsDisplay">
+    <i class="df-loader"></i>
+  </div>
+</div>
+
+<ng-template #chartsDisplay>
+  <df-card class="my-3 overflow-visible w-100" *ngIf="error !== ''">
+    <div class="error-message text-center">{{ error }}</div>
+  </df-card>
+  <app-team-summary-chart
+    *ngFor="let summary of summaries"
+    class="col-12 col-lg-6 d-block mb-5 pointer"
+    [teamId]="summary.productivitySummary.id"
+    [metricName]="summary.productivitySummary.teamName"
+    [summary]="summary"
+    [endDate]="endDate"
+    (clickOnChart)="onTeamSelect($event)">
+  </app-team-summary-chart>
+</ng-template>

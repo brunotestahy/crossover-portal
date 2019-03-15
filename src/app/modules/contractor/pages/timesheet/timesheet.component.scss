@@ -1,0 +1,91 @@
+@import "variables";
+
+.user-cell {
+  min-width: 42px;
+  text-align: left;
+  height: 54px;
+  img {
+    width: 40px;
+    border-radius: 20px;
+    border: 1px solid #d8d8d8;
+  }
+
+  @media (min-width: $breakpoint-sm) {
+    @media (max-width: $breakpoint-md) {
+      display: none;
+    }
+  }
+}
+
+.total-hours {
+  color: #02a8f3;
+}
+
+.tablet-cell {
+  @media (min-width: $breakpoint-md) {
+    display: none !important;
+  }
+
+  @media (max-width: $breakpoint-sm) {
+    display: none !important;
+  }
+
+  @media (min-width: $breakpoint-sm) {
+    @media (max-width: $breakpoint-md) {
+      display: block !important;
+    }
+  }
+}
+
+::ng-deep {
+  .weekday-cell {
+    @media (min-width: $breakpoint-sm) {
+      height: 54px !important;
+    }
+  }
+
+  #timesheetGrid {
+    th {
+      text-align: center !important;
+    }
+    td {
+      padding-left: 0px !important;
+      padding-right: 0px !important;
+  
+      span {
+        padding-left: 0px !important;
+        padding-right: 0px !important;
+        text-align: center !important;
+      }
+    }
+
+    th:not(:nth-child(1)) {
+      width: 9% !important;
+    }
+
+    .df-grid__row--data:nth-child(even) {
+      background-color: white !important;
+    }
+  }
+
+  .future-date{
+    border: none !important;
+    color: #ccc !important;
+  }
+  .above-average{
+    border-bottom: 4px solid #6DBD70;
+    color: inherit;
+  }
+  .below-average{
+    border-bottom: 4px solid #FA605D;
+    color: #FA605D;
+  }
+  .matches-average{
+    border-bottom: 4px solid #FFAB2D;
+    color: inherit;
+  }
+  .disabled-user{
+    opacity: 0.5;
+    pointer-events: none;
+  }
+}

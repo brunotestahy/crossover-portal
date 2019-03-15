@@ -1,0 +1,41 @@
+<div *ngIf="isEditable">
+  <div class="has-edit"
+       *ngFor="let education of educations; let last = last;">
+    <div (click)="onEdit(education)"
+         *ngIf="selectedEntry !== education">
+      <h4>
+        {{ education.school }}
+        <span class="edit-arrow">
+          <i class="fa fa-edit"></i>
+        </span>
+      </h4>
+      <span>{{ education.degree }}</span>
+      <br>
+      <span>{{ education.startYear }}</span>
+      <span *ngIf="education.startYear && education.endYear">-</span>
+      <span>{{ education.endYear }}</span>
+    </div>
+    <app-education-form class="d-block"
+                        [initialValue]="selectedEntry"
+                        (cancel)="onCancel()"
+                        (save)="onSave($event)"
+                        (remove)="onDelete($event)"
+                        *ngIf="selectedEntry === education"></app-education-form>
+    <hr *ngIf="!last" />
+  </div>
+</div>
+<div *ngIf="!isEditable">
+  <div *ngFor="let education of educations; let last = last;">
+    <div *ngIf="selectedEntry !== education">
+      <h4>
+        {{ education.school }}
+      </h4>
+      <span>{{ education.degree }}</span>
+      <br>
+      <span>{{ education.startYear }}</span>
+      <span *ngIf="education.startYear && education.endYear">-</span>
+      <span>{{ education.endYear }}</span>
+    </div>
+    <hr *ngIf="!last" />
+  </div>
+</div>

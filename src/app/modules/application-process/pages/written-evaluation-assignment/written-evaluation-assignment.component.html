@@ -1,0 +1,76 @@
+<df-card #card
+         class="px-4 py-3 mb-3">
+  <h4 class="written-evaluation__title d-flex align-items-center w-100 py-3">
+    <img src="/assets/images/candidate/application-process/steps/project-evaluation.svg"
+         width="45"
+         height="45" />
+    <span class="ml-3">Written Evaluation</span>
+    <div class="d-flex align-items-center ml-2 ml-md-4">
+      <small><i class="fa fa-circle au-blue mr-2"></i></small>
+      <small><i class="fa fa-circle au-blue mr-2"></i></small>
+      <small><i class="fa fa-circle-o au-gray-3"></i></small>
+    </div>
+  </h4>
+  <app-page-alert *ngIf="error"
+                  [text]="error"
+                  class="mt-3">
+  </app-page-alert>
+  <p class="my-3">
+    <span [innerHTML]="description | keepHtml"></span>
+    Make sure to answer all {{ data?.test.questions.length }} questions before submission.
+  </p>
+  <df-group-toggle *ngIf="questionButtonsLoaded" [items]="questionButtons"
+                   [selectedIndex]="questionSelectedIndex"
+                   (change)="onToggleChange($event)"
+                   class="mb-3">
+  </df-group-toggle>
+  <form [formGroup]="form"
+        class="standard-form">
+    <div *ngFor="let q of questions; index as i" class="col p-0 mb-4"
+         [class.d-none]="questionSelectedIndex !== i"
+         [class.d-block]="questionSelectedIndex === i">
+      <p [innerHTML]="q.question | keepHtml"></p>
+      <div [froalaEditor]="editorOptions"
+           formControlName="q{{q.sequenceNumber}}"></div>
+    </div>
+  </form>
+  <div class="d-flex flex-wrap justify-content-end">
+    <button df-button
+            type="button"
+            class="mr-2 col-6 col-md-auto"
+            (click)="previous()"
+            [disabled]="questionSelectedIndex === 0">
+      <span>Previous</span>
+    </button>
+    <button df-button
+            type="button"
+            class="mr-md-2 col col-md-auto"
+            (click)="next()"
+            [disabled]="questionSelectedIndex === questionButtons.length - 1">
+      <span>Next</span>
+    </button>
+    <button df-button
+            type="button"
+            class="btn-primary mr-2 mt-2 mt-md-0 col-6 col-md-auto"
+            (click)="saveDraft()">
+      <span>Save Draft</span>
+    </button>
+    <span [dfToolTip]="submitAllTooltip">
+      <button df-button
+              type="button"
+              (click)="submit()"
+              class="mt-2 mt-md-0 col col-md-auto"
+              [disabled]="form.invalid">
+        <span>Submit All</span>
+      </button>
+    </span>
+
+    <ng-template #submitAllTooltip>
+      <div class="criteria-tooltip">
+        <p>
+          You must provide a response to all questions in order to submit your application.
+        </p>
+      </div>
+    </ng-template>
+  </div>
+</df-card>

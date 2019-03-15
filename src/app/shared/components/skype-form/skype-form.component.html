@@ -1,0 +1,13 @@
+<form [formGroup]="form" class="standard-form container-fluid" (submit)="onSubmit()">
+  <div>
+    <label>Skype ID</label>
+    <df-input-container>
+      <input type="text" formControlName="skypeId">
+    </df-input-container>
+    <df-validation-messages [control]="form.get('skypeId')"></df-validation-messages>
+  </div>
+  <div class="d-flex">
+    <button class="mr-2" type="submit" df-button theme="info">Save</button>
+    <button class="mr-2" type="button" df-button theme="danger" (click)="cancel.emit()">Cancel</button>
+  </div>
+</form>

@@ -1,0 +1,32 @@
+@import "variables";
+
+.card-row {
+  border-bottom: solid 1px map-get($au-gray, 3);
+
+  &:first-child {
+    border-top: solid 1px map-get($au-gray, 3);
+  }
+
+  &:nth-child(even) {
+    background-color: lighten(map-get($map: $au-gray, $key: 2), 10%);
+  }
+}
+::ng-deep {
+  .df-card__title {
+    /*This will work for IE10+*/
+    @media screen and (-ms-high-contrast: active), screen and (-ms-high-contrast: none) {
+      padding: 2rem !important;
+    }
+  }
+  .df-card__footer {
+    @media screen and (min-width: $breakpoint-md) {
+      min-height: 12rem;
+    }
+    @media screen and (min-width: $breakpoint-lg) {
+      min-height: 9rem;
+    }
+    @media screen and (min-width: $breakpoint-xl) {
+      min-height: 7rem;
+    }
+  }
+}

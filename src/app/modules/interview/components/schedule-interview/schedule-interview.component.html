@@ -1,0 +1,90 @@
+<div class="container-fluid padding-aligned my-3">
+  <app-page-alert *ngIf="error"
+                  [text]="error"
+                  class="mb-3">
+  </app-page-alert>
+  <div class="row">
+    <div class="col-lg-5">
+      <df-card class="my-3">
+        <df-card-content>
+          <app-schedule-calendar></app-schedule-calendar>
+        </df-card-content>
+      </df-card>
+
+      <df-card class="my-3"
+               *ngIf="selectedDay">
+        <df-card-content>
+          <form class="mb-2 d-block standard-form"
+                [formGroup]="interviewForm"
+                (submit)="saveSchedule()">
+            <div class="row no-gutters my-3">
+              <div class="col-lg-3 col-md-4 col-sm-6 inverview__slot"
+                   *ngFor="let slot of selectedDaySlots"
+                   [class.inverview__slot--selected]="slot === selectedSlot"
+                   (click)="selectSlot(slot)">
+                {{slot | date : 'MMM dd HH:mm'}}
+              </div>
+            </div>
+            <!-- <df-radio-group formControlName="slot"
+                              class="d-block interview__select-slot overflow-y">
+                <df-radio-input *ngFor="let slot of selectedDaySlots"
+                                [value]="slot">{{slot | date : 'MMM dd, yyyy HH:mm'}}</df-radio-input>
+              </df-radio-group>
+              <df-validation-messages controlName="slot"></df-validation-messages> -->
+            <button type="submit"
+                    df-button
+                    theme="info"
+                    class="d-block w-100">Save Schedule</button>
+          </form>
+          <p>
+            Can't make any of these times?
+            <span class="fake-link"
+                  (click)="enableReschedule()">Click here</span>
+          </p>
+        </df-card-content>
+      </df-card>
+
+    </div>
+    <div class="col-lg-7">
+      <df-card class="my-3">
+        <df-card-content>
+          <!-- <app-interview-map class="my-3"
+                             [you]="interview.interviewee"
+                             [counterpart]="interview.selection.manager"></app-interview-map> -->
+          <div class="text-center">
+            <span>{{hoursDiff | date: 'hh:mm'}}</span>
+            <p>TIME DIFFERENCE</p>
+          </div>
+        </df-card-content>
+      </df-card>
+      <div class="form-row">
+        <div class="col-md-6">
+          <df-card class="mb-3">
+            <df-card-content>
+              <div class="interview__card interview__card--part">
+                <h3 class="interview__card__heading">YOU</h3>
+                <!-- <p class="interview__card__line interview__card__line--first">{{interview.interviewee.location.country.name}}</p>
+                <p class="interview__card__line">{{interview.interviewee.location.city || '&nbsp;'}}</p>
+                <p class="interview__card__line">UTC/GMT {{interview.interviewee.location.timeZone.hourlyOffset}}</p>
+                <p class="interview__card__line">Current time: {{(yourTime$ | async) | date: 'hh:mm a'}}</p> -->
+              </div>
+            </df-card-content>
+          </df-card>
+        </div>
+        <div class="col-md-6">
+          <df-card class="mb-3">
+            <df-card-content>
+              <div class="interview__card interview__card--counterpart">
+                <h3 class="interview__card__heading">HIRING MANAGER</h3>
+                <!-- <p class="interview__card__line interview__card__line--first">{{interview.selection.manager.location.country.name}}</p>
+                <p class="interview__card__line">{{interview.selection.manager.location.city || '&nbsp;'}}</p>
+                <p class="interview__card__line">UTC/GMT {{interview.selection.manager.location.timeZone.hourlyOffset}}</p>
+                <p class="interview__card__line">Current time: {{(managerTime$ | async) | date: 'hh:mm a'}}</p> -->
+              </div>
+            </df-card-content>
+          </df-card>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

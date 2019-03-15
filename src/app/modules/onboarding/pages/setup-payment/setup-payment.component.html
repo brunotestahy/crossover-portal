@@ -1,0 +1,43 @@
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-md-6 offset-md-3 setup-step">
+      <app-page-alert *ngIf="error" [text]="error" class="my-3"></app-page-alert>
+      <df-card>
+        <df-card-content>
+          <div class="payment-icon"></div>
+          <div class="onboarding__steps">
+            <div class="onboarding__step onboarding__step--completed"></div>
+            <div class="onboarding__step onboarding__step--completed"></div>
+            <div class="onboarding__step onboarding__step--active"></div>
+            <div class="onboarding__step onboarding__step--inactive"></div>
+            <div class="onboarding__step onboarding__step--inactive"></div>
+            <strong>Step 3</strong>
+          </div>
+
+          <h1>
+            Setup payment gateway through
+            <span>{{ paymentType?.formattedName || '-' }}</span>
+          </h1>
+          <p>
+            The time you log through WorkSmart will be automatically paid through
+            {{ paymentType?.formattedName || '-' }} - our partner payment platform. Setup your
+            {{ paymentType?.formattedName || '-' }} account to make sure you get paid effortlessly.
+          </p>
+
+          <button
+            type="button"
+            class="w-md-auto w-100"
+            df-button
+            theme="info"
+            (click)="setPaymentType()"
+            [disabled]="!paymentType">
+            Setup {{ paymentType?.formattedName || '-' }}
+          </button>
+        </df-card-content>
+      </df-card>
+    </div>
+    <div class="col-3 d-none d-md-flex align-items-center pr-0">
+      <div class="onboarding__office-icon"></div>
+    </div>
+  </div>
+</div>

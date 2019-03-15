@@ -1,0 +1,69 @@
+.blue {
+  color: $au-blue !important;
+}
+
+.red {
+  color: $au-red !important;
+}
+
+.green {
+  color: $au-green !important;
+}
+
+.au-blue {
+  color: $au-blue !important;
+}
+.au-white {
+  color: $au-white !important;
+}
+.au-green {
+  color: $au-green !important;
+}
+.au-red {
+  color: $au-red !important;
+}
+.au-black {
+  color: $au-black !important;
+}
+.au-amber, .au-yellow {
+  color: $au-amber !important;
+}
+.au-orange {
+  color: $au-orange !important;
+}
+.au-light-gray {
+  color: $au-light-gray !important;
+}
+.au-gray-main {
+  color: $au-gray-main !important;
+}
+.au-pink {
+  color: $au-pink !important;
+}
+.au-neutral-1 {
+  color: map-get($au-neutral, 1) !important;
+}
+.au-neutral-2 {
+  color: map-get($au-neutral, 2) !important;
+}
+.au-neutral-3 {
+  color: map-get($au-neutral, 3) !important;
+}
+.au-neutral-4 {
+  color: map-get($au-neutral, 4) !important;
+}
+.au-neutral-5 {
+  color: map-get($au-neutral, 5) !important;
+}
+.au-gray-1 {
+  color: map-get($au-gray, 1) !important;
+}
+.au-gray-2 {
+  color: map-get($au-gray, 2) !important;
+}
+.au-gray-3 {
+  color: map-get($au-gray, 3) !important;
+}
+.au-gray-4 {
+  color: map-get($au-gray, 4) !important;
+}

@@ -1,0 +1,36 @@
+<div class="au-modal-header p-3">
+  <div class="d-flex align-items-center m-0">
+    <h5>Please choose if Crossover can use Analytics and/or Advertising cookies.</h5>
+    <i (click)="close()"
+       class="au-modal-close fa fa-times">
+    </i>
+  </div>
+</div>
+<app-page-alert class="mt-3 ml-3 mr-3 mb-0"
+                *ngIf="error"
+                [text]="error"></app-page-alert>
+<div class="px-3 pt-3">
+  <app-cookie-preferences-form
+    [value]="value"
+    (valueChange)="onValueChange($event)">
+  </app-cookie-preferences-form>
+</div>
+<div class="w-100 d-flex align-items-center p-3 ">
+  <a href="https://www.crossover.com/privacy-policy/" target="_blank">Privacy Policy</a>
+  <div class="ml-auto">
+    <button df-button
+            type="button"
+            class="mr-2"
+            theme="success"
+            loaderPosition="after"
+            (click)="submit()">
+      <span>Submit</span>
+    </button>
+    <button df-button
+            type="button"
+            theme="danger"
+            (click)="close()">
+      <span>Cancel</span>
+    </button>
+  </div>
+</div>

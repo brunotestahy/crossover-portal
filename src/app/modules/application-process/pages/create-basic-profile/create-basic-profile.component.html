@@ -1,0 +1,179 @@
+<df-card #card
+         class="px-4 py-3">
+  <h4 class="create-basic-profile__title d-flex align-items-center w-100 py-3">
+    <img src="/assets/images/candidate/application-process/steps/create-basic-profile.svg"
+         width="45"
+         height="45" />
+    <span class="ml-3">Create Basic Profile</span>
+  </h4>
+  <p class="py-2">
+    Before getting started please fill in your profile below.
+    This information keeps your account secure and helps us coordinate future reviews.
+  </p>
+  <app-page-alert *ngIf="error"
+                  [text]="error"
+                  class="mb-3">
+  </app-page-alert>
+  <form [formGroup]="form"
+        class="standard-form d-flex flex-column flex-md-row">
+    <div class="create-basic-profile__avatar d-flex flex-column align-items-center mr-md-3 mb-5 mb-md-0"
+         (click)="avatarSelection()">
+      <img *ngIf="form.controls.avatar.valid"
+           [src]="form.value.avatar"
+           width="160"
+           height="160" />
+      <img *ngIf="form.controls.avatar.invalid"
+           src="/assets/images/user.png"
+           width="160"
+           height="160" />
+      <span class="create-basic-profile__avatar__button au-blue py-3 w-100 text-center text-uppercase">
+        Change Avatar
+      </span>
+    </div>
+    <div class="col-12 col-md">
+      <div class="form-row flex-column">
+        <label class="required">
+          Country
+        </label>
+        <div class="w-100">
+          <df-select formControlName="country" (change)="onCountryChange($event)"
+                     filterable="true">
+            <df-option *ngFor="let country of allowedCountries$ | async"
+                       [value]="country.id"
+                       [displayText]="country.name">
+              {{ country.name }}
+            </df-option>
+          </df-select>
+          <df-validation-messages [control]="form.controls.country">
+          </df-validation-messages>
+          <div class="text-right">
+            <small class="blue text-right pointer"
+                   [dfToolTip]="countryTooltip$ | async"
+                   [dfToolTipShowOnClick]="true"
+                   container=".create-basic-profile df-card"
+                   dfToolTipPlacement="bottomright">
+              Your country is not listed?
+            </small>
+          </div>
+        </div>
+      </div>
+      <div class="form-row flex-column">
+        <label class="required">
+          Timezone
+        </label>
+        <div class="w-100">
+          <df-select formControlName="timezone">
+            <df-option *ngFor="let timezone of country.timezones; first as isFirst"
+                       [value]="timezone"
+                       [selected]="isFirst">
+              {{timezone.name + ' ' + timezone.hourlyOffset}}
+            </df-option>
+          </df-select>
+          <df-validation-messages [control]="form.controls.timezone">
+          </df-validation-messages>
+        </div>
+      </div>
+      <div class="form-row flex-column">
+        <label class="required">
+          Skype Id
+        </label>
+        <div class="w-100">
+          <df-input-container>
+            <input formControlName="skypeId"
+                   type="text" />
+          </df-input-container>
+          <df-validation-messages [control]="form.controls.skypeId">
+          </df-validation-messages>
+        </div>
+      </div>
+      <div class="form-row flex-column">
+        <label class="required">
+          Mobile Phone
+        </label>
+        <div class="w-100">
+          <df-input-container>
+            <input formControlName="mobile"
+                   type="text" />
+          </df-input-container>
+          <df-validation-messages [control]="form.controls.mobile">
+          </df-validation-messages>
+        </div>
+      </div>
+    </div>
+    <div class="col-12 col-md">
+      <div class="form-row flex-column"
+           [style.margin-bottom]="'21px'">
+        <label class="required">
+          Security Question
+        </label>
+        <div class="w-100">
+          <df-select formControlName="securityQuestion"
+                     class="w-100"
+                     (change)="questionChange($event)">
+            <df-option *ngFor="let question of questions$ | async"
+                       [value]="question"
+                       [displayText]="question">
+            </df-option>
+            <df-option value="other"
+                       displayText="Other...">
+            </df-option>
+          </df-select>
+          <df-validation-messages [control]="form.controls.securityQuestion">
+          </df-validation-messages>
+        </div>
+      </div>
+      <div *ngIf="form.value.securityQuestion === 'other'"
+           class="form-row">
+        <label class="required">
+          Custom Security Question
+        </label>
+        <div class="w-100">
+          <df-input-container>
+            <input formControlName="customSecurityQuestion" type="text" />
+          </df-input-container>
+          <df-validation-messages [control]="form.controls.customSecurityQuestion">
+          </df-validation-messages>
+        </div>
+      </div>
+      <div class="form-row flex-column">
+        <label class="required">
+          Security Question Answer
+        </label>
+        <div class="w-100">
+          <df-input-container>
+            <input formControlName="securityAnswer" type="text" />
+          </df-input-container>
+          <df-validation-messages [control]="form.controls.securityAnswer">
+          </df-validation-messages>
+        </div>
+      </div>
+      <div class="form-row flex-column">
+        <label class="required">
+          Work availability
+        </label>
+        <div class="w-100">
+          <df-select formControlName="availability"
+                     class="w-100">
+            <df-option *ngFor="let option of availabilities$ | async"
+                       [value]="option">
+              {{option | enumToString : true : true}} after getting hired
+            </df-option>
+          </df-select>
+          <df-validation-messages [control]="form.controls.availability">
+          </df-validation-messages>
+        </div>
+      </div>
+    </div>
+  </form>
+  <div class="d-flex justify-content-end">
+    <small [dfToolTip]="continueTooltip()" [dfToolTipShowOnClick]="true" container="body"
+           dfToolTipPlacement="left">
+      <button df-button
+              type="submit"
+              (click)="continue()"
+              [disabled]="form.invalid">
+        <span>Continue</span>
+      </button>
+    </small>
+  </div>
+</df-card>

@@ -1,0 +1,185 @@
+<div class="section__header section__header--aligned">
+  Accept Interview
+</div>
+<div class="df-loader-container"
+     *ngIf="isLoading; else loadedContent">
+  <i class="df-loader"></i>
+</div>
+<ng-template #loadedContent>
+  <div class="container-fluid padding-aligned my-3 page-scroll">
+    <app-page-alert *ngIf="error"
+                    [text]="error"
+                    class="mb-3">
+    </app-page-alert>
+    <div *ngIf="interview">
+      <div class="row">
+        <div class="col-lg-5">
+          <df-card class="my-3">
+            <df-card-content>
+              <mwl-calendar-month-view class="au-calendar"
+                                       [viewDate]="viewDate"
+                                       [headerTemplate]="headerTemplate"
+                                       [events]="events"
+                                       (dayClicked)="onDayClicked($event.day.date)"
+                                       [cellTemplate]="customCellTemplate">
+              </mwl-calendar-month-view>
+            </df-card-content>
+          </df-card>
+
+          <df-card class="my-3"
+                   *ngIf="selectedDay">
+            <df-card-content>
+              <div class="row no-gutters my-3">
+                <div class="col-lg-3 col-md-4 col-sm-6 inverview__slot"
+                     *ngFor="let slot of selectedDaySlots"
+                     [class.inverview__slot--selected]="slot === selectedSlot"
+                     (click)="selectSlot(slot)">
+                  {{slot | date : 'MMM dd HH:mm'}}
+                </div>
+              </div>
+              <button type="submit"
+                      df-button
+                      theme="info"
+                      class="d-block w-100"
+                      [disabled]="!selectedSlot"
+                      (click)="saveInterviewSchedule()">Save Schedule</button>
+              <p>
+                Can't make any of these times?
+                <span class="fake-link"
+                      (click)="enableReschedule()">Click here</span>
+              </p>
+            </df-card-content>
+          </df-card>
+        </div>
+        <div class="col-lg-7">
+          <df-card class="my-3">
+            <df-card-content>
+              <app-interview-map class="my-3"
+                                 [you]="interview.interviewee"
+                                 [counterpart]="interview.selection.manager"></app-interview-map>
+              <div class="text-center">
+                <span>{{hoursDiff | formatHours: hh:mm}}</span>
+                <p>TIME DIFFERENCE</p>
+              </div>
+            </df-card-content>
+          </df-card>
+          <div class="form-row">
+            <div class="col-md-6">
+              <df-card class="mb-3">
+                <df-card-content>
+                  <div class="interview__card interview__card--part">
+                    <h3 class="interview__card__heading">YOU</h3>
+                    <p class="interview__card__line interview__card__line--first">{{interview.interviewee.location.country.name}}</p>
+                    <p class="interview__card__line">{{interview.interviewee.location.city || '&nbsp;'}}</p>
+                    <p class="interview__card__line">UTC/GMT {{interview.interviewee.location.timeZone.hourlyOffset}}</p>
+                    <p class="interview__card__line">Current time: {{(yourTime$ | async) | date: 'hh:mm a'}}</p>
+                  </div>
+                </df-card-content>
+              </df-card>
+            </div>
+            <div class="col-md-6">
+              <df-card class="mb-3">
+                <df-card-content>
+                  <div class="interview__card interview__card--counterpart">
+                    <h3 class="interview__card__heading">HIRING MANAGER</h3>
+                    <p class="interview__card__line interview__card__line--first">{{interview.selection.manager.location.country.name}}</p>
+                    <p class="interview__card__line">{{interview.selection.manager.location.city || '&nbsp;'}}</p>
+                    <p class="interview__card__line">UTC/GMT {{interview.selection.manager.location.timeZone.hourlyOffset}}</p>
+                    <p class="interview__card__line">Current time: {{(managerTime$ | async) | date: 'hh:mm a'}}</p>
+                  </div>
+                </df-card-content>
+              </df-card>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div #reschedule>
+        <div class="row"
+             *ngIf="rescheduleEnabled">
+          <div class="col-md-6 offset-md-3">
+            <df-card>
+              <df-card-content>
+                <p>
+                  PLEASE INDICATE THE TIMES THAT YOU CAN INTERVIEW. THIS WILL HELP THE HIRING MANAGER RESCHEDULE THE INTERVIEW AT A TIME CONVENIENT
+                  FOR BOTH OF YOU.
+                </p>
+                <form [formGroup]="rescheduleForm"
+                      class="standard-form"
+                      (submit)="submitReschedule()">
+                  <df-input-container>
+                    <textarea formControlName="message"
+                              placeholder="Message"></textarea>
+                  </df-input-container>
+                  <df-validation-messages controlName="message"></df-validation-messages>
+                  <div class="row">
+                    <div class="col-md-6">
+                      <button class="d-block w-100 my-2"
+                              type="submit"
+                              df-button
+                              theme="info"
+                              [loading]="pendingReschedule"
+                              loaderPosition="after"
+                              [disabled]="rescheduleForm.invalid">Send</button>
+                    </div>
+                    <div class="col-md-6">
+                      <button class="d-block w-100 my-2"
+                              type="button"
+                              df-button
+                              theme="danger"
+                              (click)="disableReschedule()">Cancel</button>
+                    </div>
+                  </div>
+                </form>
+              </df-card-content>
+            </df-card>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #customCellTemplate
+             let-day="day"
+             let-locale="locale">
+  <div class="cal-cell-text"
+       [class.day-disabled]="!isDateAvailable(day.date)"
+       [class.day-selected]="isDateSelected(day.date)">
+    {{ day.date | calendarDate:'monthViewDayNumber':locale }}
+  </div>
+</ng-template>
+
+<ng-template #headerTemplate
+             let-days="days"
+             let-locale="locale">
+  <div class="au-calendar__header">
+    <div class="au-calendar__header__inner">
+      <h4 class="au-calendar__header__text">{{viewDate | date : 'MMMM yyyy'}}</h4>
+      <button class="au-calendar__header__ctrl-btn au-calendar__header__ctrl-btn--previous"
+              [class.au-calendar__header__ctrl-btn--disabled]="isSameMonth()"
+              type="button"
+              (click)="prevMonth()">
+      </button>
+      <button class="au-calendar__header__ctrl-btn au-calendar__header__ctrl-btn--next"
+              type="button"
+              (click)="nextMonth()"></button>
+    </div>
+  </div>
+
+  <div class="cal-cell-row cal-header">
+    <div class="cal-cell"
+         *ngFor="let day of days;"
+         [class.cal-past]="day.isPast"
+         [class.cal-today]="day.isToday"
+         [class.cal-future]="day.isFuture"
+         [class.cal-weekend]="day.isWeekend"
+         [ngClass]="day.cssClass">
+      <span class="d-none d-md-block">
+        {{ day.date | date:'EEE':locale }}
+      </span>
+      <span class="d-block d-md-none">
+        {{ day.date | date:'EEEEE':locale }}
+      </span>
+    </div>
+  </div>
+</ng-template>

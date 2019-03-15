@@ -1,0 +1,41 @@
+<df-card #card
+         class="px-4 py-3">
+  <h4 class="d-flex align-items-center w-100 py-3">
+    <img src="/assets/images/candidate/application-process/steps/rejected.svg"
+         class="mx-auto"
+         width="85"
+         height="85" />
+  </h4>
+  <h2 class="mt-4">Important Update on your Application</h2>
+  <div class="df-loader-container"
+       *ngIf="isLoading; else loadedContent">
+    <i class="df-loader"></i>
+  </div>
+  <ng-template #loadedContent>
+    <p class="pt-4">
+      Dear {{user?.printableName}} - Thank you for applying for the {{application?.job.title}} role with Crossover. It’s an extremely
+      competitive process and we greatly appreciate your time and effort. Unfortunately, while we were impressed by you and
+      your skills, we are moving forward with candidates who are a closer match to the needs of the position.
+    </p>
+    <p>
+      We understand this isn’t the news you were hoping for. This doesn’t have to be the end however! We do encourage you to apply
+      for open positions that you qualify for in the future, however you must wait 3 months to apply for the same role again.
+    </p>
+    <p>
+      Again, thank you for your time and interest in working as a Crossover partner. We wish you the best in your career search
+      and hope our paths cross again soon.
+    </p>
+    <p>
+      The Crossover Team
+    </p>
+    <div>
+      <button class="d-block ml-auto"
+              type="button"
+              df-button
+              theme="info"
+              routerLink="/marketplace/available-jobs">
+        CHECK OUT OTHER CROSSOVER JOBS
+      </button>
+    </div>
+  </ng-template>
+</df-card>

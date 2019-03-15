@@ -1,0 +1,156 @@
+<div class="section__header section__header--aligned d-flex align-items-center">
+  <span class="mr-2">Pipeline Sourcing Details</span>
+</div>
+<div class="container-fluid padding-aligned page-scroll">
+  <a class="my-3 d-block"
+     routerLink="..">
+    <i class="fa fa-long-arrow-left"></i>
+    Back to all Pipelines
+  </a>
+  <app-page-alert class="my-3"
+                  *ngIf="error !== ''; else noErrorTemplate"
+                  [text]="error"></app-page-alert>
+  <ng-template #noErrorTemplate>
+    <div class="df-loader-container"
+         *ngIf="isLoading; else loadedContent">
+      <i class="df-loader"></i>
+    </div>
+    <ng-template #loadedContent>
+      <df-card class="my-3">
+        <df-card-header>
+          <div class="d-flex w-100 align-items-center">
+            <h5 class="my-0">Summary - {{sourcingDetails.job.title}}</h5>
+            <button type="button"
+                    class="ml-auto"
+                    df-button
+                    theme="info"
+                    (click)="grid.exportCSV()">Download CSV</button>
+          </div>
+        </df-card-header>
+        <df-card-content>
+          <div class="row">
+            <div class="col-md-4">
+              Total Number of Candidates: 
+              <a routerLink="/applicants/tracking"
+                 [queryParams]="{jobId: sourcingDetails.job.id}"
+                 target="_blank">
+                {{sourcingDetails.applicationsCount}}
+              </a>
+              <br> Last Day: {{sourcingDetails.applicationsCountDay}}
+              <br> Last 7 Day: {{sourcingDetails.applicationsCountWeek}}
+            </div>
+            <div class="col-md-4">
+              Average Resume Score: {{sourcingDetails.avgResumeScore | number : '1.2-2'}}
+              <br> Average Resume Score - past day: {{sourcingDetails.avgResumeScoreDay | number : '1.2-2'}}
+              <br> Average Resume Score - past 7 days: {{sourcingDetails.avgResumeScoreWeek | number : '1.2-2'}}
+            </div>
+            <div class="col-md-4">
+              Campaigns with most applicants:
+              <a routerLink="/applicants/tracking"
+                 [queryParams]="{jobId: sourcingDetails.job.id, campaign: campaignMostApplicants.campaign}"
+                 target="_blank">{{campaignMostApplicants?.campaign}}</a>
+              <br> Campaigns with least applicants:
+              <a routerLink="/applicants/tracking"
+                 [queryParams]="{jobId: sourcingDetails.job.id, campaign: campaignLeastApplicants.campaign}"
+                 target="_blank">{{campaignLeastApplicants?.campaign}}</a>
+              <br> Campaigns with best score:
+              <a routerLink="/applicants/tracking"
+                 [queryParams]="{jobId: sourcingDetails.job.id, campaign: campaignBestScore.campaign}"
+                 target="_blank">{{campaignBestScore?.campaign}}</a>
+              <br> Campaigns with lowest score:
+              <a routerLink="/applicants/tracking"
+                 [queryParams]="{jobId: sourcingDetails.job.id, campaign: campaignLowestScore.campaign}"
+                 target="_blank">{{campaignLowestScore?.campaign}}</a>
+            </div>
+          </div>
+        </df-card-content>
+      </df-card>
+      <df-card class="my-3">
+        <df-card-content>
+          <df-grid #grid
+                   [value]="sourcingDetails.campaignsStatistics"
+                   [responsive]="true">
+            <df-grid-column header="Campaign"
+                            field="campaign"
+                            [sortable]="true"></df-grid-column>
+            <df-grid-column header="Total"
+                            field="total"
+                            [sortable]="true"></df-grid-column>
+            <df-grid-column header="Last Day"
+                            field="total1"
+                            [sortable]="true"></df-grid-column>
+            <df-grid-column header="Last 7 Days"
+                            field="total7"
+                            [sortable]="true"></df-grid-column>
+            <df-grid-column header="Average Score"
+                            field="avgScore"
+                            [sortable]="true">
+              <ng-template dfGridTemplate="body"
+                           let-col
+                           let-item="rowData">
+                {{item.avgScore | number : '1.2-2'}}
+              </ng-template>
+            </df-grid-column>
+            <df-grid-column header="Average Score 1 Day"
+                            field="avgScore1"
+                            [sortable]="true">
+              <ng-template dfGridTemplate="body"
+                           let-col
+                           let-item="rowData">
+                {{item.avgScore1 | number : '1.2-2'}}
+              </ng-template>
+            </df-grid-column>
+            <df-grid-column header="Average Score 7 Days"
+                            field="avgScore7"
+                            [sortable]="true">
+              <ng-template dfGridTemplate="body"
+                           let-col
+                           let-item="rowData">
+                {{item.avgScore7 | number : '1.2-2'}}
+              </ng-template>
+            </df-grid-column>
+            <df-grid-footer-column-group>
+              <df-grid-row>
+                <df-grid-column>
+                  <ng-template dfGridTemplate="footer">
+                    Total:
+                  </ng-template>
+                </df-grid-column>
+                <df-grid-column>
+                  <ng-template dfGridTemplate="footer">
+                    {{gridTotal}}
+                  </ng-template>
+                </df-grid-column>
+                <df-grid-column>
+                  <ng-template dfGridTemplate="footer">
+                    {{gridTotalDay}}
+                  </ng-template>
+                </df-grid-column>
+                <df-grid-column>
+                  <ng-template dfGridTemplate="footer">
+                    {{gridTotalWeek}}
+                  </ng-template>
+                </df-grid-column>
+                <df-grid-column>
+                  <ng-template dfGridTemplate="footer">
+                    {{gridAverage | number : '1.2-2'}}
+                  </ng-template>
+                </df-grid-column>
+                <df-grid-column>
+                  <ng-template dfGridTemplate="footer">
+                    {{gridAverageDay | number : '1.2-2'}}
+                  </ng-template>
+                </df-grid-column>
+                <df-grid-column>
+                  <ng-template dfGridTemplate="footer">
+                    {{gridAverageWeek | number : '1.2-2'}}
+                  </ng-template>
+                </df-grid-column>
+              </df-grid-row>
+            </df-grid-footer-column-group>
+          </df-grid>
+        </df-card-content>
+      </df-card>
+    </ng-template>
+  </ng-template>
+</div>

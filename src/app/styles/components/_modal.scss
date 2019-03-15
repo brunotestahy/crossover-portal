@@ -1,0 +1,49 @@
+@import "~@devfactory/ngx-df/core/theming/aurea-skin/theming";
+.df-modal__content {
+  max-height: 90vh;
+  overflow-y: auto !important;
+  transform: translate3d(0,0,0);
+  -webkit-transform: translate3d(0,0,0);
+  df-card {
+    border-radius: 0;
+  }
+}
+
+.au-modal-header {
+  background: $au-gray-main;
+  color: $au-white;
+  position: relative;
+}
+
+.au-modal-close {
+  margin-left: auto;
+  cursor: pointer;
+}
+
+.huge-modal .df-modal__content {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  margin-left: 30px;
+  margin-right: 30px;
+  @media screen and (min-width: $breakpoint-md) {
+    width: 66.666%;
+    margin-left: 0;
+    margin-right: 0;
+  }
+}
+
+// Specific modal styles
+.change-avatar-modal .df-card__content {
+  max-height: 65vh;
+  overflow: auto;
+}
+
+.endorsement-filter-modal {
+  .df-modal__content {
+    display: -ms-flexbox!important;
+    display: flex!important;
+    -ms-flex-direction: column!important;
+    flex-direction: column!important;
+  }
+}

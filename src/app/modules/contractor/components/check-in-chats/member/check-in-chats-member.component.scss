@@ -1,0 +1,191 @@
+@import "variables";
+
+.on-track {
+  background-color: #66BB6A;
+}
+
+.pending-blocked {
+  background-color: #EF5350;
+}
+
+.pending-unblocked {
+  background-color: #FDD835;
+}
+
+.not-done {
+  background-color: #90A4AE;
+}
+
+.user {
+  height: 41px;
+  min-width: 42px;
+  text-align: left;
+  white-space: nowrap;
+  img {
+    width: 40px;
+    border-radius: 20px;
+    border: 1px solid #d8d8d8;
+  }
+
+  @media (min-width: $breakpoint-xl) {
+    display: block !important;
+  }
+}
+
+.user-name {
+  display: -webkit-inline-box;
+}
+
+.user-cell {
+  height: 41px;
+  text-align: left;
+  white-space: nowrap;
+  img {
+    width: 40px;
+    border-radius: 20px;
+    border: 1px solid #d8d8d8;
+  }
+
+  @media (min-width: $breakpoint-sm) {
+    @media (max-width: $breakpoint-md) {
+      display: none !important;
+    }
+  }
+}
+
+.tablet-cell {
+  @media (min-width: $breakpoint-md) {
+    display: none !important;
+  }
+
+  @media (max-width: $breakpoint-sm) {
+    display: none !important;
+  }
+
+  @media (min-width: $breakpoint-sm) {
+    @media (max-width: $breakpoint-md) {
+      display: flex !important;
+    }
+  }
+}
+
+.cursor-pointer {
+  cursor: pointer;
+}
+
+.monthly-check-in-background {
+  height: 41px;
+}
+
+::ng-deep {
+
+  .check-ins-grid table {
+    font-size: 11px;
+  }
+
+  #monthlyCheckinsGrid table
+  th:not(:nth-child(1)):not(:nth-child(2)):not(:nth-child(3)):not(:nth-child(4)):not(:nth-child(5)) {
+    width: 1.6% !important;
+    min-width: 1.6% !important;
+    max-width: 1.6% !important;
+    padding-right: 0 !important;
+    padding-left: 0 !important;
+
+    @media (min-width: $breakpoint-sm) {
+      @media (max-width: $breakpoint-md) {
+        font-size: 9px;
+        width: 1.92% !important;
+        min-width: 1.92% !important;
+        max-width: 1.92% !important;
+      }
+    }
+  }
+
+  #monthlyCheckinsGrid table th:nth-child(2),
+  #monthlyCheckinsGrid table th:nth-child(3),
+  #monthlyCheckinsGrid table th:nth-child(4) {
+    width: 8.5% !important;
+  }
+
+  #monthlyCheckinsGrid table th:nth-child(5) {
+    width: 8.5% !important;
+    @media (min-width: $breakpoint-lg) {
+      width: 6.5% !important;
+    }
+  }
+
+  #weeklyCheckinsGrid table th:nth-child(2),
+  #weeklyCheckinsGrid table th:nth-child(3),
+  #weeklyCheckinsGrid table th:nth-child(4) {
+    width: 8.5% !important;
+  }
+
+  #weeklyCheckinsGrid table th:nth-child(6),
+  #weeklyCheckinsGrid table th:nth-child(7),
+  #weeklyCheckinsGrid table th:nth-child(8),
+  #weeklyCheckinsGrid table th:nth-child(9),
+  #weeklyCheckinsGrid table th:nth-child(10) {
+    width: 9% !important;
+  }
+
+  #weeklyCheckinsGrid table th:nth-child(5) {
+    width: 7% !important;
+    @media (min-width: $breakpoint-lg) {
+      width: 5% !important;
+    }
+  }
+
+  #dailyCheckinsGrid table th:nth-child(2),
+  #dailyCheckinsGrid table th:nth-child(3),
+  #dailyCheckinsGrid table th:nth-child(7),
+  #dailyCheckinsGrid table th:nth-child(8) {
+    width: 12% !important;
+  }
+
+  #dailyCheckinsGrid table th:nth-child(4),
+  #dailyCheckinsGrid table th:nth-child(6) {
+    width: 10.5% !important;
+  }
+
+  #dailyCheckinsGrid table th:nth-child(5) {
+    width: 11% !important;
+    @media (min-width: $breakpoint-lg) {
+      width: 9% !important;
+    }
+  }
+
+  @media (min-width: $breakpoint-md) {
+    #monthlyCheckinsGrid table
+    td:not(:nth-child(1)):not(:nth-child(2)):not(:nth-child(4)):not(:nth-child(5)) {
+      padding: 0!important;
+      .df-grid-table-body__cell-data{
+        padding: 0!important;
+      }
+    }
+  }
+
+  .check-ins-grid table
+  td {
+    @media (min-width: $breakpoint-sm) {
+      @media (max-width: $breakpoint-md) {
+        padding: 0!important;
+        .df-grid-table-body__cell-data{
+          padding: 0!important;
+        }
+      }
+    }
+  }
+
+  .df-grid-table-body__cell-column-title {
+    min-width: 53% !important;
+    max-width: 53% !important;
+  }
+
+  .df-grid {
+    // overflow-x: hidden !important;
+  }
+
+  .df-modal__content {
+    // overflow: visible !important;
+  }
+}

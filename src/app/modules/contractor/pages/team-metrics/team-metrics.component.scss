@@ -1,0 +1,201 @@
+@import "variables";
+
+:host {
+  height: 100%;
+}
+
+.disabled-refresher {
+  cursor: not-allowed;
+  opacity: .4;
+}
+
+.disabled-card {
+  opacity: 0.5;
+  pointer-events: none;
+}
+
+.team-member {
+  min-width: 42px;
+  text-align: left;
+  min-height: 54px;
+  img {
+    width: 40px;
+    border-radius: 20px;
+    border: 1px solid #d8d8d8;
+  }
+}
+
+.weekly-average-record {
+  font-size: 13px;
+}
+
+.weekly-average-cell {
+  padding-left: 12px;
+  padding-right: 12px;
+}
+
+.team-average-cell {
+  padding-left: 9px;
+  padding-right: 12px;
+}
+
+.team-average-cell-units {
+  padding-left: 37px;
+  padding-right: 41px;
+}
+
+.team-average-cell-cost {
+  padding-left: 22px;
+}
+
+.metric-target {
+  margin-left: 17px;
+}
+
+.team-average {
+  color: #02a8f3;
+}
+
+.team-average-check-box {
+  margin-left: 9px;
+}
+
+.team-average-label {
+  margin-left: 8px;
+}
+
+.score {
+  &-success {
+    color: #6dbd70;
+  }
+
+  &-warning {
+    color: #ffab2d;
+  }
+
+  &-danger {
+    color: #fa605d;
+  }
+}
+
+.option-select {
+  width: 100%;
+  @media (min-width: $breakpoint-md) {
+    width: auto;
+  }
+}
+
+.inactive-user {
+  opacity: 0.5;
+}
+
+.chart-tooltip {
+  padding: 4px 6px;
+  color: #fff;
+  border-radius: 4px;
+  background: #333;
+  font-size: 13px;
+}
+
+::ng-deep {
+  app-team-metrics {
+
+    .chart-grid {
+      .df-grid-scrollable-view__body {
+        @media (max-width: 1024px) {
+          max-height: unset !important;
+        }
+      }
+    }
+    .df-bar,
+    .df-line-chart {
+      height: 438px;
+
+    }
+
+    .six-months {
+      .df-bar {
+        .df-bar__axis--x {
+          g:not(:nth-child(3n+1)) {
+            @media (max-width: $breakpoint-md) {
+              display: none !important;
+            }
+          }
+        }
+      }
+    }
+
+    .twelve-weeks {
+      .df-bar {
+        .df-bar__axis--x {
+          g:nth-child(even) {
+            @media (max-width: $breakpoint-md) {
+              display: none !important;
+            }
+          }
+        }
+      }
+    }
+
+    .df-tooltip {
+      max-width: 180px;
+      display: none !important;
+      @media (min-width: $breakpoint-md) {
+        display: block !important;
+      }
+    }
+
+    .df-tooltip__content {
+      font-size: 12px;
+    }
+
+    .df-grid__row--data:nth-child(even) {
+      background-color: unset;
+    }
+
+    .df-grid__row--selected {
+      background-color: #eee !important;
+    }
+
+    .team-metric-grid {
+      .df-grid--scrollable {
+        overflow-x: hidden !important;
+        @media (min-width: $breakpoint-md) {
+          width: 610px !important;
+        }
+        @media (min-width: $breakpoint-lg) {
+          width: 718px !important;
+        }
+        @media (min-width: $breakpoint-xl) {
+          width: 1050px !important;
+        }
+      }
+
+      .df-grid-scrollable-view--unfrozen {
+        @media (min-width: $breakpoint-lg) {
+            width: 388px !important;
+        }
+        @media (min-width: $breakpoint-xl) {
+          width: 720px !important;
+        }
+      }
+
+      .df-grid {
+        th {
+          height: 54px !important;
+          width: 100px !important;
+          text-align: center !important;
+        }
+      }
+
+      .df-grid--scrollable {
+        margin-left: auto !important;
+        margin-right: auto !important;
+      }
+
+      .df-grid__row--data {
+        height: 55px;
+      }
+    }
+  }
+}

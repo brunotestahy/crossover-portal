@@ -1,0 +1,21 @@
+@import "variables";
+
+.interview-timeline {
+  border-left-style: solid;
+  border-left-width: 3px;
+  border-left-color: $au-blue;
+  padding-left: 15px;
+}
+
+.interview-step {
+  position: absolute;
+  margin-left: -24px;
+  width: 16px;
+  height: 16px;
+  display: block;
+  border-radius: 50%;
+  border-style: solid;
+  border-color: $au-blue;
+  border-width: 3px;
+  background-color: $au-white;
+}

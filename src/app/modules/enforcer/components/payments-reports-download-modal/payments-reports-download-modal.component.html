@@ -1,0 +1,66 @@
+<div class="payments-reports-download-modal">
+  <div class="payments-reports-download-modal__header section__header d-flex justify-content-between">
+    <span>Generate report</span>
+    <button type="button"
+            df-button
+            df-clear-button
+            theme="danger"
+            (click)="close()">
+      <df-icon name="times"></df-icon>
+    </button>
+  </div>
+
+  <div class="payments-reports-download-modal__content">
+    <div class="row">
+      <div class="col-6 col-md-3">
+        <h6 class="filterCategory">Platforms</h6>
+        <df-checkbox [(ngModel)]="platforms[filterEnums.Platform.Paychex]"
+                     (change)="changeFilterAndQuery()">Paychex</df-checkbox>
+        <df-checkbox [(ngModel)]="platforms[filterEnums.Platform.Payoneer]"
+                     (change)="changeFilterAndQuery()">Payoneer</df-checkbox>
+      </div>
+      <div class="col-6 col-md-3">
+        <h6 class="filterCategory">Types</h6>
+        <df-checkbox [(ngModel)]="types[filterEnums.Type.Weekly]"
+                     (change)="changeFilterAndQuery()">Weekly</df-checkbox>
+        <df-checkbox [(ngModel)]="types[filterEnums.Type.Monthly]"
+                     (change)="changeFilterAndQuery()">Monthly</df-checkbox>
+      </div>
+      <div class="col-6 col-md-3">
+        <h6 class="filterCategory">Units</h6>
+        <df-checkbox [(ngModel)]="units[filterEnums.Unit.Hour]"
+                     (change)="changeFilterAndQuery()">Hour</df-checkbox>
+        <df-checkbox [(ngModel)]="units[filterEnums.Unit.Week]"
+                     (change)="changeFilterAndQuery()">Week</df-checkbox>
+        <df-checkbox [(ngModel)]="units[filterEnums.Unit.Month]"
+                     (change)="changeFilterAndQuery()">Month</df-checkbox>
+      </div>
+      <div class="col-6 col-md-3">
+        <h6 class="filterCategory">Statuses</h6>
+        <df-checkbox [(ngModel)]="statuses[filterEnums.Status.Approved]"
+                     (change)="changeFilterAndQuery()">Approved</df-checkbox>
+        <df-checkbox [(ngModel)]="statuses[filterEnums.Status.Ready]"
+                     (change)="changeFilterAndQuery()">Ready</df-checkbox>
+        <df-checkbox [(ngModel)]="statuses[filterEnums.Status.Rejected]"
+                     (change)="changeFilterAndQuery()">Rejected</df-checkbox>
+      </div>
+    </div>
+  </div>
+
+  <div class="payments-reports-download-modal__footer">
+    <span class="filterResultsCount"
+          *ngIf="filterResultsCount<0">
+      <i class="df-loader"></i>
+    </span>
+    <span class="filterResultsCount"
+          *ngIf="filterResultsCount>=0">
+      {{filterResultsCount}} filter results
+    </span>
+
+    <button type="button"
+            [disabled]="isDownloadDisabled"
+            (click)="downloadReports()"
+            df-button>Download
+    </button>
+  </div>
+</div>

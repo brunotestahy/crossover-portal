@@ -1,0 +1,52 @@
+@import 'variables';
+
+:host {
+  .assignment-avatar {
+    display: inline-block;
+    vertical-align: middle;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    overflow: hidden;
+
+    img {
+      width: auto;
+      height: auto;
+      max-width: 100%;
+      max-height: 100%;
+    }
+  }
+
+  .teams-list {
+    height: 100%;
+    max-height: 400px;
+    overflow: auto;
+
+    &__item {
+      min-height: 40px;
+    }
+  }
+
+  df-checkbox {
+
+    ::ng-deep {
+
+      .df-checkbox__wrapper-btn {
+        width: 100%;
+      }
+
+      .df-checkbox__layout {
+        display: block;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        text-align: left;
+      }
+
+      .df-checkbox__icon {
+        color: $au-blue;
+        font-size: 1.2rem;
+      }
+    }
+  }
+}

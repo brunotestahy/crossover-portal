@@ -1,0 +1,32 @@
+<div class="page-content">
+  <div class="d-flex worksmart-header mb-4">
+    <h1>Worksmart</h1>
+    <button type="button" df-button df-large-button theme="primary" class="ml-auto" routerLink="/worksmart">Download</button>
+  </div>
+  <div>
+    <h4>Introducing Worksmart</h4>
+    <p>We are committed to your success, and therefore Crossover created these guidelines to be transparent about WorkSmart.
+      WorkSmart is becoming the standard of how sustainable remote work is measured, and below are some policies and guidelines
+      you will want to follow.</p>
+    <h4>Productivity Team</h4>
+    <p> From time to time you may hear from the Productivity Team.
+      <br>
+      <br> The Productivity Team is an internal team inside of Crossover that has formed checks and balances to ensure full transparency,
+      timecards are accurate and paid in a timely manner, and to ensure that hiring manager as well as their team members
+      are working to their full capacity.
+      <br>
+      <br> Hiring managers want to ensure that their team members are billing fairly for the work they have performed; Team members
+      want to ensure that they are meeting expectations and getting paid for the work they have performed, and on time. </p>
+    <h4>More about WorkSmart</h4>
+    <p>
+      <a routerLink="guidelines-for-success">Guidelines for Success</a>
+    </p>
+    <p>
+      <a routerLink="faq/candidate" *ngIf="!isManager">Frequently Asked Questions</a>
+      <a routerLink="faq/manager" *ngIf="isManager">Frequently Asked Questions</a>
+    </p>
+  </div>
+  <div class="clearfix"></div>
+  <app-markdown-viewer class="mt-5" [markdown]="markdown$ | async"></app-markdown-viewer>
+  <div class="clearfix"></div>
+</div>

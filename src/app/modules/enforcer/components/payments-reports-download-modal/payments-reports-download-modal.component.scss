@@ -1,0 +1,31 @@
+@import 'variables';
+@import '~@devfactory/ngx-df/core/theming/aurea-skin/theming';
+
+:host {
+  .payments-reports-download-modal {
+    text-align: left;
+    &__header {
+    }
+    &__content {
+      padding: 40px;
+      .filterCategory {
+        margin: 15px 0;
+      }
+      df-checkbox {
+        display: block;
+      }
+    }
+    &__footer {
+        border-top: 1px solid rgba(0,0,0,.1);
+        padding: 20px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+
+        .df-loader {
+          height: 20px;
+          width: 20px;
+        }
+    }
+  }
+}

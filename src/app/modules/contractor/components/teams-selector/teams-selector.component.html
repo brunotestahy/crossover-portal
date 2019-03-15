@@ -1,0 +1,39 @@
+<df-input-container>
+  <df-icon dfPrefix
+           name="search"
+           isFixedWidth
+           ariaHidden></df-icon>
+  <input type="text"
+         placeholder="Search teams..."
+         [(ngModel)]="nameSearch">
+</df-input-container>
+<p class="text-muted">
+    <df-checkbox [ngModel]="selectedTeamsIds.length > 0"
+                 [indeterminate]="selectedTeamsIds.length > 0 && teams.length != selectedTeamsIds.length"
+                 (change)="toggleTeamSelectionAll()">
+      {{selectedTeamsIds.length}} teams(s) selected.
+    </df-checkbox>
+</p>
+
+<div class="border-bottom bg-light teams-list">
+  <div *ngFor="let team of teams | propertyFilter : 'name' : nameSearch"
+        class="row m-0 align-items-center teams-list__item">
+      <div class="col-6 p-0">
+        <df-checkbox [ngModel]="selectedTeamsIds.indexOf(team.id) >= 0"
+                     (change)="toggleTeamSelection(team)">
+                        {{team.name}}
+        </df-checkbox>
+      </div>
+      <div class="col-6 p-0 pr-2 text-right">
+          <span *ngFor="let assignment of team.activeAssignments | slice:0:assignmentsPerTeam"
+                class="assignment-avatar">
+              <img [src]="assignment.selection.marketplaceMember.application.candidate.photoUrl"
+                   (error)="$event.target.src = 'assets/images/user.png'">
+          </span>
+          <span class="text-muted font-weight-bold"
+                *ngIf="team.activeAssignments && team.activeAssignments.length-assignmentsPerTeam > 0">
+            +{{team.activeAssignments.length-assignmentsPerTeam}}
+          </span>
+      </div>
+  </div>
+</div>

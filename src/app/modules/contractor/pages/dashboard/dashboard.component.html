@@ -1,0 +1,141 @@
+<div class="section__header section__header--aligned">
+  Dashboard
+</div>
+
+<div (scroll)="onPageScroll()"
+     class="page-content padding-aligned page-scroll">
+  <app-page-alert
+    *ngIf="error"
+    [text]="error"
+    class="my-3">
+  </app-page-alert>
+
+  <div class="df-loader-container"
+       *ngIf="isLoading">
+    <i class="df-loader"></i>
+  </div>
+  <div *ngIf="!isLoading"
+       class="row overflow-visible mx-0">
+    <div class="col-12 px-0 col-xl-6 row mx-0 h-100"
+         [class.col-lg-8]="!managerMode">
+      <div *ngIf="!isAllDirectReports" class="col-12 col-lg-7 col-xl-7">
+        <div class="d-flex justify-content-between">
+          <h6 class="ml-2 text-uppercase">Productivity</h6>
+          <a
+            [routerLink]="'../team-summary'"
+            class="d-flex mb-2 summary-link"
+            *ngIf="managerMode">
+            <small>Summary</small>
+          </a>
+        </div>
+        <df-card class="overflow-visible productivity-card"
+                 [class.clickable-section]="managerMode"
+                 (click)="navigateToTeamMetrics()">
+          <div class="df-loader-container"
+               *ngIf="isLoading">
+            <i class="df-loader"></i>
+          </div>
+          <df-card-header *ngIf="!isLoading"
+                          class="productivity-card-header">
+            <div class="align-self-center text-center w-100">{{metricDescription}}</div>
+          </df-card-header>
+          <df-card-content *ngIf="!isLoading"
+                           class="d-flex flex-column">
+            <div *ngIf="isMetricAverageNumber(metricAverage)" class="d-flex justify-content-between">
+              <small>Average:<span class="success"> {{getMetricAverage()}}</span></small>
+              <small><span class="success">{{getMetricTargetPercentage()}}</span>{{metricTarget === '1' ? '' : '% of target'}}</small>
+            </div>
+            <div *ngIf="isMetricAverageNumber(metricAverage)" class="row m-0 p-0">
+              <div class="col-12 m-0 p-0">
+                <df-line-chart
+                  [data]="teamTrend"
+                  [colorFn]="colorFn"
+                  [tooltipTemplate]="chartTooltip"
+                  [showDots]="true"
+                  [showValues]="true"
+                  [smoothLine]="false"
+                  [showLegend]="false"
+                  [xAxisTickFormatter]="xAxisTickFormatter"
+                  [yAxisTickFormatter]="yAxisTickFormatter"
+                  [numTicks]=4>
+                </df-line-chart>
+              </div>
+            </div>
+            <div *ngIf="!isMetricAverageNumber(metricAverage)" class="row mx-0 no-activities">
+              Metric is not set for this team
+            </div>
+          </df-card-content>
+        </df-card>
+      </div>
+      <div *ngIf="!isAllDirectReports" class="col-12 col-lg-5 col-xl-5">
+        <app-activities-chart [noManagersSelected]="noManagersSelected"
+                              [managerMode]="managerMode"
+                              [activityAverage]="activityAverage"
+                              (metricAverage)="metricAverage = $event"
+                              (metricDescription)="metricDescription = $event"
+                              (metricTarget)="metricTarget = $event"
+                              (teamTrend)="updateTeamTrend($event)">
+        </app-activities-chart>
+      </div>
+      <div class="d-flex col-12 mx-0 mb-4 mt-4 mt-xl-4 justify-content-center">
+        <app-contractors-desks
+          [workDiaries]="workDiaries"
+          [contractors]="contractors"
+          [managerMode]="managerMode"
+          [currentUser]="currentUser">
+        </app-contractors-desks>
+      </div>
+    </div>
+    <div class="col-12 px-0 col-xl-6 row mx-0 h-100"
+         [class.col-lg-4]="!managerMode">
+      <div *ngIf="!isAllDirectReports && (isWorkflowWidgetConfigured || isCurrentUserCompanyAdminOrTeamOwner)"
+           class="col-12 mx-0 mt-4 mt-xl-0">
+        <div class="d-flex justify-content-start">
+          <h6 class="ml-2 text-uppercase">Workflows - Current Queue</h6>
+        </div>
+        <df-card class="productivity-card overflow-visible">
+          <df-card-content class="d-flex justify-content-center">
+            <div class="align-self-center d-flex flex-column"
+                 *ngIf="!isWorkflowWidgetConfigured">
+              <div class="workflows-icon"></div>
+              You have not activated Workflows yet.
+              <a class="text-center"
+                 (click)="openWorkflowsWizard()"
+                 [routerLink]="">Launch Workflows Wizard</a>
+            </div>
+            <app-workflows-widget
+              *ngIf="isWorkflowWidgetConfigured"
+              (click)="goToWorkflows()"
+              [teamId]="currentTeamGroup.team.id"
+              class="pointer w-100 d-flex">
+            </app-workflows-widget>
+          </df-card-content>
+        </df-card>
+      </div>
+
+      <div class="d-flex col-12 flex-wrap h-100"
+           [class.col-lg-4]="!managerMode"
+           [class.order-lg-1]="!managerMode || (!isAllDirectReports && !isCurrentUserCompanyAdminOrTeamOwner)">
+        <div *ngFor="let appButton of availableButtons"
+             class="col-4 col-xl-3 pointer px-0 py-5 d-flex justify-content-center app-button"
+             (click)="navigateTo(appButton)">
+          <div class="d-flex flex-column align-self-center text-center">
+            <i class="mx-auto app-icon {{appButton.class}}"></i>
+            <small><strong>{{appButton.displayText}}</strong></small>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<ng-template #chartTooltip let-data="data">
+  <div class="chart-tooltip">
+    <span>{{metricDescription}}: {{data.value}}</span>
+  </div>
+</ng-template>
+
+<ng-template #workflowsWizardModal let-close="close">
+  <app-workflows-wizard class="text-left"
+                        (close)="close()"></app-workflows-wizard>
+</ng-template>

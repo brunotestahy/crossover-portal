@@ -1,0 +1,376 @@
+@import "variables";
+
+:host {
+  .daily-date-picker {
+    min-width: 236px;
+  }
+
+  .disabled-refresher {
+    cursor: not-allowed;
+    opacity: .4;
+  }
+
+  .contractor-header {
+    max-height: 42px;
+    overflow: hidden;
+    display: block !important;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    text-align: center;
+  }
+
+  .hours-logged-header {
+    font-size: 11px;
+  }
+
+  .section-bar {
+    display: -ms-flexbox;
+    display: flex;
+    flex-direction: column !important;
+  }
+
+  .planned-section-bar {
+    height: 100%;
+  }
+
+  .section-tooltip-text {
+    font-size: 11px;
+
+    span {
+      display: block;
+    }
+  }
+
+  .planned-tooltip-title {
+    max-width: 8rem;
+  }
+
+  .section-bar__element {
+    flex-basis: unset;
+    -ms-flex-positive: unset;
+    flex-grow: unset;
+    max-width: 100px;
+    position: unset;
+    min-height: 1px;
+    padding-right: 0;
+    padding-left: 0;
+    font-size: 11px;
+
+    $percentage: 0;
+    $maxDivHeight: 54;
+    $maxDivHeightSingle: 15;
+    $maxDivHeightDouble: 30;
+    @while ($percentage <= 100) {
+      &.section-height-#{$percentage} {
+        height: ($percentage * 3) + px;
+
+        // Hide content with div's height smaller than 25px
+        @if (($percentage * 3) < $maxDivHeightSingle) {
+          div {
+            display: none;
+          }
+        }
+
+        @if (($percentage * 3) >= $maxDivHeightSingle) {
+          @if (($percentage * 3) <= $maxDivHeightDouble) {
+            .spent-time,
+            .spent-time-percentage {
+              display: none;
+            }
+          }
+        }
+
+        @if (($percentage * 3) > $maxDivHeightDouble) {
+          @if (($percentage * 3) <= $maxDivHeight) {
+            .spent-time-percentage {
+              display: none;
+            }
+          }
+        }
+      }
+      $percentage: $percentage + 1;
+    }
+  }
+
+  .time-box-header {
+    height: 60px;
+  }
+
+  .time-box-group {
+    width: 79px;
+  }
+
+  .time-slot {
+    min-height: 10px;
+    max-height: 10px;
+    height: 10px;
+
+    &:nth-of-type(3) {
+      border-bottom: 1px dotted #ebebeb;
+    }
+
+    $dottedSlotsPerHour: 2;
+    $timeCardsPerHour: 6;
+    $totalTimeCards: 144;
+    @while ($timeCardsPerHour <= $totalTimeCards) {
+      &:nth-of-type(#{$timeCardsPerHour}) {
+        border-bottom: 1px solid #ebebeb;
+      }
+      &:nth-of-type(#{$timeCardsPerHour + 3}) {
+        border-bottom: 1px dotted #ebebeb;
+      }
+      $timeCardsPerHour: $timeCardsPerHour + 6;
+    }
+  }
+
+  .single-time-slot {
+    width: 55% !important;
+  }
+
+  .time-box {
+    width: 100%;
+    max-width: 140px;
+  }
+
+  .table-display {
+    @media (min-width: $breakpoint-lg) {
+      max-width: 100px;
+    }
+  }
+
+  .team-member {
+    @media (min-width: $breakpoint-lg) {
+      min-width: 42px;
+      text-align: left;
+      height: 100px;
+      img {
+        width: 60px;
+        height: 60px;
+        border-radius: 30px;
+        border: 1px solid #d8d8d8;
+        margin: 0 0 8px 0;
+      }
+      .fa-list, .fa-users {
+        font-size: 20px;
+      }
+    }
+  }
+
+  .frozen-column {
+    min-width: 42px;
+    text-align: left;
+    height: 100px;
+
+    &.has-score-label {
+      position: relative;
+    }
+
+    img {
+      width: 60px;
+      height: 60px;
+      border-radius: 30px;
+      border: 1px solid #d8d8d8;
+      margin: 0 0 8px 0;
+    }
+  }
+
+  .photo {
+    display: block;
+    margin: 0 auto 8px;
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    overflow: hidden;
+    text-align: center;
+    background: #d5d8d9;
+  }
+
+  .activity-row {
+    @media (min-width: $breakpoint-md) {
+      height: 2.5rem;
+    }
+  }
+
+  .score {
+    &-success {
+      color: #6dbd70;
+    }
+
+    &-warning {
+      color: #ffab2d;
+    }
+
+    &-danger {
+      color: #fa605d;
+    }
+  }
+
+  ::ng-deep {
+    .score-label {
+      position: absolute;
+      border-radius: 50%;
+      top: 36%;
+      left: 50%;
+      transform: translateX(-50%);
+
+      .df-label {
+        border-radius: 14px !important;
+        height: 20px !important;
+        opacity: 0.8 !important;
+      }
+    }
+
+    .bar-grid {
+
+      &--percentage {
+        .df-grid-scrollable-view--unfrozen {
+          @media (min-width: $breakpoint-lg) {
+            width: 568px !important;
+          }
+          @media (min-width: $breakpoint-xl) {
+            width: 844px !important;
+          }
+        }
+
+        .df-grid-table-body__cell-data {
+          height: 540px !important;
+        }
+      }
+
+      df-grid-scrollable-view:nth-child(2) {
+        .df-grid-scrollable-view__header-box,
+        .df-grid-scrollable-view__wrapper {
+          table:nth-child(1) {
+            @media (min-width: $breakpoint-lg) {
+              margin-left: 27px !important;
+            }
+          }
+        }
+
+        .df-grid-scrollable-view__table > tbody > tr > td {
+          border-right: 1px solid #ebebeb;
+        }
+      }
+
+      &--time {
+        .df-grid__row--data {
+          height: unset !important;
+        }
+
+        .df-grid-scrollable-view--unfrozen {
+          @media (min-width: $breakpoint-lg) {
+            width: 514px !important;
+          }
+          @media (min-width: $breakpoint-xl) {
+            width: 790px !important;
+          }
+        }
+
+        td,
+        .df-grid-table-body__cell-data {
+          padding-left: 0px !important;
+          padding-right: 0px !important;
+        }
+
+        .df-grid-table-body__cell-data {
+          height: 1444px;
+        }
+      }
+    }
+
+    .table-grid {
+      .df-grid-scrollable-view--unfrozen {
+        @media (min-width: $breakpoint-lg) {
+          width: 292px !important;
+        }
+        @media (min-width: $breakpoint-xl) {
+          width: 570px !important;
+        }
+      }
+    }
+
+    .team-activity-grid {
+      .df-grid--scrollable__wrapper {
+        overflow-x: hidden !important;
+      }
+
+      .df-grid--scrollable {
+        @media (min-width: $breakpoint-md) {
+          width: 610px !important;
+        }
+        @media (min-width: $breakpoint-lg) {
+          width: 718px !important;
+        }
+        @media (min-width: $breakpoint-xl) {
+          width: 1000px !important;
+        }
+      }
+
+      .df-grid-scrollable-view--frozen .df-grid-scrollable-view__body {
+        overflow: visible !important;
+      }
+
+      .df-grid__row--data:nth-child(even) {
+        @media (min-width: $breakpoint-md) {
+          background-color: white !important;
+        }
+      }
+
+      .df-grid--scrollable {
+        margin-left: auto !important;
+        margin-right: auto !important;
+      }
+    }
+
+    .grid-column-sm {
+      min-width: 80px;
+    }
+
+    .grid-column-md {
+      width: 120px;
+    }
+
+    .grid-column-lg {
+      width: 140px;
+    }
+  }
+
+  .time-radio-group-desktop {
+    @media (max-width: $breakpoint-sm) {
+      display: none !important;
+    }
+
+    /*This will work for IE10+*/
+    @media screen and (-ms-high-contrast: active), screen and (-ms-high-contrast: none) {
+      df-radio-input {
+        display: block !important;
+      }
+    }
+  }
+
+  .time-radio-group-mobile {
+    @media (min-width: $breakpoint-sm) {
+      display: none !important;
+    }
+  }
+
+  .table-activity-border {
+    border-left: 4px solid white;
+  }
+
+  .section-name {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+}
+
+::ng-deep {
+  .profile-modal {
+    .df-modal__content {
+      height: 100%;
+      width: 100%;
+      background-color: #f1f2f5;
+    }
+  }
+}

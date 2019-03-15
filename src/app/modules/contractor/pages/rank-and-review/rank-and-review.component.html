@@ -1,0 +1,384 @@
+<div class="section__header section__header--aligned">
+  Rank and Review
+</div>
+
+<div class="page-content padding-aligned page-scroll"
+     [formGroup]="form">
+  <df-card>
+    <df-card-content class="d-flex justify-content-center justify-content-md-end flex-wrap ml-md-auto">
+      <a [routerLink]=""
+         class="d-flex align-self-center mr-2"
+         [class.currently-visible-week]="currentDateMatches(recentWeeks.previous)"
+         (click)="fetchLastWeek();">Last Week</a>
+      <a [routerLink]=""
+         class="d-flex align-self-center mr-2"
+         [class.currently-visible-week]="currentDateMatches(recentWeeks.current)"
+         (click)="fetchThisWeek();">This Week</a>
+      <div class="d-flex justify-content-end align-items-center mr-3">
+        <i class="fa fa-chevron-left pointer"
+           (click)="previousWeek()"></i>
+        <df-datepicker formControlName="date"
+                       [formatFn]="getFormattedWeekDays"
+                       [direction]="-2">
+        </df-datepicker>
+        <i class="fa fa-chevron-right pointer"
+           (click)="nextWeek()"
+           *ngIf="form.get('date')?.value < recentWeeks.current"></i>
+      </div>
+    </df-card-content>
+  </df-card>
+  <df-card class="my-3 overflow-visible">
+    <div class="df-loader-container"
+         *ngIf="loadState.activities || loadState.review">
+      <i class="df-loader"></i>
+    </div>
+    <df-card-content *ngIf="!loadState.activities && !loadState.review && !errorMessage">
+      <div class="text-muted mb-3">
+        Answer these questions every week, and keep a record for everyone in the team to see.
+      </div>
+
+      <!-- Reviews -->
+      <div class="row" formArrayName="performers">
+        <div class="col-sm-12 col-lg-8 row">
+          <div *ngFor="let review of form.get('performers')?.controls; let index = index"
+               class="col-12 col-lg-6 d-flex flex-column text-editor-container"
+               [class.active]="editors[index] && editors[index].active">
+            <div class="text-editor mb-5 position-relative d-flex flex-column">
+              <h6 class="mb-2 pb-1">{{ review.value.questionDescription }}</h6>
+              <div class="froala-editor d-inline-flex flex-column flex-grow-1"
+                   [froalaEditor]="froalaEditorOptions"
+                   [formControl]="review.get('answer')"
+                   (froalaInit)="initializeFroalaEditor(index, $event)"
+                   (touch)="initializeFroalaEditor(index)"
+                   (mousedown)="initializeFroalaEditor(index)"
+                   *ngIf="canEdit"></div>
+              <div
+                *ngIf="!canEdit"
+                class="non-admin-text"
+                [innerHTML]="getFormattedAnswer(review.value.answer || froalaEditorOptions.placeholderText)">
+              </div>
+              <div class="text-editor-actions">
+                <button type="button"
+                        (click)="saveFroalaEditor(index)"
+                        [routerLink]=""
+                        class="mr-1"
+                        df-button>
+                  <df-icon name="check"></df-icon>
+                </button>
+                <button type="button"
+                        (click)="cancelFroalaEditor(index)"
+                        [routerLink]=""
+                        df-button>
+                  <df-icon name="times"></df-icon>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-12 col-lg-4 d-flex flex-column">
+          <!-- Top performers -->
+          <div class="d-flex flex-column">
+            <div class="d-flex align-items-center">
+              <i class="fa fa-arrow-circle-up fa-2x mr-2 align-self-center top-performer"></i>
+              <h5 class="align-self-center mb-0">Top Performers</h5>
+              <span class="d-block ml-auto">Last 4 Weeks</span>
+            </div>
+            <df-grid [value]="pov.topPerformers"
+                     class="rank-and-review"
+                     [responsive]="false"
+                     emptyMessage="No rank information registered for this week!">
+              <df-grid-column>
+                <ng-template dfGridTemplate="body"
+                             let-col
+                             let-item="rowData">
+                  <div [class.inactive]="!item.active"
+                       [dfToolTip]="getInactiveMessage(item)"
+                       dfToolTipPlacement="top"
+                       class="team-member row position-relative">
+                    <div class="col-md-4 px-2 justify-content-center d-none d-lg-flex">
+                      <img class="align-self-center"
+                           [src]="item.assignment.candidate?.photoUrl || 'assets/images/user.png'">
+                    </div>
+                    <div class="col-12 col-md-8 pl-1 pr-0 d-flex flex-column justify-content-center">
+                      <div class="shortened-column">{{ item.assignment.candidate?.printableName }}</div>
+                    </div>
+                  </div>
+                </ng-template>
+              </df-grid-column>
+              <df-grid-column>
+                <ng-template dfGridTemplate="body"
+                             let-col
+                             let-item="rowData">
+                  <div class="position-relative d-flex flex-column">
+                    <div class="d-flex">
+                      <i class="fa fa-circle top-performer align-self-center mr-1"></i>
+                      {{ item.calculatedAverages.metricsStats.toFixed(1) }}
+                    </div>
+                    <div class="text-muted">
+                      Avg. metric
+                    </div>
+                  </div>
+                </ng-template>
+              </df-grid-column>
+              <df-grid-column>
+                <ng-template dfGridTemplate="body"
+                             let-col
+                             let-item="rowData">
+                  <div class="d-flex justify-content-center">
+                    <div class="mr-2 position-relative">
+                      <i class="fa fa-clock-o {{ getScoreClass(item.calculatedAverages.recordedHours, 40) }}"
+                         [dfToolTip]="'Time Logged: ' + item.calculatedAverages.recordedHours.toFixed(2) + ' hrs'"
+                         dfToolTipPlacement="left"></i>
+                    </div>
+                    <div class="mr-2 position-relative">
+                      <i class="fa fa-align-center position-relative {{ getScoreClass(item.calculatedAverages.activityMetrics, 100) }}"
+                         [dfToolTip]="'Alignment Score: ' + item.calculatedAverages.activityMetrics.toFixed(0) + '%'"
+                         dfToolTipPlacement="left"></i>
+                    </div>
+                    <div class="mr-2 position-relative">
+                      <i class="fa fa-crosshairs position-relative {{ getScoreClass(item.calculatedAverages.focusScores, 100) }}"
+                         [dfToolTip]="'Focus Score: ' + item.calculatedAverages.focusScores.toFixed(0) + '%'"
+                         dfToolTipPlacement="left"></i>
+                    </div>
+                    <div class="mr-2 position-relative">
+                      <i class="fa fa-bolt position-relative {{ getScoreClass(item.calculatedAverages.intensityScores, 100) }}"
+                         [dfToolTip]="'Intensity Score: ' + item.calculatedAverages.intensityScores.toFixed(0) + '%'"
+                         dfToolTipPlacement="left"></i>
+                    </div>
+                  </div>
+                </ng-template>
+              </df-grid-column>
+            </df-grid>
+          </div>
+          <!-- Top gainers -->
+          <div class="d-flex flex-column mt-4 mb-2">
+            <div class="d-flex align-items-center">
+              <i class="fa fa-arrow-circle-right fa-2x mr-2 align-self-center top-performer"></i>
+              <h5 class="align-self-center mb-0">Biggest Gainers</h5>
+              <span class="d-block ml-auto">Over Previous 4 Weeks</span>
+            </div>
+            <df-grid [value]="pov.topGainers"
+                     class="rank-and-review"
+                     [responsive]="false"
+                     emptyMessage="No rank information registered for this week!">
+              <df-grid-column>
+                <ng-template dfGridTemplate="body"
+                             let-col
+                             let-item="rowData">
+                  <div [class.inactive]="!item.active"
+                       [dfToolTip]="getInactiveMessage(item)"
+                       dfToolTipPlacement="top"
+                       class="team-member row position-relative">
+                    <div class="col-md-4 px-2 justify-content-center d-none d-lg-flex">
+                      <img class="align-self-center"
+                           [src]="item.assignment.candidate?.photoUrl || 'assets/images/user.png'">
+                    </div>
+                    <div class="col-12 col-md-8 pl-1 pr-0 d-flex flex-column justify-content-center">
+                      <div class="shortened-column">{{ item.assignment.candidate?.printableName }}</div>
+                    </div>
+                  </div>
+                </ng-template>
+              </df-grid-column>
+              <df-grid-column>
+                <ng-template dfGridTemplate="body"
+                             let-col
+                             let-item="rowData">
+                  <div class="position-relative d-flex flex-column">
+                    <div class="d-flex">
+                      <i class="fa fa-circle top-performer align-self-center mr-1"></i>
+                      {{ getNumberSymbol(item.metricsChange) }}{{ (item.metricsChange * 100).toFixed(0) }}%
+                    </div>
+                    <div class="text-muted">
+                      Change
+                    </div>
+                  </div>
+                </ng-template>
+              </df-grid-column>
+              <df-grid-column>
+                <ng-template dfGridTemplate="body"
+                             let-col
+                             let-item="rowData">
+                  <div class="d-flex justify-content-center">
+                    <div class="mr-2 position-relative">
+                      <i class="fa fa-clock-o {{ getScoreClass(item.calculatedAverages.recordedHours, 40) }}"
+                         [dfToolTip]="'Time Logged: ' + item.calculatedAverages.recordedHours.toFixed(2) + ' hrs'"
+                         dfToolTipPlacement="left"></i>
+                    </div>
+                    <div class="mr-2 position-relative">
+                      <i class="fa fa-align-center position-relative {{ getScoreClass(item.calculatedAverages.activityMetrics, 100) }}"
+                         [dfToolTip]="'Alignment Score: ' + item.calculatedAverages.activityMetrics.toFixed(0) + '%'"
+                         dfToolTipPlacement="left"></i>
+                    </div>
+                    <div class="mr-2 position-relative">
+                      <i class="fa fa-crosshairs position-relative {{ getScoreClass(item.calculatedAverages.focusScores, 100) }}"
+                         [dfToolTip]="'Focus Score: ' + item.calculatedAverages.focusScores.toFixed(0) + '%'"
+                         dfToolTipPlacement="left"></i>
+                    </div>
+                    <div class="mr-2 position-relative">
+                      <i class="fa fa-bolt position-relative {{ getScoreClass(item.calculatedAverages.intensityScores, 100) }}"
+                         [dfToolTip]="'Intensity Score: ' + item.calculatedAverages.intensityScores.toFixed(0) + '%'"
+                         dfToolTipPlacement="left"></i>
+                    </div>
+                  </div>
+                </ng-template>
+              </df-grid-column>
+            </df-grid>
+          </div>
+          <!-- Bottom performers -->
+          <div class="d-flex flex-column mt-4 mb-2">
+            <div class="d-flex align-items-center">
+              <i class="fa fa-arrow-circle-down fa-2x mr-2 align-self-center bottom-performer"></i>
+              <h5 class="align-self-center mb-0">Bottom Performers</h5>
+              <span class="d-block ml-auto">Last 4 Weeks</span>
+            </div>
+            <df-grid [value]="pov.bottomPerformers"
+                     class="rank-and-review"
+                     [responsive]="false"
+                     emptyMessage="No rank information registered for this week!">
+              <df-grid-column>
+                <ng-template dfGridTemplate="body"
+                             let-col
+                             let-item="rowData">
+                  <div [class.inactive]="!item.active"
+                       [dfToolTip]="getInactiveMessage(item)"
+                       dfToolTipPlacement="top"
+                       class="team-member row position-relative">
+                    <div class="col-md-4 px-2 justify-content-center d-none d-lg-flex">
+                      <img class="align-self-center"
+                           [src]="item.assignment.candidate?.photoUrl || 'assets/images/user.png'">
+                    </div>
+                    <div class="col-12 col-md-8 pl-1 pr-0 d-flex flex-column justify-content-center">
+                      <div class="shortened-column">{{ item.assignment.candidate?.printableName }}</div>
+                    </div>
+                  </div>
+                </ng-template>
+              </df-grid-column>
+              <df-grid-column>
+                <ng-template dfGridTemplate="body"
+                             let-col
+                             let-item="rowData">
+                  <div class="position-relative d-flex flex-column">
+                    <div class="d-flex">
+                      <i class="fa fa-circle bottom-performer align-self-center mr-1"></i>
+                      {{ item.calculatedAverages.metricsStats.toFixed(1) }}
+                    </div>
+                    <div class="text-muted">
+                      Avg. metric
+                    </div>
+                  </div>
+                </ng-template>
+              </df-grid-column>
+              <df-grid-column>
+                <ng-template dfGridTemplate="body"
+                             let-col
+                             let-item="rowData">
+                  <div class="d-flex justify-content-center">
+                    <div class="mr-2 position-relative">
+                      <i class="fa fa-clock-o {{ getScoreClass(item.calculatedAverages.recordedHours, 40) }}"
+                         [dfToolTip]="'Time Logged: ' + item.calculatedAverages.recordedHours.toFixed(2) + ' hrs'"
+                         dfToolTipPlacement="left"></i>
+                    </div>
+                    <div class="mr-2 position-relative">
+                      <i class="fa fa-align-center position-relative {{ getScoreClass(item.calculatedAverages.activityMetrics, 100) }}"
+                         [dfToolTip]="'Alignment Score: ' + item.calculatedAverages.activityMetrics.toFixed(0) + '%'"
+                         dfToolTipPlacement="left"></i>
+                    </div>
+                    <div class="mr-2 position-relative">
+                      <i class="fa fa-crosshairs position-relative {{ getScoreClass(item.calculatedAverages.focusScores, 100) }}"
+                         [dfToolTip]="'Focus Score: ' + item.calculatedAverages.focusScores.toFixed(0) + '%'"
+                         dfToolTipPlacement="left"></i>
+                    </div>
+                    <div class="mr-2 position-relative">
+                      <i class="fa fa-bolt position-relative {{ getScoreClass(item.calculatedAverages.intensityScores, 100) }}"
+                         [dfToolTip]="'Intensity Score: ' + item.calculatedAverages.intensityScores.toFixed(0) + '%'"
+                         dfToolTipPlacement="left"></i>
+                    </div>
+                  </div>
+                </ng-template>
+              </df-grid-column>
+            </df-grid>
+          </div>
+          <!-- Lowest Gainers -->
+          <div class="d-flex flex-column mt-4 mb-2">
+            <div class="d-flex align-items-center">
+              <i class="fa fa-arrow-circle-left fa-2x mr-2 align-self-center bottom-performer"></i>
+              <h5 class="align-self-center mb-0">Lowest Gainers</h5>
+              <span class="d-block ml-auto">Over Previous 4 Weeks</span>
+            </div>
+            <df-grid [value]="pov.bottomGainers"
+                     class="rank-and-review"
+                     [responsive]="false"
+                     emptyMessage="No rank information registered for this week!">
+              <df-grid-column>
+                <ng-template dfGridTemplate="body"
+                             let-col
+                             let-item="rowData">
+                  <div [class.inactive]="!item.active"
+                       [dfToolTip]="getInactiveMessage(item)"
+                       dfToolTipPlacement="top"
+                       class="team-member row position-relative">
+                    <div class="col-md-4 px-2 justify-content-center d-none d-lg-flex">
+                      <img class="align-self-center"
+                           [src]="item.assignment.candidate?.photoUrl || 'assets/images/user.png'">
+                    </div>
+                    <div class="col-12 col-md-8 pl-1 pr-0 d-flex flex-column justify-content-center">
+                      <div class="shortened-column">{{ item.assignment.candidate?.printableName }}</div>
+                    </div>
+                  </div>
+                </ng-template>
+              </df-grid-column>
+              <df-grid-column>
+                <ng-template dfGridTemplate="body"
+                             let-col
+                             let-item="rowData">
+                  <div class="position-relative d-flex flex-column">
+                    <div class="d-flex">
+                      <i class="fa fa-circle bottom-performer align-self-center mr-1"></i>
+                      {{ getNumberSymbol(item.metricsChange) }}{{ (item.metricsChange * 100).toFixed(0) }}%
+                    </div>
+                    <div class="text-muted">
+                      Change
+                    </div>
+                  </div>
+                </ng-template>
+              </df-grid-column>
+              <df-grid-column>
+                <ng-template dfGridTemplate="body"
+                             let-col
+                             let-item="rowData">
+                  <div class="d-flex justify-content-center">
+                    <div class="mr-2 position-relative">
+                      <i class="fa fa-clock-o {{ getScoreClass(item.calculatedAverages.recordedHours, 40) }}"
+                         [dfToolTip]="'Time Logged: ' + item.calculatedAverages.recordedHours.toFixed(2) + ' hrs'"
+                         dfToolTipPlacement="left"></i>
+                    </div>
+                    <div class="mr-2 position-relative">
+                      <i class="fa fa-align-center position-relative {{ getScoreClass(item.calculatedAverages.activityMetrics, 100) }}"
+                         [dfToolTip]="'Alignment Score: ' + item.calculatedAverages.activityMetrics.toFixed(0) + '%'"
+                         dfToolTipPlacement="left"></i>
+                    </div>
+                    <div class="mr-2 position-relative">
+                      <i class="fa fa-crosshairs position-relative {{ getScoreClass(item.calculatedAverages.focusScores, 100) }}"
+                         [dfToolTip]="'Focus Score: ' + item.calculatedAverages.focusScores.toFixed(0) + '%'"
+                         dfToolTipPlacement="left"></i>
+                    </div>
+                    <div class="mr-2 position-relative">
+                      <i class="fa fa-bolt position-relative {{ getScoreClass(item.calculatedAverages.intensityScores, 100) }}"
+                         [dfToolTip]="'Intensity Score: ' + item.calculatedAverages.intensityScores.toFixed(0) + '%'"
+                         dfToolTipPlacement="left"></i>
+                    </div>
+                  </div>
+                </ng-template>
+              </df-grid-column>
+            </df-grid>
+          </div>
+        </div>
+      </div>
+    </df-card-content>
+    <div class="error-message text-center"
+         *ngIf="!loadState.activities && !loadState.review && errorMessage">
+      {{ errorMessage }}
+    </div>
+  </df-card>
+</div>

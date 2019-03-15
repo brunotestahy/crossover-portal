@@ -1,0 +1,35 @@
+
+<div class="photo"
+     [style.backgroundImage]="'url(' + (assignment.candidate?.photoUrl || 'assets/images/user.png') + ')'">
+  <div class="caption">
+    <p>{{assignment.candidate.printableName}}</p>
+    <p>{{assignment.jobTitle}}</p>
+    <p class="{{ lastOnlineClass }}">{{lastOnlineText}}</p>
+  </div>
+  <div class="overlay"></div>
+</div>
+
+<div class="row px-0 mx-0 mt-2 lower-text">
+  <div class="col-6 d-flex pr-0">
+    <i class="fa fa-map-marker mr-2"></i>
+    <div class="align-self-center">
+      {{assignment.candidate.location?.city}}{{
+        assignment.candidate.location?.city && assignment.candidate.location?.country ? ', ' : ''
+      }}{{assignment.candidate.location?.country}}
+    </div>
+  </div>
+  <div class="col-6 pl-0 d-flex justify-content-end">
+    <i class="fa fa-clock-o align-self-center mr-2"></i>
+    <div class="align-self-center">
+      {{getContractorTime(assignment.candidate.location?.timeZone) | date: 'hh:mm a'}}
+    </div>
+  </div>
+</div>
+<div class="row px-0 mx-0 mt-2 lower-text">
+  <div class="col-6">Manager</div>
+  <div class="col-6">{{manager}}</div>
+</div>
+<div class="row px-0 mx-0 mt-2 mb-3 lower-text">
+  <div class="col-6">Weekly Hours</div>
+  <div class="col-6">{{assignment.weeklyLimit}} hr / week </div>
+</div>

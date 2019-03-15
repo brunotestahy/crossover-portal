@@ -1,0 +1,7 @@
+<div class="activity-level-bar">
+  <div [class.meeting-time]="isMeetingTime(workDiary)"
+       [class.low-activity]="hasLowActivity(workDiary)"
+       [class.normal-activity]="hasNormalActivity(workDiary)"
+       [style.width]="getIntensityScore(workDiary)">
+  </div>
+</div>

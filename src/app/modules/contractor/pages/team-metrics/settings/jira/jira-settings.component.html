@@ -1,0 +1,93 @@
+<div class="df-loader-container"
+     *ngIf="isLoading">
+  <i class="df-loader"></i>
+</div>
+<div *ngIf="!isLoading"
+     class="d-block">
+  <div class="d-flex justify-content-between mb-4">
+    <div class="mb-2 d-block d-sm-flex">
+      <h4 class="mb-0 mr-1">Jira Settings</h4>
+      <div [dfToolTip]="tooltipText"
+           dfToolTipPlacement="bottom"
+           container="body"
+           class="d-flex"
+           [disabled]="isTeamOwnerOrAdmin">
+        <a href="#"
+           [class.disabled]="!isTeamOwnerOrAdmin"
+           class="align-self-center d-flex"
+           *ngIf="servers.length < 5"
+           [routerLink]=""
+           (click)="addServer()">
+          <span class="d-flex mr-1">Add Server</span>
+          <i class="fa fa-plus-circle align-self-center"></i>
+        </a>
+      </div>
+    </div>
+    <div [dfToolTip]="tooltipText"
+         dfToolTipPlacement="bottom"
+         container="body"
+         [disabled]="isTeamOwnerOrAdmin">
+      <button df-button
+              [disabled]="!isTeamOwnerOrAdmin"
+              type="button"
+              (click)="showMetricSources()">
+        Change Metric Source
+      </button>
+    </div>
+  </div>
+  <div *ngIf="error"
+       class="alert alert-danger my-3">{{error}}</div>
+  <df-tab-group [selectedIndex]="selectedIndex">
+    <df-tab *ngFor="let server of servers; let i = index">
+      <ng-template dfTabHeader>
+        <i class="fa fa-server mr-2"></i>
+        Server {{(i + 1)}}
+      </ng-template>
+      <app-jira-server-settings [servers]="servers"
+                                [teamId]="teamId"
+                                [metricSetup]="metricSetup"
+                                [jiraUsers]="jiraUsers"
+                                (remove)="openConfirmationModal(i)"
+                                [readOnly]="!isTeamOwnerOrAdmin"
+                                [(isLoading)]="isLoading"></app-jira-server-settings>
+    </df-tab>
+  </df-tab-group>
+</div>
+<div *ngIf="!isLoading"
+     class="d-flex justify-content-end mt-3">
+  <button (click)="onClose()"
+          class="mr-2"
+          type="button"
+          theme="danger"
+          df-button>
+    Cancel
+  </button>
+  <button type="button"
+          [disabled]="!isServerChecked"
+          (click)="saveSetup()"
+          df-button>
+    Save
+  </button>
+</div>
+
+<ng-template #confirmationModal
+             let-close="close">
+  <div class="container-fluid mt-2">
+    You are disabling this server. Do you also want to delete it?
+  </div>
+  <div class="w-100 d-flex align-items-center justify-content-end p-3">
+    <button df-button
+            type="button"
+            theme="danger"
+            class="mr-2"
+            (click)="close()">
+      <span>No</span>
+    </button>
+    <button df-button
+            type="button"
+            theme="success"
+            (click)="removeServer(close)">
+      <span>Yes</span>
+    </button>
+  </div>
+</ng-template>

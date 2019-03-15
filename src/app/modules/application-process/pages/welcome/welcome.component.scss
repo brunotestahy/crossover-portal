@@ -1,0 +1,197 @@
+@import "~@devfactory/ngx-df/core/theming/aurea-skin/theming";
+@import "variables";
+
+:host {
+  width: 100%;
+  height: 100%;
+  background: $au-white;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 99;
+  overflow-y: hidden;
+}
+
+.au-primary-background {
+  img {
+    height: 100%;
+  }
+}
+
+.step {
+  background: $au-white;
+}
+
+.step-1 {
+  .img-wrapper {
+    top: -1rem;
+
+    .step__image {
+      // max-width: 20vh;
+      // max-height: 14vh;
+      max-width: 78px;
+      max-height: 78px;
+    }
+  }
+}
+
+.step-2 {
+  display: none;
+  transform: translateY(100%);
+  transition: 0.2s linear transform;
+
+  &.visible {
+    display: flex;
+    transform: translateY(-100%);
+  }
+}
+
+.next {
+  background: $au-black;
+  cursor: pointer;
+  max-height: 85px; // FF fix
+
+  &.z-index-9 {
+    z-index: 9;
+  }
+
+  .fa {
+    font-size: 2vh;
+    background: $au-white;
+    -webkit-transform: translatex(-50%);
+    transform: translatex(-50%);
+    left: 50%;
+  }
+  .fa-chevron-down {
+    top: -1.5rem;
+  }
+  .fa-chevron-up {
+    bottom: -1.5rem;
+  }
+}
+
+.welcome__title {
+  font-size: 2vw;
+}
+
+.big {
+  font-size: 14vh;
+  line-height: 14.25vh;
+
+  &.position-relative {
+    top: -3vw;
+  }
+}
+
+.highway {
+  background: url('/assets/images/candidate/application-process/road.svg') center top no-repeat;
+  background-size: 50% 100%;
+
+  &__step {
+    width: 50vw;
+
+    &__image {
+      min-width: 120px !important;
+      width: 120px;
+      min-height: 120px;
+      height: 120px;
+      align-self: flex-start;
+    }
+
+    &__number {
+      font-size: 72px;
+    }
+
+    &__text {
+      left: -10px;
+      top: 20px;
+
+      h2 {
+        font-size: 36px;
+      }
+
+      p {
+        font-size: 20px;
+        background: rgba(255, 255, 255, 0.5);
+      }
+    }
+  }
+}
+
+.hired {
+  background: $au-blue;
+
+  h1 {
+    font-size: 20vw;
+    line-height: 16vw;
+  }
+
+  ::ng-deep {
+    .df-button {
+      height: auto;
+      color: $au-blue;
+
+      > span {
+        font-size: 4vh;
+      }
+    }
+  }
+}
+
+.bottom-text {
+  bottom: 0;
+  position: absolute;
+}
+
+.df-loader-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100vh;
+  width: 100vw;
+}
+
+@media screen and (max-width: $breakpoint-sm) {
+  .welcome__title {
+    font-size: 5vw;
+  }
+  .big {
+    font-size: 19vw;
+    line-height: 19.25vw;
+  }
+}
+
+@media screen and (min-width: $breakpoint-sm) and (max-width: $breakpoint-md) {
+  .welcome__title {
+    font-size: 5vw;
+  }
+  .big {
+    font-size: 13vw;
+    line-height: 13.25vw;
+  }
+}
+
+@media screen and (max-width: $breakpoint-md) {
+  .highway__step {
+    width: 100%;
+  }
+}
+
+@media screen and (min-width: $breakpoint-lg) and (max-width: $breakpoint-xl) {
+  .big {
+    font-size: 13vw;
+    line-height: 13.25vw;
+  }
+  .img-wrapper {
+    top: 0;
+  }
+}
+
+@media screen and (min-width: 2000px) {
+  .step-1 {
+    .big {
+      font-size: 16vh;
+      line-height: 16.25vh;
+    }
+  }
+}

@@ -1,0 +1,123 @@
+<div class="row"
+     *ngIf="userDetail; else placeholder">
+  <div class="col-auto">
+    <img class="img-fluid mb-2 picture-card-image"
+         [src]="userDetail.photoUrl || '/assets/images/user.png'">
+  </div>
+  <div class="col-auto">
+    <h4 class="m-0">{{userDetail?.firstName}} {{userDetail?.lastName}}</h4>
+    <div class="d-flex w-100 align-items-center"
+         *ngIf="isProfile">
+      <i class="ml-auto fa fa-skype pointer"
+         dfToolTip="Make a call or chat with {{user?.printableName}}"
+         container="body"
+         (click)="toggleSkypeOptions()">
+        <div>
+          <a [href]="'skype:' + user?.skypeId + 'call'"
+             class="skype-circle">
+            <i class="fa fa-phone fa-fw"></i>
+          </a>
+          <a [href]="'skype:' + user?.skypeId + 'chat'"
+             class="skype-circle">
+            <i class="fa fa-phone fa-fw"></i>
+          </a>
+        </div>
+      </i>
+    </div>
+
+    <div class="au-neutral-3 my-2">
+      {{assignment?.jobTitle}}
+    </div>
+    <div class="my-1">
+      <span class="au-neutral-3">Start date:</span>
+      {{assignment?.currentAssignmentHistory?.effectiveDateBegin | date: 'MMM d, y'}}
+      <span [dfToolTip]="getTooltipText(assignment?.scheduledTerminationDate)"
+            dfToolTipPlacement="top"
+            container="body"
+            [disabled]="!assignment?.scheduledTerminationDate">
+        <a *ngIf="managerControl"
+           class="end-contract-link"
+           [class.disabled]="assignment?.scheduledTerminationDate"
+           href="#"
+           [routerLink]=""
+           (click)="showEndContractModal()">End Contract</a>
+      </span>
+    </div>
+    <div class="my-1"
+         *ngIf="assignment?.team">
+      <span class="au-neutral-3">Team:</span>
+      {{assignment?.currentAssignmentHistory?.team?.name}}
+    </div>
+    <div class="my-1"
+         *ngIf="assignment?.currentAssignmentHistory?.manager">
+      <span class="au-neutral-3">Manager:</span>
+      {{assignment?.currentAssignmentHistory?.manager?.printableName}}
+    </div>
+    <div class="my-1"
+         *ngIf="assignment?.currentAssignmentHistory?.salary">
+      <span class="au-neutral-3">Salary:</span>
+      <span class="fake-link"
+            (click)="showSalary()"
+            *ngIf="!viewSalary">Show</span>
+      <span *ngIf="viewSalary">{{assignment?.currentAssignmentHistory?.salary | currency}} / {{assignment?.salaryUnit | enumToString }}
+        <span class="fake-link"
+              (click)="hideSalary()">Hide</span>
+      </span>
+    </div>
+    <div class="my-1">
+      <span class="au-neutral-3">Location:</span>
+      {{assignment?.selection?.marketplaceMember?.application?.candidate?.location?.state}}
+      {{assignment?.selection?.marketplaceMember?.application?.candidate?.location?.country?.name}},
+      (UTC {{userDetail?.location?.timeZone?.hourlyOffset}})
+    </div>
+    <div class="my-1">
+      <span class="au-neutral-3">Current date/time:</span>
+      {{ getUserTimezone(userDetail?.location?.timeZone?.offset) | date: 'MMM d, h:mm a'}}
+    </div>
+    <div class="d-flex w-100 align-items-center my-1 font-16">
+      <span dfToolTip="Take {{assignment?.featureValues?.webcamshotFrequency}} Webcam photo(s) every 10 minutes"
+            container="body">
+        <i class="au-neutral-3 fa fa-fw fa-camera"></i>
+        <i class="fa fa-fw"
+           [ngClass]="isFeatureEnabled('WEBCAM_PICTURES')?'fa-check-circle-o au-green':'fa-times-circle-o au-red'">
+        </i>
+      </span>
+      <div class="icons-divider"></div>
+      <span dfToolTip="Take {{assignment?.featureValues?.screenshotFrequency}} screenshot every 10 minutes"
+            container="body">
+        <i class="au-neutral-3 fa fa-fw fa-desktop"></i>
+        <i class="fa fa-fw"
+           [ngClass]="isFeatureEnabled('SCREENSHOTS')?'fa-check-circle-o au-green':'fa-times-circle-o au-red'">
+        </i>
+      </span>
+      <div class="icons-divider"></div>
+      <span dfToolTip="Capture the name of the applications/website used"
+            container="body">
+        <i class="au-neutral-3 fa fa-fw fa-list-alt"></i>
+        <i class="fa fa-fw"
+           [ngClass]="isFeatureEnabled('APPLICATION_TRACKING')?'fa-check-circle-o au-green':'fa-times-circle-o au-red'">
+        </i>
+      </span>
+      <div class="icons-divider"></div>
+      <span dfToolTip="Let Crossover's Productivity Team review the activity and dispute timecards."
+            container="body">
+        <i class="au-neutral-3 fa fa-fw fa-eye"></i>
+        <i class="fa fa-fw"
+           [ngClass]="isFeatureEnabled('ENFORCER_REVIEW')?'fa-check-circle-o au-green':'fa-times-circle-o au-red'">
+        </i>
+      </span>
+    </div>
+  </div>
+</div>
+<ng-template #placeholder>
+  <app-placeholder-card-image></app-placeholder-card-image>
+</ng-template>
+<ng-template #endContractModal
+             let-close="close">
+  <div class="text-left">
+    <app-end-contract [userDetail]="userDetail"
+                      (close)="close()"
+                      (success)="onEndContract($event)"
+                      [assignment]="assignment"></app-end-contract>
+  </div>
+</ng-template>

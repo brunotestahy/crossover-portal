@@ -1,0 +1,157 @@
+@import "variables";
+
+:host {
+  ::ng-deep {
+    .df-input-container input[type=text] {
+      font-size: .85em;
+      color: #ffffff;
+    }
+  }
+}
+
+
+.job-search__text {
+  width: auto;
+}
+
+
+.job-search__category {
+  height: 32px;
+}
+
+.job-is-new {
+  background: $au-blue;
+  position: absolute;
+  top: 1px;
+  right: 1px;
+  padding: 4px 6px;
+  font-size: 10px;
+  color: #ffffff;
+}
+
+.jobs-container {
+  height: calc(100vh - 152px);
+  overflow: auto;
+  position: relative;
+}
+
+.panel {
+  display: block;
+  width: 100%;
+  position: relative;
+  margin-bottom: 8px;
+  transition: all .5s;
+  background-color: #fff;
+  border: 1px solid transparent;
+  border-radius: 4px;
+  box-shadow: 0 1px 1px rgba(0,0,0,.05);
+  border-color: #ddd;
+  &:hover {
+    border-color: $au-blue;
+    text-decoration: none;
+    box-shadow: 0 1px 6px 0 #ccc;
+    .cell--title {
+      color: $au-blue;
+    }
+  }
+}
+
+.panel-body {
+  height: auto;
+  display: block;
+  padding: 15px 30px;
+}
+
+.cell {
+  display: block;
+  padding: 8px;
+  color: #7e7f81;
+  transition: all 0.2s;
+  &:first-child, &:last-child {
+    padding-left: 30px;
+  }
+
+  &--title {
+    width: 100%;
+    font-weight: 700;
+    font-size: 14px;
+    color: #2b2b2b;
+    text-align: center;
+  }
+
+  &--work-time {
+    float: left;
+    width: 50%;
+    text-align: center;
+  }
+  &--salary-hr {
+    float: left;
+    width: 50%;
+    text-align: center;
+  }
+  &--salary-year {
+    float: left;
+    width: 100%;
+    text-align: center;
+  }
+
+
+  &--value {
+    color: #2b2b2b;
+  }
+}
+
+@media screen and (min-width: 576px) {
+  .cell {
+    &--work-time {
+      float: left;
+      width: 33.3333%;
+      text-align: center;
+    }
+    &--salary-hr {
+      float: left;
+      width: 33.3333%;
+      text-align: center;
+    }
+    &--salary-year {
+      width: 33.3333%;
+    }
+  }
+}
+
+@media screen and (min-width: 768px) {
+  .panel {
+    display: table;
+  }
+
+  .panel-body {
+    height: 80px;
+    display: table-row;
+  }
+
+  .cell {
+    display: table-cell;
+    vertical-align: middle;
+
+    &--title {
+      font-size: 16px;
+      width: 550px;
+      text-align: left;
+      float: none;
+    }
+    &--work-time {
+      width: 215px;
+      text-align: left;
+      float: none;
+    }
+    &--salary-hr {
+      width: 205px;
+      text-align: left;
+      float: none;
+    }
+    &--salary-year {
+      text-align: left;
+      float: none;
+    }
+  }
+}

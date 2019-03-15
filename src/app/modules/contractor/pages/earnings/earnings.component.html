@@ -1,0 +1,173 @@
+<div class="section__header section__header--aligned">
+  My Earnings
+</div>
+
+<div class="page-content padding-aligned page-scroll">
+  <app-page-alert *ngIf="error"
+                  [text]="error"
+                  class="my-3"></app-page-alert>
+  <df-card class="my-3">
+    <df-card-content>
+      <div class="form-row">
+        <form [formGroup]="form"
+              class="col-md-6">
+          <div class="form-row">
+            <div class="col-12 col-lg-6 d-md-flex align-items-center">
+              <label class="mr-2 text-right text-md-left">From:</label>
+              <df-datepicker class="mr-2 flex-grow"
+                             formControlName="from"></df-datepicker>
+            </div>
+            <div class="col-12 col-lg-6 d-md-flex align-items-center">
+              <label class="mr-2 text-right text-md-left">To:</label>
+              <df-datepicker class="mr-2 flex-grow"
+                             formControlName="to"></df-datepicker>
+            </div>
+          </div>
+        </form>
+        <div class="col-md-6 text-md-right">
+          <button type="button"
+                  class="mb-2 earning-btn w-sm-50 w-100 w-md-auto"
+                  df-button
+                  theme="info"
+                  (click)="downloadIncomeStatement()"
+                  [loading]="isIncomeStatementLoading"
+                  loaderPosition="after">Download Income Statement</button>
+          <button type="button"
+                  class="earning-btn w-sm-50 w-100 w-md-auto"
+                  df-button
+                  theme="info"
+                  [loading]="isPaymentReportLoading"
+                  (click)="downloadPaymentReport()"
+                  loaderPosition="after">Download Payment Report</button>
+        </div>
+      </div>
+    </df-card-content>
+  </df-card>
+  <div class="df-loader-container"
+       *ngIf="isLoading; else loadedContent">
+    <i class="df-loader"></i>
+  </div>
+  <ng-template #loadedContent>
+    <df-card class="my-3">
+      <df-card-content>
+        <df-grid [value]="earnings"
+                 class="earnings-grid"
+                 emptyMessage="No earnings found."
+                 [responsive]="isResponsive"
+                 (rowClick)="openLogbook(logBook, $event.data)">
+          <df-grid-column field="team"
+                          header="Team"
+                          [sortable]="true">
+            
+          </df-grid-column>
+          <df-grid-column field="paymentPlatform"
+                          header="Payment Platform"
+                          [sortable]="true">
+            <ng-template dfGridTemplate="body"
+                         let-col
+                         let-item="rowData">
+              <span class="text-capitalize">{{item.paymentPlatform}}</span>
+            </ng-template>
+          </df-grid-column>
+          <df-grid-column field="loggedHours"
+                          header="Logged Hours"
+                          [sortable]="true">
+            <ng-template dfGridTemplate="body"
+                         let-col
+                         let-item="rowData">
+              <span *ngIf="item.loggedHours">{{item.loggedHours | formatHours :hh:mm}}</span>
+              <span *ngIf="!item.loggedHours">-</span>
+            </ng-template>
+          </df-grid-column>
+          <df-grid-column field="manual"
+                          header="Manual"
+                          [sortable]="true">
+            <ng-template dfGridTemplate="body"
+                         let-col
+                         let-item="rowData">
+              <span *ngIf="item.manual">{{item.manual | formatHours :hh:mm}}</span>
+              <span *ngIf="!item.manual">-</span>
+            </ng-template>
+          </df-grid-column>
+          <df-grid-column field="disputed"
+                          header="Disputed"
+                          [sortable]="true">
+            <ng-template dfGridTemplate="body"
+                         let-col
+                         let-item="rowData">
+              <span *ngIf="item.disputed">{{item.disputed | formatHours :hh:mm}}</span>
+              <span *ngIf="!item.disputed">-</span>
+            </ng-template>
+          </df-grid-column>
+          <df-grid-column field="paymentHours"
+                          header="Payment Hours"
+                          [sortable]="true">
+            <ng-template dfGridTemplate="body"
+                         let-col
+                         let-item="rowData">
+              <span *ngIf="item.paymentHours">{{item.paymentHours | formatHours :hh:mm}}</span>
+              <span *ngIf="!item.paymentHours">-</span>
+            </ng-template>
+          </df-grid-column>
+          <df-grid-column field="weeklyLimit"
+                          header="Weekly Limit"
+                          [sortable]="true">
+            <ng-template dfGridTemplate="body"
+                         let-col
+                         let-item="rowData">
+              <span *ngIf="item.weeklyLimit">{{item.weeklyLimit}}</span>
+              <span *ngIf="!item.weeklyLimit">-</span>
+            </ng-template>
+          </df-grid-column>
+          <df-grid-column field="netPayment"
+                          header="Net Payment"
+                          [sortable]="true">
+            <ng-template dfGridTemplate="body"
+                         let-col
+                         let-item="rowData">
+              <span *ngIf="item.netPayment">{{item.netPayment | currency}}</span>
+              <span *ngIf="!item.netPayment">-</span>
+            </ng-template>
+          </df-grid-column>
+          <df-grid-column field="paymentStatus"
+                          header="Payment Status"
+                          [sortable]="true">
+            <ng-template dfGridTemplate="body"
+                         let-col
+                         let-item="rowData">
+              <span class="text-capitalize">{{item.paymentStatus}}</span>
+            </ng-template>
+          </df-grid-column>
+          <df-grid-column field="paymentWeekStartDate"
+                          header="Payment Week Start Date"
+                          [sortable]="true">
+          </df-grid-column>
+        </df-grid>
+      </df-card-content>
+    </df-card>
+  </ng-template>
+
+</div>
+<ng-template #logBook
+             let-close="close">
+  <df-card class="mb-3">
+    <df-card-content>
+      <div class="d-flex align-items-center flex-wrap">
+        <div class="ml-auto d-flex">
+          <span (click)="setDateToToday()"
+                class="pointer align-self-center">Today</span>
+          <app-my-dashboard-datepicker [view]="'daily'"
+                                       [date]="earningdate"
+                                       (update)="onDateChange($event)"></app-my-dashboard-datepicker>
+        </div>
+      </div>
+    </df-card-content>
+  </df-card>
+  <df-card class="overflow-initial">
+    <df-card-content>
+      <app-logbook [userDetail]="userDetail"
+                   [day]="earningdate"></app-logbook>
+
+    </df-card-content>
+  </df-card>
+</ng-template>

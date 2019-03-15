@@ -1,0 +1,20 @@
+@import "variables";
+
+@media (max-width: $breakpoint-md) {
+  .wide-element {
+    margin-left: auto !important;
+    margin-right: auto !important;
+  }
+}
+
+@media (max-width: 600px) {
+  .wide-element {
+    width: 100% !important;
+  }
+}
+
+.metrics-chart {
+  height: 300px;
+  min-width: 75% !important;
+}
+

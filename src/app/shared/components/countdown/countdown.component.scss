@@ -1,0 +1,39 @@
+.df-countdown {
+  &__inner {
+    display: flex;
+    flex-flow: row nowrap;
+    align-items: center;
+  }
+
+  &__time {
+    display: flex;
+    flex-flow: column nowrap;
+    font-size: 24px;
+
+    small {
+      font-size: 10px;
+      font-weight: bold;
+      position: relative;
+      top: -8px;
+    }
+  }
+
+  &__colon {
+    position: relative;
+    top: -8px;
+    font-weight: bold;
+    padding: 0 4px;
+  }
+}
+
+.isIE {
+  .df-countdown__time {
+    display: block;
+
+    span, small {
+      float: left;
+      clear: both;
+      width: 100%;
+    }
+  }
+}

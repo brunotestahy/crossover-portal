@@ -1,0 +1,64 @@
+<div class="section__header section__header--aligned d-flex align-items-center justify-content-between flex-wrap flex-md-nowrap">
+  <span class="mb-2 mb-md-0 w-100">Pending Interview Offers Report</span>
+  <button df-button
+          class="btn-primary col-6 col-md-auto"
+          (click)="downloadCsv()"
+          [disabled]="isLoading">
+    <span>Download CSV</span>
+    </button>
+</div>
+<div class="df-loader-container"
+     *ngIf="isLoading">
+  <i class="df-loader"></i>
+</div>
+<div class="page-content"
+     [class.d-none]="isLoading">
+  <app-page-alert class="my-3"
+                  *ngIf="error"
+                  [text]="error"></app-page-alert>
+  <df-card class="pt-2">
+    <div id="printTable">
+      <df-grid [value]="data"
+               [emptyMessage]="noDataMessage"
+               [responsive]="isResponsive"
+               #grid>
+        <df-grid-column field="id"
+                        header="#">
+        </df-grid-column>
+        <df-grid-column field="company"
+                        header="Company">
+        </df-grid-column>
+        <df-grid-column field="hm"
+                        header="HM">
+        </df-grid-column>
+        <df-grid-column field="hmEmail"
+                        header="HM Email">
+        </df-grid-column>
+        <df-grid-column field="candidateName"
+                        header="Candidate Name">
+        </df-grid-column>
+        <df-grid-column field="candidateEmail"
+                        header="Candidate Email">
+        </df-grid-column>
+        <df-grid-column field="jobRole"
+                        header="Job Role">
+        </df-grid-column>
+        <df-grid-column field="startDateTime"
+                        header="Interview Offer Date (EST)">
+        </df-grid-column>
+        <df-grid-column field="interviewTime"
+                        header="Interview Offer Time (EST)">
+        </df-grid-column>
+      </df-grid>
+    </div>
+    <df-table-paginator [collectionSize]="collectionSize"
+                        [(currentPage)]="currentPage"
+                        [pageSize]="pageSize"
+                        [showSearchInput]="false"
+                        (refresh)="loadData()"
+                        (pageChange)="onPageChange($event)"
+                        [showPrint]="false"
+                        [showExcel]="false">
+    </df-table-paginator>
+  </df-card>
+</div>

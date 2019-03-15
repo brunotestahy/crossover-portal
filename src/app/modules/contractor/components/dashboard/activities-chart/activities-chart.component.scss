@@ -1,0 +1,79 @@
+@import "variables";
+
+$success-color: #8bc34a;
+$warning-color: #ff9800;
+$danger-color: #f44346;
+
+:host {
+  .section-name {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .no-activities {
+    position: absolute;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    left: 50%;
+  }
+
+  .clickable-section:hover {
+    box-shadow: 0 0 15px rgba(34,170,228,.3);
+    cursor: pointer;
+  }
+
+  .productivity-card {
+    height: 330px;
+  }
+
+  .section-bar {
+    display: -ms-flexbox;
+    display: flex;
+    flex-direction: column !important;
+    height: 250px;
+  }
+
+  .productivity-card {
+    height: 330px;
+  }
+
+  .section-bar__element {
+    flex-basis: unset;
+    -ms-flex-positive: unset;
+    flex-grow: unset;
+    max-width: 100px;
+    position: unset;
+    min-height: 1px;
+    padding-right: 0;
+    padding-left: 0;
+    font-size: 11px;
+
+    $percentage: 0;
+    $maxDivHeight: 54;
+    $maxDivHeightSingle: 15;
+    $maxDivHeightDouble: 30;
+    @while ($percentage <= 100) {
+      &.section-height-#{$percentage} {
+        height: ($percentage * 2.25) + px;
+
+        // Hide content with div's height smaller than 25px
+        @if (($percentage * 2) < $maxDivHeightSingle) {
+          div {
+            display: none;
+          }
+        }
+
+        @if (($percentage * 2) >= $maxDivHeightSingle) {
+          @if (($percentage * 2) <= $maxDivHeightDouble) {
+            .spent-time-percentage {
+              display: none;
+            }
+          }
+        }
+      }
+      $percentage: $percentage + 1;
+    }
+  }
+}

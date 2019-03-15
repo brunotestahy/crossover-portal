@@ -1,0 +1,240 @@
+<div class="section__header section__header--aligned d-flex align-items-center">
+  <span class="mr-2">Pipeline Health Details</span>
+</div>
+<div class="container-fluid page-scroll d-flex flex-column page-scroll">
+  <app-page-alert class="my-3"
+                  *ngIf="error; else noErrorTemplate"
+                  [text]="error"></app-page-alert>
+  <ng-template #noErrorTemplate>
+    <div class="df-loader-container"
+         *ngIf="isLoading; else loadedContent">
+      <i class="df-loader"></i>
+    </div>
+    <ng-template #loadedContent>
+      <df-card class="my-3 flex-no-shrink">
+        <df-card-content>
+          <h5>{{health.jobTitle}}</h5>
+          <div class="pipeline-salary">
+            <strong>
+              {{yearSalary}}
+            </strong>
+          </div>
+          <div class="pipeline-total">
+            <strong>{{total}}</strong>
+            <span class="pipeline-total-caption">total applied</span>
+          </div>
+          <div class="pipeline-since">since {{health.jobOpeningDate| date: 'MM.dd.yyyy'}}</div>
+        </df-card-content>
+      </df-card>
+      <div class="row">
+        <div class="col-lg mb-3 mb-lg-0">
+          <df-card>
+            <df-card-title class="p-3 bg-au-neutral-4 au-white">
+              <span>Verify Email</span>
+            </df-card-title>
+            <df-card-content class="p-0 pipeline-queue-state">
+              <div class="pipeline-state-row"
+                   [ngClass]="{ 'pipeline-state-row--gray': verifyEmail.inProgress.isGray }">
+                <span>In Progress</span>
+                <a class="ml-auto float-right"
+                   [routerLink]="'/applicants/tracking'"
+                   [queryParams]="{jobId: jobId, status: 'candidateVerifiesEmailAddress'}"
+                   target="_blank">
+                  {{verifyEmail.inProgress.value}}
+                </a>
+              </div>
+              <div class="pipeline-state-row"
+                   [ngClass]="{ 'pipeline-state-row--gray': verifyEmail.stalled.isGray }">
+                <span>Stalled</span>
+                <a class="ml-auto float-right"
+                   [routerLink]="'/applicants/tracking'"
+                   [queryParams]="{jobId: jobId, status: 'candidateVerifiesEmailAddress', stalled: true}"
+                   target="_blank">
+                  {{verifyEmail.stalled.value}}
+                </a>
+              </div>
+            </df-card-content>
+          </df-card>
+        </div>
+        <div class="col-lg mb-3 mb-lg-0">
+          <df-card>
+            <df-card-title class="p-3 bg-au-neutral-4 au-white">
+              <span>Technical Screen</span>
+            </df-card-title>
+            <df-card-content class="p-0 pipeline-queue-state">
+              <div class="pipeline-state-row"
+                   [ngClass]="{ 'pipeline-state-row--gray': technicalScreen.invited.isGray }">
+                <span>Invited</span>
+                <a class="ml-auto float-right"
+                   [routerLink]="'/applicants/tracking'"
+                   [queryParams]="{jobId: jobId, status: 'techTrialUpdatesStatus1'}"
+                   target="_blank">
+                  {{technicalScreen.invited.value}}
+                </a>
+              </div>
+              <div class="pipeline-state-row"
+                   [ngClass]="{ 'pipeline-state-row--gray': technicalScreen.stalled.isGray }">
+                <span>Stalled</span>
+                <a class="ml-auto float-right"
+                   [routerLink]="'/applicants/tracking'"
+                   [queryParams]="{jobId: jobId, status: 'techTrialUpdatesStatus1', stalled: true}"
+                   target="_blank">
+                  {{technicalScreen.stalled.value}}
+                </a>
+              </div>
+            </df-card-content>
+          </df-card>
+        </div>
+        <div class="col-lg mb-3 mb-lg-0">
+          <df-card>
+            <df-card-title class="p-3 bg-au-neutral-4 au-white">
+              <span>Project Evaluation</span>
+            </df-card-title>
+            <df-card-content class="p-0 pipeline-queue-state">
+              <div class="pipeline-state-row"
+                   [ngClass]="{ 'pipeline-state-row--gray': projectEvaluation.invited.isGray }">
+                <span>Invited</span>
+                <a class="ml-auto float-right"
+                   [routerLink]="'/applicants/tracking'"
+                   [queryParams]="{jobId: jobId, status: 'candidateStartsAssignment'}"
+                   target="_blank">
+                  {{projectEvaluation.invited.value}}
+                </a>
+              </div>
+              <div class="pipeline-state-row"
+                   [ngClass]="{ 'pipeline-state-row--gray': projectEvaluation.inProgress.isGray }">
+                <span>In Progress</span>
+                <a class="ml-auto float-right"
+                   [routerLink]="'/applicants/tracking'"
+                   [queryParams]="{jobId: jobId, status: 'candidateEndsAssignment'}"
+                   target="_blank">
+                  {{projectEvaluation.inProgress.value}}
+                </a>
+              </div>
+              <div class="pipeline-state-row"
+                   [ngClass]="{ 'pipeline-state-row--gray': projectEvaluation.underEvaluation.isGray }">
+                <span>Under Evaluation</span>
+                <a class="ml-auto float-right"
+                   [routerLink]="'/applicants/tracking'"
+                   [queryParams]="{jobId: jobId, status: 'techTrialUpdatesStatus2'}"
+                   target="_blank">
+                  {{projectEvaluation.underEvaluation.value}}
+                </a>
+              </div>
+              <div class="pipeline-state-row"
+                   [ngClass]="{ 'pipeline-state-row--gray': projectEvaluation.stalled.isGray }">
+                <span>Stalled</span>
+                <a class="ml-auto float-right"
+                   [routerLink]="'/applicants/tracking'"
+                   [queryParams]="{
+                      jobId: jobId,
+                      status: ['candidateStartsAssignment','candidateEndsAssignment','techTrialUpdatesStatus2'],
+                      stalled: true
+                    }"
+                   target="_blank">
+                  {{projectEvaluation.stalled.value}}
+                </a>
+              </div>
+            </df-card-content>
+          </df-card>
+        </div>
+        <div class="col-lg mb-3 mb-lg-0">
+          <df-card>
+            <df-card-title class="p-3 bg-au-neutral-4 au-white">
+              <span>Written Evaluation</span>
+            </df-card-title>
+            <df-card-content class="p-0 pipeline-queue-state">
+                <div class="pipeline-state-row"
+                [ngClass]="{ 'pipeline-state-row--gray': writtenEvaluation.invited.isGray }">
+             <span>Invited</span>
+             <a class="ml-auto float-right"
+                [routerLink]="'/applicants/tracking'"
+                [queryParams]="{jobId: jobId, status: 'candidateSubmits5QTest'}"
+                target="_blank">
+               {{writtenEvaluation.invited.value}}
+             </a>
+           </div>
+           <div class="pipeline-state-row"
+                [ngClass]="{ 'pipeline-state-row--gray': writtenEvaluation.raGrades.isGray }">
+             <span>RA grades</span>
+             <a class="ml-auto float-right"
+                [routerLink]="'/applicants/tracking'"
+                [queryParams]="{jobId: jobId, status: 'recruitmentAnalystGrades5QTest'}"
+                target="_blank">
+               {{writtenEvaluation.raGrades.value}}
+             </a>
+           </div>
+           <div class="pipeline-state-row"
+                [ngClass]="{ 'pipeline-state-row--gray': writtenEvaluation.amEndorses.isGray }">
+             <span>AM endorses</span>
+             <a class="ml-auto float-right"
+                [routerLink]="'/applicants/tracking'"
+                [queryParams]="{jobId: jobId, status: 'accountManagerEndorsesApplication'}"
+                target="_blank">
+               {{writtenEvaluation.amEndorses.value}}
+             </a>
+           </div>
+           <div class="pipeline-state-row"
+                [ngClass]="{ 'pipeline-state-row--gray': writtenEvaluation.stalled.isGray }">
+             <span>Stalled</span>
+             <a class="ml-auto float-right"
+                [routerLink]="'/applicants/tracking'"
+                [queryParams]="{
+                  jobId: jobId,
+                  status: ['candidateSubmits5QTest','recruitmentAnalystGrades5QTest','accountManagerEndorsesApplication'],
+                  stalled: true
+                }"
+                target="_blank">
+               {{writtenEvaluation.stalled.value}}
+             </a>
+           </div>
+            </df-card-content>
+          </df-card>
+        </div>
+        <div class="col-lg mb-3 mb-lg-0">
+          <df-card>
+            <df-card-title class="p-3 bg-au-neutral-4 au-white">
+              <span>Marketplace</span>
+            </df-card-title>
+            <df-card-content class="p-0 pipeline-queue-state">
+                <div class="pipeline-state-row"
+                [ngClass]="{ 'pipeline-state-row--gray': marketplace.preMP.isGray }">
+             <span>Pre-MP</span>
+             <a class="ml-auto float-right"
+                [routerLink]="'/applicants/tracking'"
+                [queryParams]="{jobId: jobId, status: 'candidateTakesTalentAdvocateTest'}"
+                target="_blank">
+               {{marketplace.preMP.value}}
+             </a>
+           </div>
+           <div class="pipeline-state-row"
+                [ngClass]="{ 'pipeline-state-row--gray': marketplace.marketplace.isGray }">
+             <span>Marketplace</span>
+             <a class="ml-auto float-right"
+                [routerLink]="'/applicants/tracking'"
+                [queryParams]="{jobId: jobId, status: 'Marketplace'}"
+                target="_blank">
+               {{marketplace.marketplace.value}}
+             </a>
+           </div>
+           <div class="pipeline-state-row"
+                [ngClass]="{ 'pipeline-state-row--gray': marketplace.stalled.isGray }">
+             <span>Stalled</span>
+             <a class="ml-auto float-right"
+                [routerLink]="'/applicants/tracking'"
+                [queryParams]="{
+                  jobId: jobId,
+                  status: ['candidateTakesTalentAdvocateTest','Marketplace'],
+                  stalled: true
+                }"
+                target="_blank">
+               {{marketplace.stalled.value}}
+             </a>
+           </div>
+            </df-card-content>
+          </df-card>
+        </div>
+      </div>
+    </ng-template>
+  </ng-template>
+</div>

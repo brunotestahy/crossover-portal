@@ -1,0 +1,41 @@
+@import 'variables';
+
+:host {
+  .job-description-modal {
+    max-height: 80vh;
+    overflow: hidden;
+    text-align: left;
+
+    &__header {
+      height: 64px;
+    }
+
+    &__close {
+      margin-left: auto;
+      cursor: pointer;
+    }
+
+    &__content {
+      max-height: calc(80vh - 64px);
+      overflow: auto;
+      padding: 30px;
+
+      .row {
+        margin-top: 15px;
+        .col-6 {
+          padding: 0 10px;
+        }
+      }
+    }
+
+    &__footer {
+      border-top: 1px solid rgba(0, 0, 0, 0.1);
+      display: flex;
+      flex-direction: column;
+      .right {
+        display: inline-flex;
+        align-self: flex-end;
+      }
+    }
+  }
+}

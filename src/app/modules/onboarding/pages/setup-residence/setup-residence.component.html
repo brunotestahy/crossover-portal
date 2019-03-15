@@ -1,0 +1,198 @@
+<div class="container-fluid">
+  <div class="row ie-fix">
+    <div class="col-md-6 offset-md-3">
+      <app-page-alert *ngIf="error" [text]="error" class="my-3"></app-page-alert>
+      <df-card>
+        <df-card-content>
+          <div class="residence-icon"></div>
+          <div class="onboarding__steps">
+            <div class="onboarding__step onboarding__step--completed"></div>
+            <div class="onboarding__step onboarding__step--active"></div>
+            <div class="onboarding__step onboarding__step--inactive"></div>
+            <div class="onboarding__step onboarding__step--inactive"></div>
+            <div class="onboarding__step onboarding__step--inactive"></div>
+            <strong>Step 2</strong>
+          </div>
+
+          <h1>Location and citizenship</h1>
+          <form [formGroup]="form" (submit)="onSubmit()" class="standard-form">
+            <div class="working-through-entity d-flex">
+              <label class="working-through-entity-label">I am working through an entity</label>
+              <df-slide-toggle formControlName="workingThroughEntity"></df-slide-toggle>
+            </div>
+            <div *ngIf="!form.value.workingThroughEntity" formGroupName="personalInfo" class="row">
+              <div class="col-lg-6 pr-lg-4">
+                <div>
+                  <label>Title</label>
+                  <df-select formControlName="title">
+                    <df-option value="Mr" displayText="Mr.">Mr.</df-option>
+                    <df-option value="Ms" displayText="Ms.">Ms.</df-option>
+                    <df-option value="Dr" displayText="Dr.">Dr.</df-option>
+                  </df-select>
+                  <df-validation-messages [control]="form.get(['personalInfo', 'title'])"></df-validation-messages>
+                </div>
+                <div>
+                  <label>Primary Citizenship</label>
+                  <df-select formControlName="primaryCitizenship" [filterable]="true">
+                    <df-option *ngFor="let country of countries" [value]="country" [displayText]="country.name">{{country.name}}</df-option>
+                  </df-select>
+                  <df-validation-messages [control]="form.get(['personalInfo', 'primaryCitizenship'])"></df-validation-messages>
+                </div>
+                <div *ngIf="secondaryCitizenshipControl.enabled">
+                  <label>Secondary Citizenship</label>
+                  <div class="d-flex">
+                    <df-select formControlName="secondaryCitizenship"
+                               [filterable]="true"
+                                [ngClass]="{'ie-fix': ieFixClass}">
+                      <df-option *ngFor="let country of countries" [value]="country" [displayText]="country.name">{{country.name}}</df-option>
+                    </df-select>
+                    <button type="button" class="ml-2" df-button theme="danger" (click)="removeCitizenship()">
+                      <i class="fa fa-trash"></i>
+                    </button>
+                  </div>
+                  <df-validation-messages [control]="form.get(['personalInfo', 'secondaryCitizenship'])"></df-validation-messages>
+                </div>
+                <div *ngIf="tertiaryCitizenshipControl.enabled">
+                  <label>Tertiary Citizenship</label>
+                  <div class="d-flex">
+                    <df-select formControlName="tertiaryCitizenship"
+                               [filterable]="true"
+                               [ngClass]="{'ie-fix': ieFixClass}">
+                      <df-option *ngFor="let country of countries" [value]="country" [displayText]="country.name">{{country.name}}</df-option>
+                    </df-select>
+                    <button type="button" class="ml-2" df-button theme="danger" (click)="removeCitizenship()">
+                      <i class="fa fa-trash"></i>
+                    </button>
+                  </div>
+                  <df-validation-messages [control]="form.get(['personalInfo', 'tertiaryCitizenship'])"></df-validation-messages>
+                </div>
+                <button type="button" df-button theme="success" class="d-block ml-auto my-2 fixed-button-width" *ngIf="!tertiaryCitizenshipControl.enabled"
+                  (click)="addCitizenship()">
+                  <i class="fa fa-plus mr-2"></i> Add citizenship
+                </button>
+              </div>
+              <div class="col-lg-6 pl-lg-4">
+                <!-- <h5 class="address-info">Address Info</h5> -->
+                <div>
+                  <label>Country of Residence</label>
+                  <df-select formControlName="country" [filterable]="true">
+                    <df-option *ngFor="let country of countries" [value]="country" [displayText]="country.name">{{country.name}}</df-option>
+                  </df-select>
+                  <df-validation-messages [control]="personalInfoGroup.get('country')"></df-validation-messages>
+                </div>
+                <div>
+                  <label>Address Line 1</label>
+                  <df-input-container>
+                    <input type="text" formControlName="address1">
+                  </df-input-container>
+                  <df-validation-messages [control]="personalInfoGroup.get('address1')"></df-validation-messages>
+                </div>
+                <div>
+                  <label>Address Line 2</label>
+                  <df-input-container>
+                    <input type="text" formControlName="address2">
+                  </df-input-container>
+                  <df-validation-messages [control]="personalInfoGroup.get('address2')"></df-validation-messages>
+                </div>
+                <div>
+                  <label>City</label>
+                  <df-input-container>
+                    <input type="text" formControlName="city">
+                  </df-input-container>
+                  <df-validation-messages [control]="personalInfoGroup.get('city')"></df-validation-messages>
+                </div>
+                <div>
+                  <label>State of Residence</label>
+                  <df-input-container>
+                    <input type="text" formControlName="state">
+                  </df-input-container>
+                  <df-validation-messages [control]="personalInfoGroup.get('state')"></df-validation-messages>
+                </div>
+                <div>
+                  <label>ZIP</label>
+                  <df-input-container>
+                    <input type="text" formControlName="zip">
+                  </df-input-container>
+                  <df-validation-messages [control]="personalInfoGroup.get('zip')"></df-validation-messages>
+                </div>
+              </div>
+            </div>
+
+
+            <div *ngIf="form.value.workingThroughEntity" formGroupName="entityInfo" class="row">
+              <div class="col-lg-6">
+                <div>
+                  <label>Legal Name of Entity</label>
+                  <df-input-container>
+                    <input type="text" formControlName="name">
+                  </df-input-container>
+                  <df-validation-messages [control]="entityInfoGroup.get('name')"></df-validation-messages>
+                </div>
+              </div>
+              <div class="col-lg-6">
+                <div>
+                  <label>Country where incorporated</label>
+                  <df-select formControlName="country" [filterable]="true">
+                    <df-option *ngFor="let country of countries" [value]="country" [displayText]="country.name">{{country.name}}</df-option>
+                  </df-select>
+                  <df-validation-messages [control]="entityInfoGroup.get('country')"></df-validation-messages>
+                </div>
+              </div>
+              <div class="col-lg-6">
+                <div>
+                  <label>Address Line 1</label>
+                  <df-input-container>
+                    <input type="text" formControlName="address1">
+                  </df-input-container>
+                  <df-validation-messages [control]="entityInfoGroup.get('address1')"></df-validation-messages>
+                </div>
+              </div>
+              <div class="col-lg-6">
+                <div>
+                  <label>Address Line 2</label>
+                  <df-input-container>
+                    <input type="text" formControlName="address2">
+                  </df-input-container>
+                  <df-validation-messages [control]="entityInfoGroup.get('address2')"></df-validation-messages>
+                </div>
+              </div>
+              <div class="col-lg-6">
+                <div>
+                  <label>City</label>
+                  <df-input-container>
+                    <input type="text" formControlName="city">
+                  </df-input-container>
+                  <df-validation-messages [control]="entityInfoGroup.get('city')"></df-validation-messages>
+                </div>
+              </div>
+              <div class="col-lg-6">
+                <div>
+                  <label>State where incorporated</label>
+                  <df-input-container>
+                    <input type="text" formControlName="state">
+                  </df-input-container>
+                  <df-validation-messages [control]="entityInfoGroup.get('state')"></df-validation-messages>
+                </div>
+              </div>
+              <div class="col-lg-6">
+                <div>
+                  <label>ZIP</label>
+                  <df-input-container>
+                    <input type="text" formControlName="zip">
+                  </df-input-container>
+                  <df-validation-messages [control]="entityInfoGroup.get('zip')"></df-validation-messages>
+                </div>
+              </div>
+            </div>
+
+
+            <button type="submit" class="w-100" df-button theme="info" loaderPosition="after" [loading]="isPending">SEND</button>
+          </form>
+        </df-card-content>
+      </df-card>
+    </div>
+    <div class="col-3 d-none d-md-flex align-items-center pr-0">
+      <div class="onboarding__office-icon"></div>
+    </div>
+  </div>
+</div>

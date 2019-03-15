@@ -1,0 +1,42 @@
+@import "variables";
+
+:host {
+  .row {
+    /*This will work for IE10+*/
+    @media screen and (-ms-high-contrast: active), screen and (-ms-high-contrast: none) {
+      min-width: 90vw;
+    }
+  }
+}
+
+.step-list {
+  display: flex;
+  flex-direction: column;
+  padding-top: 30px;
+  font-size: 18px;
+  line-height: 40px;
+}
+
+.step-number {
+  color: map-get($au-gray, 3);
+  margin-right: 20px;
+}
+
+.character-icon {
+  background-image: url('/assets//images/candidate/onboarding-process/male-character.svg');
+  width: 99px;
+  height: 308px;
+}
+
+.start-process-button {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  text-decoration: none;
+  &:hover {
+    cursor: pointer;
+    .circle-icon {
+      text-decoration: none;
+    }
+  }
+}

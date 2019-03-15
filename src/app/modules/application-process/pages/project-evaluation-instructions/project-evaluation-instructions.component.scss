@@ -1,0 +1,11 @@
+@import "variables";
+
+.project-evaluation__title {
+  border-bottom: $border;
+}
+
+::ng-deep {
+  df-alert .df-alert__wrapper {
+    width: 500px;
+  }
+}

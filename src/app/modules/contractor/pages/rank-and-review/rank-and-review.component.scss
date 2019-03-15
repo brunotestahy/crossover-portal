@@ -1,0 +1,147 @@
+.team-member {
+  min-width: 40px;
+  text-align: left;
+  height: 46px;
+  img {
+    width: 36px;
+    border-radius: 18px;
+    border: 1px solid #d8d8d8;
+  }
+}
+
+.success {
+  color: #8bc34a;
+}
+
+.warning {
+  color: #ff9800;
+}
+
+.danger {
+  color: #f44346;
+}
+
+.answers {
+  border: 1px solid #ccc;
+  height: 88%;
+  padding: 5px 10px;
+}
+
+.inactive {
+  opacity: 0.5;
+}
+
+.currently-visible-week {
+  color: black;
+  font-weight: bold;
+}
+
+.shortened-column {
+  width: 90%;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+.error-message {
+  line-height: 200px;
+}
+
+.top-performer {
+  color: #8bc34a;
+}
+
+.bottom-performer {
+  color: #f44346;
+}
+
+::ng-deep {
+  .text-editor-actions .df-button__content {
+    display: block;
+    width: 100%;
+  }
+
+  .rank-and-review {
+    .df-grid {
+      font-size: 12px !important;
+      overflow-x: visible !important;
+    }
+    th:nth-child(2),
+    th:nth-child(3) {
+      width: 25% !important;
+      width: 25% !important;
+    }
+    td:nth-child(2),
+    td:nth-child(3) {
+      padding: 0!important;
+      .df-grid-table-body__cell-data{
+        padding: 0!important;
+      }
+    }
+    .df-grid__row--data:nth-child(even) {
+      background-color: white !important;
+    }
+    .df-grid__table .df-grid-table-body__cell {
+      overflow: visible;
+    }
+  }
+
+  .df-datepicker__icon {
+    display: none;
+  }
+  .text-editor-container {
+    padding: 0;
+  }
+
+  .non-admin-text {
+    min-height: 350px;
+  }
+
+  .text-editor {
+    border-bottom: 1px solid #e4e4e4;
+    margin: 0 15px 36px 15px;
+
+    h6 {
+      border-bottom: 1px solid #e4e4e4;
+    }
+
+    .froala-editor {
+      min-height: 350px;
+      position: relative;
+      z-index: 2;
+      background-color: #fff;
+      .fr-wrapper, .fr-element {
+        display: flex;
+        flex-direction: column;
+        flex-grow: 1;
+      }
+    }
+
+    .text-editor-actions {
+      position: absolute;
+      display: flex;
+      z-index: 1;
+      right: 0;
+      bottom: -36px;
+      opacity: 0;
+      transform: translateY(-100%);
+      transition: all ease-out 200ms;
+
+      button {
+        display: inline-flex;
+        line-height: 35px;
+        width: 35px;
+        padding: 0;
+        justify-content: center;
+        text-align: center;
+      }
+    }
+  }
+
+  .text-editor-container.active {
+    .text-editor-actions {
+      opacity: 1;
+      transform: translateY(0%);
+    }
+  }
+}

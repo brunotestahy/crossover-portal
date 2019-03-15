@@ -1,0 +1,32 @@
+<form [formGroup]="form" (submit)="onSubmit()">
+  <app-page-alert *ngIf="error" [text]="error" class="mb-2"></app-page-alert>
+  <div>
+    <df-input-container>
+      <input type="text" formControlName="email" placeholder="Email Address">
+    </df-input-container>
+    <df-validation-messages [control]="form.get('email')"></df-validation-messages>
+  </div>
+
+  <div>
+    <df-input-container>
+      <input type="password" formControlName="password" placeholder="Password">
+    </df-input-container>
+    <df-validation-messages [control]="form.get('password')"></df-validation-messages>
+  </div>
+
+  <button type="submit" #loginBtn df-button theme="success" class="d-block w-100 mb-3 mt-1"
+    loaderPosition="after" [loading]="pending">LOGIN</button>
+    <button type="button" class="linkedin-btn d-block w-100 mb-3" (click)="loginWithLinkedIn()">
+      <i class="fa fa-linkedin linkedin-btn__icon"></i>
+      <span class="linkedin-btn__text">Login with LinkedIn</span>
+    </button>
+
+  <div class="d-flex w-100">
+      <a class="w-50  d-block login__reset-password" routerLink="../forgot-password">
+        Forgot password
+      </a>
+    <div class="login__privacy-policy w-50  ml-auto text-right">
+      <a routerLink="/documents/privacy-policy" class="login__privacy-policy">Privacy Policy</a>
+    </div>
+  </div>
+</form>

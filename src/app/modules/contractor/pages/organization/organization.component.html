@@ -1,0 +1,414 @@
+<ng-template #managerChangeConfirmationTemplate>
+  <div class="manager-change-modal">
+    <div class="manager-change-modal__content">
+      <p>
+        Move
+        <strong>{{managerChangeConfirmationData.candidateName}}</strong> to
+        <strong>{{managerChangeConfirmationData.teamName}}</strong> under
+        <strong>{{managerChangeConfirmationData.managerName}}</strong>?
+      </p>
+      <p class="text-muted">The contractor will be notified via email.</p>
+    </div>
+  </div>
+</ng-template>
+
+<div class="section__header section__header--aligned">
+  <span>Organization</span>
+  <button df-button
+          type="button"
+          (click)="openNewTeamModal()">
+    <span>New Team</span>
+  </button>
+</div>
+
+<div class="page-content padding-aligned page-scroll"
+     #scrollableParent>
+  <app-page-alert
+    *ngIf="error"
+    [text]="error"
+    class="my-3">
+  </app-page-alert>
+  <div class="row">
+    <div class="col-lg-5 team-summary" #teamSummary>
+      <df-card *ngIf="!isTeamsLoading">
+        <df-card-header>
+          My Team
+        </df-card-header>
+        <div class="sticky"
+             [class.sticky--in-view]="isDropAreaOutOfView"
+             [class.row]="isDropAreaOutOfView">
+          <div
+            class="drop-area"
+            [class.col-lg-5]="isDropAreaOutOfView"
+            dnd-droppable
+            (dragenter)="$event.preventDefault()"
+            (onDropSuccess)="moveContractorToTeam($event)"
+            appScrollRange
+            [scrollParent]="elRef"
+            [range]="[120, teamSummary.clientHeight]"
+            (rangeChange)="isDropAreaOutOfView = $event && scrollableParent.clientHeight >= minimumHeightForDropAreaChange;">
+            Drag contractor here to create a new team.
+          </div>
+        </div>
+
+        <df-accordion *ngIf="myTeams[0]"
+                      [toggleHidden]="true">
+          <df-accordion-panel #managerPanel>
+            <df-accordion-header>
+              <df-accordion-header-title class="manager">
+                <div class="accordion-contractor-item">
+                  <button type="button"
+                          (click)="managerPanel.togglePanel(); $event.stopPropagation()"
+                          df-button
+                          df-clear-button>
+                    <df-icon name="{{managerPanel.expanded? 'chevron-down' : 'chevron-right'}}"></df-icon>
+                  </button>
+                  <span class="name">
+                    <df-icon name="circle-thin"></df-icon>
+                    {{currentUser?.fullName}}
+                  </span>
+                  <span class="job">{{currentUserAvatarType}}</span>
+
+                </div>
+              </df-accordion-header-title>
+            </df-accordion-header>
+            <df-accordion-content>
+              <df-accordion [multi]="true">
+                <df-accordion-panel *ngFor="let team of myTeams"
+                                    [disabled]="true"
+                                    (open)="getTeam(team)"
+                                    #panel>
+
+                  <df-accordion-header [class.selected]="selectedTeam && team.id === selectedTeam.id"
+                                       (click)="selectTeam(team)">
+                    <df-accordion-header-title>
+                      <button type="button"
+                              (click)="panel.togglePanel(); $event.stopPropagation()"
+                              df-button
+                              df-clear-button>
+                        <df-icon name="{{panel.expanded? 'chevron-down' : 'chevron-right'}}"></df-icon>
+                      </button>
+                      <span class="name">
+                        <df-icon name="users"></df-icon>
+                        {{team.name}}
+                      </span>
+                    </df-accordion-header-title>
+                  </df-accordion-header>
+                  <df-accordion-content (dragenter)="$event.preventDefault()"
+                                        dnd-droppable
+                                        (onDropSuccess)="moveContractorToTeam($event, team)">
+                    <div *ngFor="let assignment of team.activeAssignments"
+                         class="accordion-contractor-item"
+                         dnd-draggable
+                         [dragEnabled]="true"
+                         [dragData]="{assignment: assignment, oldTeam: team}">
+
+                      <span class="name">
+                        <df-icon name="circle-thin"></df-icon>
+                        {{assignment.candidate.printableName}}
+                      </span>
+                      <span class="job">
+                        {{assignment.jobTitle}}
+                      </span>
+
+                    </div>
+                  </df-accordion-content>
+
+                </df-accordion-panel>
+              </df-accordion>
+            </df-accordion-content>
+
+          </df-accordion-panel>
+        </df-accordion>
+      </df-card>
+
+
+      <df-card *ngIf="!isTeamsLoading">
+        <df-card-header>
+          Other Teams
+        </df-card-header>
+
+        <df-accordion *ngFor="let team of otherTeams"
+                      [toggleHidden]="true"
+                      [multi]="true">
+          <df-accordion-panel [disabled]="true"
+                              (open)="getTeam(team, true)"
+                              #panel>
+
+            <df-accordion-header [class.selected]="selectedTeam && team.id === selectedTeam.id"
+                                 (click)="selectTeam(team, { otherTeamType: true, shouldCache: true })">
+              <df-accordion-header-title>
+                <button type="button"
+                        (click)="panel.togglePanel(); $event.stopPropagation()"
+                        df-button
+                        df-clear-button>
+                  <df-icon name="{{panel.expanded? 'chevron-down' : 'chevron-right'}}"></df-icon>
+                </button>
+                <span class="name">
+                  <df-icon name="users"></df-icon>
+                  {{team.name}}
+                </span>
+              </df-accordion-header-title>
+            </df-accordion-header>
+            <df-accordion-content>
+              <div *ngFor="let assignment of team.activeAssignments"
+                   class="accordion-contractor-item">
+
+                <span class="name">
+                  <df-icon name="circle-thin"></df-icon>
+                  {{assignment.candidate.printableName}}
+                </span>
+                <span class="job">
+                  {{assignment.jobTitle}}
+                </span>
+              </div>
+            </df-accordion-content>
+
+          </df-accordion-panel>
+        </df-accordion>
+      </df-card>
+
+      <df-card *ngIf="isTeamsLoading"
+               class="loader">
+        <i class="df-loader"></i>
+      </df-card>
+    </div>
+
+    <div class="col-lg-7 team-detail">
+      <df-card *ngIf="selectedTeam">
+        <df-card-header>
+          <span *ngIf="isTeamNameEditing">
+            <df-input-container>
+              <input type="text"
+                     placeholder="Team Name"
+                     [ngModel]="selectedTeam.name"
+                     (keydown.enter)="onTeamNameChange($event.target.value)"
+                     (keydown)="isTeamNameEditing=($event.key !== 'Enter')"
+                     (blur)="isTeamNameEditing = false; onTeamNameChange($event.target.value)"/>
+            </df-input-container>
+          </span>
+          <div *ngIf="!isTeamNameEditing"
+               class="editableContent">
+            <span>{{selectedTeam.name}}</span>
+            <button type="button"
+                    *ngIf="isRole(currentUser, avatarTypes.CompanyAdmin) && !isTeamNameEditing"
+                    (click)="isTeamNameEditing = true; isOwnerEditing= false"
+                    df-button
+                    df-clear-button>
+              <df-icon name="edit"></df-icon>
+            </button>
+          </div>
+
+          <span *ngIf="isOwnerEditing" class="team-owner">Owner:
+            <df-select [ngModel]="selectedTeam.teamOwner?.id"
+                       (change)="onTeamOwnerChange($event); isOwnerEditing = false"
+                       [filterable]="true"
+                       background="dark"
+                       [autoSize]="false"
+                       selectType="inline">
+
+            <ng-template ngFor
+                         let-managerId
+                         [ngForOf]="managersIds">
+              <ng-template [ngIf]="isNewManagersCompany(managers[managerId].company)">
+                <df-option disabled="true"
+                           class="df-option--category">
+                  {{managers[managerId].company.name}}
+                </df-option>
+              </ng-template>
+              <df-option [value]="managerId"
+                         class="pl-3">
+                {{managers[managerId].printableName}}
+              </df-option>
+            </ng-template>
+          </df-select>
+          </span>
+
+          <div *ngIf="!isOwnerEditing"
+               class="editableContent">
+            <span>Owner: {{selectedTeam.teamOwner?.printableName || 'Not Assigned'}}</span>
+            <button type="button"
+                    *ngIf="isRole(currentUser, avatarTypes.CompanyAdmin) && !isOwnerEditing"
+                    (click)="isOwnerEditing = true; isTeamNameEditing = false"
+                    df-button
+                    df-clear-button>
+              <df-icon name="edit"></df-icon>
+            </button>
+          </div>
+        </df-card-header>
+        <df-card-content>
+          <df-group-toggle [items]="teamDetailTabs"
+                           [selectedIndex]="selectedTeamDetailTab"
+                           (change)="teamDetailTabChange($event.id)">
+          </df-group-toggle>
+        </df-card-content>
+      </df-card>
+
+      <div *ngIf="selectedTeamDetailTab === '0'"
+           class="members-section">
+        <df-card *ngIf="!isTeamLoading">
+          <df-grid [value]="teamAssignments"
+                   [loading]="isTeamLoading"
+                   [editable]="true">
+            <df-grid-column header="Members">
+              <ng-template dfGridTemplate="body"
+                           let-member="rowData">
+                <div class="member-cell">
+                  <div class="member-cell__avatar">
+                    <img [src]="member.candidate.photoUrl"
+                         (error)="$event.target.src = 'assets/images/user.png'">
+                  </div>
+                  <span class="member-cell__name"
+                        (click)="navigateToContractor(member)">{{member.candidate.printableName}}</span>
+                </div>
+              </ng-template>
+            </df-grid-column>
+            <df-grid-column field="jobTitle"
+                            header="Job Title">
+              <ng-template dfGridTemplate="body"
+                           let-rowIndex="rowIndex">
+                <df-input-container *ngIf="isEditing[rowIndex] && isEditing[rowIndex]['jobTitle']">
+                  <input type="text"
+                         placeholder="Job Title"
+                         [(ngModel)]="teamAssignments[rowIndex].jobTitle"
+                         (keydown.enter)="updateActiveAssignment(teamAssignments[rowIndex])"
+                         (keydown)="isEditing[rowIndex]['jobTitle']=($event.key !== 'Enter')"
+                         (blur)="isEditing[rowIndex]['jobTitle']=false; updateActiveAssignment(teamAssignments[rowIndex])"/>
+                </df-input-container>
+
+                <div *ngIf="!isEditing[rowIndex] || !isEditing[rowIndex]['jobTitle']"
+                     class="editableContent">
+                  <span>{{teamAssignments[rowIndex].jobTitle}}</span>
+                  <button type="button"
+                          *ngIf="!isOtherTeamSelected || isRole(currentUser, avatarTypes.CompanyAdmin)"
+                          (click)="isEditing = {}; isEditing[rowIndex] = {jobTitle: true}"
+                          df-button
+                          df-clear-button>
+                    <df-icon name="edit"></df-icon>
+                  </button>
+                </div>
+
+              </ng-template>
+            </df-grid-column>
+
+            <df-grid-column field="manager.printableName"
+                            header="Manager">
+              <ng-template dfGridTemplate="body"
+                           let-rowIndex="rowIndex">
+
+                <df-select *ngIf="isEditing[rowIndex] && isEditing[rowIndex]['manager'] && !isManagersLoading"
+                           [ngModel]="teamAssignments[rowIndex].manager.id"
+                           (change)="onManagerChange(rowIndex, managers[$event]); isEditing[rowIndex] = false"
+
+                           [filterable]="true"
+                           background="dark"
+                           [autoSize]="false"
+                           selectType="inline">
+
+                  <ng-template ngFor
+                               let-managerId
+                               [ngForOf]="managersIds">
+                    <ng-template [ngIf]="isNewManagersCompany(managers[managerId].company)">
+                      <df-option disabled="true"
+                                 class="df-option--category">
+                        {{managers[managerId].company.name}}
+                      </df-option>
+                    </ng-template>
+                    <df-option [value]="managerId"
+                               class="pl-3">
+                      {{managers[managerId].printableName}}
+                    </df-option>
+                  </ng-template>
+                </df-select>
+                <i *ngIf="isEditing[rowIndex] && isEditing[rowIndex]['manager'] && isManagersLoading"
+                   class="small-loader df-loader"></i>
+
+                <div *ngIf="!isEditing[rowIndex] || !isEditing[rowIndex]['manager']"
+                     class="editableContent">
+                  <span>{{teamAssignments[rowIndex].manager.printableName}}</span>
+                  <button type="button"
+                          *ngIf="!isOtherTeamSelected || isRole(currentUser, avatarTypes.CompanyAdmin)"
+                          (click)="isEditing = {}; isEditing[rowIndex] = {manager: true}"
+                          df-button
+                          df-clear-button>
+                    <df-icon name="edit"></df-icon>
+                  </button>
+                </div>
+
+              </ng-template>
+            </df-grid-column>
+
+            <df-grid-column field="type"
+                            header="User Role">
+              <ng-template dfGridTemplate="body"
+                           let-rowIndex="rowIndex">
+                <df-select *ngIf="isEditing[rowIndex] && isEditing[rowIndex]['type']"
+                           [ngModel]="teamAssignments[rowIndex].type"
+                           (change)="roleSelected(teamAssignments[rowIndex], $event); isEditing[rowIndex] = false"
+                           [filterable]="false"
+                           background="dark"
+                           [autoSize]="false"
+                           selectType="inline">
+
+                  <df-option displayText="Contractor"
+                             value="Contractor"
+                             class="pl-3">
+                  </df-option>
+                  <df-option displayText="Manager"
+                             value="Manager"
+                             class="pl-3">
+                  </df-option>
+                  <df-option displayText="Admin"
+                             value="Admin"
+                             class="pl-3">
+                  </df-option>
+                </df-select>
+
+                <div *ngIf="!isEditing[rowIndex] || !isEditing[rowIndex]['type']"
+                     class="editableContent">
+                  <span>{{teamAssignments[rowIndex].type}}</span>
+                  <button type="button"
+                          *ngIf="isRole(currentUser, avatarTypes.CompanyAdmin)"
+                          (click)="isEditing = {}; isEditing[rowIndex] = {type: true}"
+                          df-button
+                          df-clear-button>
+                    <df-icon name="edit"></df-icon>
+                  </button>
+                </div>
+              </ng-template>
+            </df-grid-column>
+          </df-grid>
+        </df-card>
+
+        <df-card *ngIf="isTeamLoading"
+                 class="loader pt-4 pb-4">
+          <i class="df-loader"></i>
+        </df-card>
+      </div>
+
+      <app-team-settings *ngIf="selectedTeamDetailTab === '2'"
+                         [currentManagerId]="currentManagerId"
+                         [isOtherTeam]="isOtherTeamSelected"
+                         [isSinglePageMode]="false"
+                         [team]="selectedTeam"
+                         (errorEmitter)="error = $event"
+                         (teamDeleteAction)="ngOnInit()"
+                         class="settings-section"></app-team-settings>
+    </div>
+  </div>
+</div>
+
+<ng-template #profileModal
+             let-close="close">
+  <div class="text-left">
+    <app-my-dashboard-page [includeProfile]="true"
+                           [option]="SUMMARY"
+                           (close)="close()"
+                           [managerControl]="true"
+                           [assignmentId]="currentUserAssignmentId"
+                           [manager]="currentUserManager"
+                           [teamId]="currentUserTeamId"
+                           [userDetail]="currentContractor">
+    </app-my-dashboard-page>
+  </div>
+</ng-template>

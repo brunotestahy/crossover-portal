@@ -1,0 +1,191 @@
+<div class="section__header d-flex align-items-center">
+  <span class="mr-2">Talent Advocacy</span>
+  <div class="file-wrapper ml-auto">
+    <input type="file"
+           (change)="uploadTournamentCandidatesFile($event.target.files[0])"
+           name="candidates"
+           accept=".csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel"/>
+    <button type="button" df-button>Import Candidates</button>
+  </div>
+</div>
+<div class="container-fluid page-scroll">
+  <app-page-alert class="my-3"
+                  *ngIf="error"
+                  [text]="error">
+  </app-page-alert>
+  <div class="df-loader-container"
+       *ngIf="isLoading; else loadedContent">
+    <i class="df-loader"></i>
+  </div>
+  <ng-template #loadedContent>
+    <df-card class="my-3 overflow-initial">
+      <df-card-content>
+        <df-grid [value]="candidates"
+                 emptyMessage="No candidates found."
+                 [responsive]="isResponsive$ | async">
+          <df-grid-column field="name"
+                          header="Name"
+                          [sortable]="true">
+            <ng-template dfGridTemplate="body"
+                         let-col
+                         let-item="rowData">
+              <a [routerLink]="['/profile', 'user-profile']"
+                 [queryParams]="{appId: item.applicationId}">
+                {{item.name}}
+              </a>
+            </ng-template>
+          </df-grid-column>
+          <df-grid-column field="pipeline"
+                          header="Pipeline"
+                          [sortable]="true"></df-grid-column>
+          <df-grid-column field="email"
+                          header="Email"
+                          [sortable]="true"></df-grid-column>
+          <df-grid-column field="skypeId"
+                          header="Skype ID"
+                          [sortable]="true"></df-grid-column>
+          <df-grid-column field="location"
+                          header="Location"
+                          [sortable]="true"></df-grid-column>
+          <df-grid-column field="projectEvaluationFinished"
+                          header="Project Evaluation Finished"
+                          [sortable]="true">
+            <ng-template dfGridTemplate="body"
+                         let-col
+                         let-item="rowData">
+              {{item.projectEvaluationFinished | date : 'MMM LL, yyyy'}}
+            </ng-template>
+          </df-grid-column>
+          <df-grid-column field="hasCV"
+                          header="Has CV"
+                          [sortable]="true">
+            <ng-template dfGridTemplate="body"
+                         let-col
+                         let-item="rowData">
+              <i class="fa fa-fw"
+                 [class.fa-check]="item.hasCV"
+                 [class.fa-times]="!item.hasCV"></i>
+            </ng-template>
+          </df-grid-column>
+          <df-grid-column field="recruiter"
+                          header="Recruiter"
+                          [sortable]="true"></df-grid-column>
+          <df-grid-column header="Pre-Hire Call Form">
+            <ng-template dfGridTemplate="body"
+                         let-col
+                         let-item="rowData">
+              <button type="button"
+                      df-button
+                      theme="info"
+                      (click)="openForm(item)">Open Form</button>
+            </ng-template>
+          </df-grid-column>
+          <df-grid-column>
+            <ng-template dfGridTemplate="body"
+                         let-col
+                         let-item="rowData">
+              <div class="d-flex align-items-center w-100">
+                <button type="button"
+                        df-button
+                        class="mr-2"
+                        theme="success"
+                        [disabled]="!canAccept(item)"
+                        (click)="accept(item)">Accept</button>
+                <button type="button"
+                        df-button
+                        theme="danger"
+                        (click)="reject(item)">Reject</button>
+              </div>
+            </ng-template>
+
+          </df-grid-column>
+        </df-grid>
+      </df-card-content>
+
+    </df-card>
+  </ng-template>
+</div>
+
+<ng-template #callForm
+             let-close="close">
+  <form class="text-left standard-form"
+        (submit)="onFormSubmit(close)"
+        [formGroup]="callFormGroup">
+    <div class="section__header d-flex w-100">
+      <span>Pre-Hire Call Form</span>
+      <span class="ml-auto pointer ie-fix"
+            (click)="close()">
+        <i class="fa fa-fw fa-times"></i>
+      </span>
+    </div>
+    <div class="px-3">
+      <div class="row my-3">
+        <div class="col-md-5">
+          <strong>{{selectedCandidate.name}}</strong>
+          <br>
+          <strong>{{selectedCandidate.pipeline}}</strong>
+        </div>
+        <div class="col-md-3">
+          <a href="/profile/user-profile"
+             target="_blank">See Profile </a>
+          <br>
+          <a href="/profile/user-profile"
+             target="_blank"> See Resume </a>
+        </div>
+        <div class="col-md-4">
+          <strong>Written Evaluation Score: {{selectedCandidate.score}}</strong>
+        </div>
+      </div>
+      <div class="df-loader-container"
+           *ngIf="isLoadingForm; else loadedForm">
+        <i class="df-loader"></i>
+      </div>
+      <ng-template #loadedForm>
+        <app-page-alert class="my-3"
+                        *ngIf="errorForm"
+                        [text]="errorForm">
+        </app-page-alert>
+        <div *ngIf="!errorForm">
+          <div *ngFor="let question of formData.answers">
+            <ng-container *ngIf="question.question.type === 'TEXT'">
+              <label class="d-block">{{question.question.question}}{{question.question.mandatory ? ' *' : ''}}</label>
+              <df-input-container>
+                <textarea [formControlName]="question.question.id.toString()"></textarea>
+              </df-input-container>
+              <df-validation-messages [controlName]="question.question.id.toString()"></df-validation-messages>
+            </ng-container>
+            <ng-container *ngIf="question.question.type === 'SELECT_LIST'">
+              <label class="d-block">{{question.question.question}}{{question.question.mandatory ? ' *' : ''}}</label>
+              <df-radio-group [formControlName]="question.question.id.toString()">
+                <df-radio-input *ngFor="let answer of question.question.selectValues"
+                                class="d-block"
+                                [value]="answer.value">{{answer.display}}</df-radio-input>
+              </df-radio-group>
+              <df-validation-messages [controlName]="question.question.id.toString()"></df-validation-messages>
+            </ng-container>
+          </div>
+        </div>
+      </ng-template>
+    </div>
+    <div class="container-fluid py-2"
+         *ngIf="!isLoadingForm && !errorForm">
+      <div class="form-row">
+        <div class="col-6">
+          <button type="submit"
+                  theme="success"
+                  class="w-100"
+                  [loading]="isSavingForm"
+                  loaderPosition="after"
+                  df-button>Save</button>
+        </div>
+        <div class="col-6">
+          <button type="button"
+                  theme="danger"
+                  class="w-100"
+                  df-button
+                  (click)="close()">Cancel</button>
+        </div>
+      </div>
+    </div>
+  </form>
+</ng-template>

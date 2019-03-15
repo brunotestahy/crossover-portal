@@ -1,0 +1,66 @@
+<div class="au-modal-header p-3">
+  <h5 class="d-flex align-items-center w-100 m-0">
+    <span>Notes</span>
+    <i (click)="close()"
+       class="au-modal-close fa fa-times">
+    </i>
+  </h5>
+</div>
+<div class="page-scroll" *ngIf="!loading; else loader">
+  <app-page-alert *ngIf="error"
+                  [text]="error"
+                  class="mb-3 pull-left w-100">
+  </app-page-alert>
+  <div class="pull-left w-100 px-4">
+    <div *ngIf="notes.length < 1"
+         class="my-3 text-left">
+      No notes about this candidate yet
+    </div>
+    <div *ngFor="let note of notes"
+         class="note note--info mb-2 text-left">
+      <small>
+        {{ note.sender.printableName }}
+        -
+        {{ note.createdOn | date: 'MMM dd, yyyy h:mm a' }}
+      </small>
+      <p>{{ note.content }}</p>
+    </div>
+  </div>
+  <form [formGroup]="form"
+        class="standard-form w-100 pt-4 px-2 pull-left">
+    <div class="d-flex w-100 pull-left">
+      <div class="d-flex flex-column w-100 col">
+        <label>
+          New Note
+        </label>
+        <df-input-container>
+          <textarea formControlName="note"
+                    placeholder="Please enter the note here">
+          </textarea>
+        </df-input-container>
+        <df-validation-messages [control]="form.controls.note">
+        </df-validation-messages>
+      </div>
+    </div>
+  </form>
+</div>
+<ng-template #loader>
+  <div class="my-4 loader">
+    <i class="fa fa-circle-o-notch fa-spin"></i>
+  </div>
+</ng-template>
+<div class="w-100 d-flex align-items-center justify-content-end p-4">
+  <button df-button
+          type="button"
+          class="btn-primary mr-2"
+          (click)="close(); submit();"
+          [disabled]="form.invalid">
+    <span>Save</span>
+  </button>
+  <button df-button
+          type="button"
+          class="btn-red mr-2"
+          (click)="close()">
+    <span>Cancel</span>
+  </button>
+</div>

@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="74px" height="74px" viewBox="0 0 140 140" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 42 (36781) - http://www.bohemiancoding.com/sketch -->
+    <title>Icon Written Evaluation</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Techtrial---Instructions" transform="translate(-692.000000, -250.000000)" fill-rule="nonzero">
+            <g id="First-tab" transform="translate(272.000000, 80.000000)">
+                <g id="Content">
+                    <g id="Icon-Written-Evaluation" transform="translate(420.000000, 170.000000)">
+                        <g id="Layer_1">
+                            <ellipse id="Oval" fill="#FFCA4F" cx="70" cy="70" rx="70" ry="70"></ellipse>
+                            <polygon id="Shape" fill="#FFFFFF" points="77.3188119 62.6811881 58.2455446 43.6356436 51.980198 49.9009901 31.2435644 108.756436 90.0990099 88.019802 96.3643564 81.7544554"></polygon>
+                            <polygon id="Shape" fill="#324A5E" points="39.3386139 85.8019802 31.2435644 108.756436 54.1980198 100.661386"></polygon>
+                            <path d="M51.980198,49.9009901 L96.6415842,5.26732673 C99.5247525,6.43168317 102.324752,7.81782178 105.069307,9.42574257 L64.5386139,49.9287129 L51.980198,49.9009901 Z" id="Shape" fill="#FF7058"></path>
+                            <g id="Group" transform="translate(64.316832, 9.148515)" fill="#F1543F">
+                                <path d="M25.7821782,66.3128713 L66.3128713,25.7821782 C67.8930693,28.4990099 69.2792079,31.2990099 70.4435644,34.1821782 L25.7821782,78.8712871 L25.7821782,66.3128713 Z" id="Shape"></path>
+                                <path d="M0.221782178,40.780198 L40.7247525,0.24950495 C45.8811881,3.24356436 50.760396,6.93069307 55.1683168,11.3663366 L13.0019802,53.5326733 L0.221782178,53.5326733 L0.221782178,40.780198 Z" id="Shape"></path>
+                            </g>
+                            <path d="M77.3188119,62.6811881 L119.485149,20.5148515 C123.893069,24.9227723 127.607921,29.8019802 130.60198,34.9584158 L90.0990099,75.4613861 L77.3188119,75.4613861 L77.3188119,62.6811881 Z" id="Shape" fill="#FF7058"></path>
+                        </g>
+                    </g>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

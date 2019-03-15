@@ -1,0 +1,23 @@
+<app-placeholder-bar-chart *ngIf="isLoading; else chart"></app-placeholder-bar-chart>
+<ng-template #chart>
+  <div class="d-flex align-items-center mb-2">
+    <h4 class="mr-2 my-0">Applications</h4>
+  </div>
+  <div class="text-center my-0  font-18">
+      Spotlight on your top activities this week
+  </div>
+  <df-bar [data]="chartData"
+          [valueTickFormatter]="tickFormatter"
+          [colors]="colors"
+          [margins]="margins"
+          [padding]="0.4"
+          [barAlignment]="horizontalAlignment"
+          [barLabelBottom]="barLabel"
+          [tooltipTemplate]="tooltipTemplate"></df-bar>
+</ng-template>
+<ng-template #tooltipTemplate
+             let-selected="selected">
+  <div class="df-bar__tooltip">
+    {{selected.yKey | durationFormat: 'hours':'h[h] m[m]' }}
+  </div>
+</ng-template>

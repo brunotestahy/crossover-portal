@@ -1,0 +1,213 @@
+<df-card-content>
+  <div class="row mb-2">
+    <div class="col-12 col-md-6">
+      <div class="align-self-center">
+        <strong>Metric: {{metricInputData.metricDescription}}</strong>
+        <df-checkbox *ngIf="metricInputData.queryOption <= 8"
+                     class="ml-3"
+                     [formControl]="normalizeCheck">
+          Normalize
+        </df-checkbox>
+      </div>
+    </div>
+    <div class="col-12 col-md-6 d-flex flex-column au-neutral-3 mt-2 mt-lg-0">
+      <div class="text-right"><small>{{getLastUpdate()}}</small></div>
+      <div class="text-right"><small>This data is updated automatically every 2 hrs</small></div>
+    </div>
+  </div>
+  <df-grid *ngIf="metricInputData.unitsCostMode && metricInputData.unitsCostMode === metricsConstants.UNITS"
+           [value]="metricsTableData"
+           [responsive]="true"
+           class="team-metric-grid"
+           scrollable="true"
+           frozenWidth="330px"
+           unfrozenWidth="280px">
+    <df-grid-column frozen="true"
+                    [sortFn]="columnSortName"
+                    [sortable]="true"
+                    [field]="name">
+      <ng-template dfGridTemplate="header">
+        Team Member
+      </ng-template>
+      <ng-template dfGridTemplate="body"
+                   let-col
+                   let-item="rowData">
+        <div class="team-member d-flex">
+          <div class="px-0 justify-content-center d-none d-lg-flex">
+            <img *ngIf="item.teamRecord"
+                 class="align-self-center"
+                 [src]="item.photoUrl || 'assets/images/users.png'">
+            <img *ngIf="!item.teamRecord"
+                 class="align-self-center"
+                 [src]="item.photoUrl || 'assets/images/user.png'">
+          </div>
+          <div *ngIf="!item.teamRecord && !item.isActiveAssignment"
+               class="pl-2 pr-0 d-flex flex-column justify-content-center inactive-user position-relative"
+               dfToolTipColor="dark"
+               [dfToolTip]="getContractorTerminationTooltip(item.effectiveDateEndInTeam)"
+               dfToolTipPlacement="right">
+            {{item.name}}
+          </div>
+          <div *ngIf="item.teamRecord || item.isActiveAssignment"
+               class="pl-2 pr-0 d-flex flex-column justify-content-center">
+            {{item.name}}
+          </div>
+        </div>
+      </ng-template>
+    </df-grid-column>
+    <df-grid-column frozen="true"
+                    [sortFn]="columnSortMetric"
+                    [sortable]="true"
+                    [field]="metric">
+      <ng-template dfGridTemplate="header">
+        Avg. Units
+      </ng-template>
+      <ng-template dfGridTemplate="body"
+                   let-col
+                   let-item="rowData">
+        <div *ngIf="item.metric !== ''"
+             class="d-flex justify-content-between">
+          <div class="align-self-center position-relative flex-1"
+               dfToolTipColor="dark"
+               [dfToolTip]="getCostPerUnitTooltip(item.cost)"
+               dfToolTipPlacement="left">
+            <i class="fa fa-circle"
+               *ngIf="metricTarget !== 0"
+               [ngClass]="item?.metricScoreClass"></i>
+            {{formatMetric(item.metric)}}
+          </div>
+          <div class="align-self-center position-relative flex-1"
+               dfToolTipColor="dark"
+               [dfToolTip]="getMetricTargetTooltip()"
+               dfToolTipPlacement="left">
+            ({{getMetricPercentage(item.metric)}}%)
+          </div>
+        </div>
+      </ng-template>
+    </df-grid-column>
+    <df-grid-column [sortable]="true"
+                    *ngFor="let weekHeader of filteredHeaders; let i = index;"
+                    [field]="weekHeader"
+                    [sortFn]="columnSortTicketsResolved"
+                    [style]="{'width':'100px'}">
+      <ng-template dfGridTemplate="header">
+        {{weekHeader}}
+      </ng-template>
+      <ng-template dfGridTemplate="body"
+                   let-col
+                   let-item="rowData">
+        <div *ngIf="!item.teamRecord && !item?.weeks[weekHeader]?.activeWeek"
+             class="text-center">
+          -
+        </div>
+        <div *ngIf="item.teamRecord"
+             class="text-center">
+          {{formatMetric(item?.weeks[weekHeader]?.ticketsResolved)}}
+        </div>
+        <div *ngIf="!item.teamRecord && item?.weeks[weekHeader]?.activeWeek"
+             class="text-center pointer"
+             (click)="openJira(item?.weeks[weekHeader]?.queryUsed)">
+          <div class="align-self-center position-relative"
+               dfToolTipColor="dark"
+               [dfToolTip]="getCostPerUnitTooltip(item?.weeks[weekHeader]?.cost)"
+               [dfToolTipPlacement]="getTooltipPlacement(i)">{{formatMetric(item?.weeks[weekHeader]?.ticketsResolved)}}
+          </div>
+        </div>
+      </ng-template>
+    </df-grid-column>
+  </df-grid>
+  <df-grid *ngIf="metricInputData.unitsCostMode && metricInputData.unitsCostMode === metricsConstants.COST"
+           [value]="metricsTableData"
+           [responsive]="true"
+           class="team-metric-grid"
+           scrollable="true"
+           frozenWidth="330px"
+           unfrozenWidth="280px">
+    <df-grid-column frozen="true"
+                    [sortable]="true"
+                    [sortFn]="columnSortName"
+                    [field]="name">
+      <ng-template dfGridTemplate="header">
+        Team Member
+      </ng-template>
+      <ng-template dfGridTemplate="body"
+                   let-col
+                   let-item="rowData">
+        <div class="team-member d-flex">
+          <div class="px-0 justify-content-center d-none d-lg-flex">
+            <img *ngIf="item.teamRecord"
+                 class="align-self-center"
+                 [src]="item.photoUrl || 'assets/images/users.png'">
+            <img *ngIf="!item.teamRecord"
+                 class="align-self-center"
+                 [src]="item.photoUrl || 'assets/images/user.png'">
+          </div>
+          <div *ngIf="!item.teamRecord && !item.isActiveAssignment"
+               class="pl-2 pr-0 d-flex flex-column justify-content-center inactive-user position-relative"
+               dfToolTipColor="dark"
+               [dfToolTip]="getContractorTerminationTooltip(item.effectiveDateEndInTeam)"
+               dfToolTipPlacement="right">
+            {{item.name}}
+          </div>
+          <div *ngIf="item.teamRecord || item.isActiveAssignment"
+               class="pl-2 pr-0 d-flex flex-column justify-content-center">
+            {{item.name}}
+          </div>
+        </div>
+      </ng-template>
+    </df-grid-column>
+    <df-grid-column frozen="true"
+                    [sortable]="true"
+                    [sortFn]="columnSortCost"
+                    [field]="cost">
+      <ng-template dfGridTemplate="header">
+        Avg. CpU
+      </ng-template>
+      <ng-template dfGridTemplate="body"
+                   let-col
+                   let-item="rowData">
+        <div *ngIf="item.metric !== ''"
+             class="d-flex justify-content-center">
+          <div class="align-self-center text-center position-relative"
+               dfToolTipColor="dark"
+               [dfToolTip]="getUnitsPerWeekTooltip(item)"
+               dfToolTipPlacement="left">
+            {{formatMetric(item.cost)}}
+          </div>
+        </div>
+      </ng-template>
+    </df-grid-column>
+    <df-grid-column *ngFor="let weekHeader of filteredHeaders; let i = index;"
+                    [sortable]="true"
+                    [field]="weekHeader"
+                    [sortFn]="columnSortWeekSalary"
+                    [style]="{'width':'100px'}">
+      <ng-template dfGridTemplate="header">
+        {{weekHeader}}
+      </ng-template>
+      <ng-template dfGridTemplate="body"
+                   let-col
+                   let-item="rowData">
+        <div *ngIf="item?.weeks[weekHeader]?.isLastWeek || (!item.teamRecord && !item?.weeks[weekHeader]?.activeWeek)"
+             class="text-center">
+          -
+        </div>
+        <div *ngIf="item.teamRecord && !item?.weeks[weekHeader]?.isLastWeek"
+             class="text-center">
+          {{formatMetric(item.weeks[weekHeader].cost)}}
+        </div>
+        <div *ngIf="!item.teamRecord && item?.weeks[weekHeader]?.activeWeek && !item?.weeks[weekHeader]?.isLastWeek"
+             class="text-center">
+          <div class="align-self-center position-relative"
+               dfToolTipColor="dark"
+               [dfToolTip]="getCostAndTotalsTooltip(item, weekHeader)"
+               [dfToolTipPlacement]="getTooltipPlacement(i)">{{formatMetric(item.weeks[weekHeader].cost)}}
+          </div>
+        </div>
+      </ng-template>
+    </df-grid-column>
+  </df-grid>
+  <div class="d-flex justify-content-end mt-2">
+    <span>You have {{metricInputData.activeTeamMembers}} member(s) in <strong>{{metricInputData.team.name}}</strong> team</span>
+  </div>
+</df-card-content>

@@ -1,0 +1,115 @@
+<df-card class="mb-2">
+  <df-card-content>
+    <div class="row">
+      <div class="col-12 col-lg-3 text-center">
+        <div class="chart-container">
+          <df-pie [data]="statusPercentages"
+                  [options]="chartOptions"
+                  [colors]="chartColors"
+                  [mobileOptions]="chartOptions"
+                  #dfPie>
+            <div class="df-pie-content">
+              <div class="df-pie-content__percentage">{{onTrackPercentage}}%</div>
+              <div class="df-pie-content__on-track">ON TRACK</div>
+            </div>
+          </df-pie>
+        </div>
+      </div>
+      <div class="col-12 col-lg-9">
+        <df-grid *ngIf="periodMode === periodConstants.DAILY"
+                 [value]="dailySummary"
+                 id="dailyTotalsGrid">
+          <df-grid-column header="">
+            <ng-template dfGridTemplate="body"
+                         let-col
+                         let-item="rowData">
+              <div class="d-flex"
+                   [dfToolTip]="getStatusDescription(item.status)"
+                   dfToolTipPlacement="top"
+                   container="body">
+                <div class="mr-1"
+                     [style.color]="item.statusColor">
+                  <i class="fa fa-circle"></i>
+                </div>
+                {{item.status}}
+              </div>
+            </ng-template>
+          </df-grid-column>
+          <df-grid-column header="Total"
+                          field="today">
+          </df-grid-column>
+          <df-grid-column [header]="dailyHeader"
+                          field="today">
+          </df-grid-column>
+        </df-grid>
+        <df-grid *ngIf="periodMode === periodConstants.WEEKLY"
+                 [class]="col-9"
+                 [value]="weeklySummary"
+                 id="weeklyTotalsGrid">
+          <df-grid-column header="">
+            <ng-template dfGridTemplate="body"
+                         let-col
+                         let-item="rowData">
+              <div class="d-flex"
+                   [dfToolTip]="getStatusDescription(item.status)"
+                   dfToolTipPlacement="top"
+                   container="body">
+                <div class="mr-1"
+                     [style.color]="item.statusColor">
+                  <i class="fa fa-circle"></i>
+                </div>
+                {{item.status}}
+              </div>
+            </ng-template>
+          </df-grid-column>
+          <df-grid-column header="Total"
+                          field="total">
+          </df-grid-column>
+          <df-grid-column [header]="'Monday ' + weekDayHeaders[0]"
+                          field="monday">
+          </df-grid-column>
+          <df-grid-column [header]="'Tuesday ' + weekDayHeaders[1]"
+                          field="tuesday">
+          </df-grid-column>
+          <df-grid-column [header]="'Wednesday ' + weekDayHeaders[2]"
+                          field="wednesday">
+          </df-grid-column>
+          <df-grid-column [header]="'Thursday ' + weekDayHeaders[3]"
+                          field="thursday">
+          </df-grid-column>
+          <df-grid-column [header]="'Friday ' + weekDayHeaders[4]"
+                          field="friday">
+          </df-grid-column>
+        </df-grid>
+        <df-grid *ngIf="periodMode === periodConstants.MONTHLY"
+                 [class]="col-9"
+                 [value]="monthlySummary"
+                 id="monthlyTotalsGrid">
+          <df-grid-column header="">
+            <ng-template dfGridTemplate="body"
+                         let-col
+                         let-item="rowData">
+              <div class="d-flex"
+                   [dfToolTip]="getStatusDescription(item.status)"
+                   dfToolTipPlacement="top"
+                   container="body">
+                <div class="mr-1"
+                     [style.color]="item.statusColor">
+                  <i class="fa fa-circle"></i>
+                </div>
+                {{item.status}}
+              </div>
+            </ng-template>
+          </df-grid-column>
+          <df-grid-column header="Total"
+                          field="total">
+          </df-grid-column>
+          <df-grid-column *ngFor="let header of weekHeaders; let i = index"
+                          [header]="weekHeaders[i]"
+                          [field]="'week' + i">
+          </df-grid-column>
+        </df-grid>
+      </div>
+    </div>
+  </df-card-content>
+</df-card>

@@ -1,0 +1,40 @@
+@import "variables";
+
+.pipeline-tracker {
+  overflow: visible;
+}
+
+:host {
+  ::ng-deep {
+    .df-list-panel__container {
+      padding: 0;
+    }
+    .df-list-panel__list {
+      height: 95px;
+    }
+    .df-list-panel__list-item {
+      padding: 5px 20px 5px 10px;
+      font-size: 1rem;
+      color: $au-gray-main;
+    }
+    .df-list-panel__list-item:hover,
+    .df-list-panel__list-item--selected:hover,
+    .df-list-panel__list-item--selected {
+      background-color: $au-light-gray;
+    }
+  }
+}
+
+::ng-deep {
+  .df-grid__table {
+    width: 100% !important;
+
+    @media (min-width: $breakpoint-sm) {
+      width: unset !important;
+    }
+
+    @media (min-width: $breakpoint-xl) {
+      width: 100% !important;
+    }
+  }
+}

@@ -1,0 +1,62 @@
+:host {
+  width: 280px;
+}
+
+img {
+  border: 1px solid #d8d8d8;
+}
+
+.ie-fix {
+  max-width: 180px;
+}
+
+.contractor {
+  img {
+    width: 25px;
+    height: 25px;
+  }
+
+  &__name {
+    height: 20px;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    display: block;
+    width: 90%;
+    white-space: nowrap;
+  }
+
+  &__window {
+    height: 20px;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    display: block;
+    width: 64%;
+    white-space: nowrap;
+  }
+}
+
+.contractor-info {
+  width: 138px;
+}
+
+.online-status {
+  position: relative;
+  &:before {
+    content: "";
+    position: absolute;
+    width: 13px;
+    height: 13px;
+    border-radius: 50%;
+    left: 18px;
+    bottom: 1px;
+    border: 2px solid #fff;
+    z-index: 1;
+    background-color: #BFBEBC;
+  }
+  &.online:before {
+    background-color: #32B16A;
+  }
+  &.no-activity:before {
+    background-color: #FED152;
+  }
+}

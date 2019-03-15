@@ -1,0 +1,50 @@
+.notification-icon {
+  min-height: 56px;
+  min-width: 56px;
+  height: 56px;
+  border: 1px solid #e0eaee;
+  padding: 15px 2px;
+  margin-right: 11px;
+  background-color: $au-primary;
+}
+
+.notification-info {
+  text-align: center;
+}
+
+@media screen and (max-width: $breakpoint-sm) {
+  .notification-info {
+    flex-basis: 100%;
+    margin-top: 5px;
+    margin-bottom: 5px;
+  }
+}
+
+.notification-image {
+  max-width: 50px;
+}
+
+.notification-list .notification-item {
+  line-height: 24px;
+}
+
+.notification-timestamp {
+  color: #a6a8ab;
+  border-bottom: 1px solid #e0eaee;
+}
+
+.notification-message {
+  font-size: 15px;
+  max-width: 92%;
+  &__from {
+    line-height: 1;
+    color: #131313;
+    font-weight: 500;
+    margin-bottom: 2px;
+  }
+  &__text {
+    line-height: 22px;
+    color: #696969;
+    margin-bottom: 0;
+  }
+}

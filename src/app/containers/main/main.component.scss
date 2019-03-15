@@ -1,0 +1,122 @@
+@import "variables";
+.left-group {
+  background-color: $au-primary;
+}
+
+.crossover-logo {
+  height: 100%;
+  padding: 6px;
+}
+
+:host {
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  /*This will work for firefox*/
+  @supports (-moz-appearance:none) {
+    padding-bottom: 50px; /*Compensate the header's height*/
+  }
+  /*This will work for IE10+*/
+  @media screen and (-ms-high-contrast: active), screen and (-ms-high-contrast: none) {
+    padding-bottom: 50px; /*Compensate the header's height*/
+  }
+  /*This will work for Edge*/
+  @supports (-ms-ime-align: auto) {
+    padding-bottom: 50px; /*Compensate the header's height*/
+  }
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.main-content {
+  overflow-y: auto;
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  flex-basis: 0px;
+  width: 100%;
+}
+
+.team-selector {
+  white-space: normal;
+}
+
+:host {
+  ::ng-deep {
+    .team-selector-link.disabled {
+      opacity: 0.5;
+    }
+
+    .sidebar-mobile-fixed.df-sidebar-host {
+      overflow: visible;
+    }
+
+    .sidemenu-item-text,
+    .df-sidebar__chevron-icon {
+      transition: all 0.2s;
+    }
+
+    .df-sidebar__chevron-icon {
+      display: none;
+      opacity: 0;
+    }
+
+    .df-sidebar__item-container {
+      > a {
+        overflow: hidden;
+        white-space: nowrap;
+        > i {
+          top: 0px;
+        }
+      }
+      &:hover {
+        > a {
+          text-decoration: none;
+        }
+        .sidemenu-item-text {
+          text-decoration: underline;
+        }
+      }
+    }
+
+    // show subitems if sidebar is open
+    .df-sidebar--open {
+      df-sidebar-item {
+        df-sidebar-item {
+          display: block;
+        }
+        .df-sidebar__chevron-icon {
+          display: block;
+          opacity: 1;
+        }
+      }
+
+      .sidemenu-item-text {
+        opacity: 1;
+      }
+    }
+
+    // hide subitems by default
+    df-sidebar-item {
+      df-sidebar-item {
+        display: none;
+      }
+      .sidemenu-item-text {
+        opacity: 0;
+      }
+    }
+  }
+
+  .team-selector-disabled {
+    cursor: not-allowed;
+    opacity: .6;
+
+    &:hover {
+      .sidemenu-item-text {
+        text-decoration: none;
+      }
+    }
+  }
+}

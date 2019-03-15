@@ -1,0 +1,101 @@
+<div class="section__header section__header--aligned">
+  Candidates
+</div>
+
+<app-page-alert
+      *ngIf="error !== ''"
+      [text]="error"
+      class="my-3"></app-page-alert>
+<div class="page-content padding-aligned page-scroll">
+  <div class="d-flex flex-wrap mb-4">
+    <df-select class="grading-form-control m-0 mr-md-3"
+               placeholder="Select or search a job in the list"
+               filterable="true"
+               [formControl]="pipelineControl">
+      <df-option *ngFor="let pipeline of pipelines"
+                 [value]="pipeline">
+        {{pipeline.id}} {{pipeline.title}}
+      </df-option>
+    </df-select>
+    <df-select class="grading-form-control m-0 mr-md-3"
+               placeholder="Select the test"
+               [formControl]="testControl">
+      <df-option *ngFor="let test of tests"
+                 [value]="test"
+                 [class.d-none]="hideFiveQTest(test)"
+                 [displayText]="test.name">
+      </df-option>
+    </df-select>
+    <div *ngIf="pipelineControl.value && testControl.value === FIVE_Q"
+         class="email-form-control m-0 mr-md-3 d-flex mt-3 mt-lg-0 ">
+      <df-input-container>
+        <input type="text"
+               (keydown)="filterFiveQCandidates($event)"
+               placeholder="Email/Name"
+               [formControl]="emailNameControl">
+      </df-input-container>
+      <button
+        *ngIf="testControl.value"
+        df-button
+        class="ml-1 d-block d-md-none"
+        type="button"
+        (click)="filterFiveQCandidates({ key: 'Enter' })"
+        theme="primary">
+        <i class="fa fa-search"></i>
+      </button>
+    </div>
+
+    <button
+      *ngIf="testControl.value && testControl.value.name === FIVE_Q"
+      df-button
+      class="mt-3 mt-lg-0"
+      type="button"
+      (click)="goTo5QRubric()"
+      theme="primary">
+      5Q Rubric
+    </button>
+    <button
+      *ngIf="pipelineControl.value && testControl.value?.name === FIVE_Q"
+      class="ml-auto mt-3 mt-lg-0"
+      df-button
+      type="button"
+      (click)="saveGrades()"
+      [disabled]="isSaveGradesDisabled()"
+      theme="primary">
+      Save Grades
+    </button>
+  </div>
+  <app-five-q-grading
+    *ngIf="showFiveQ()"
+    [selectedJob]="selectedJob"></app-five-q-grading>
+</div>
+
+<ng-template #saveConfirmationModal
+             let-close="close">
+  <div class="au-modal-header p-3">
+    <div class="d-flex align-items-center m-0">
+      <h5>Unsaved Grades</h5>
+      <i (click)="close()"
+         class="au-modal-close fa fa-times">
+      </i>
+    </div>
+  </div>
+  <div class="container-fluid mt-2">
+      You have unsaved grades. Are you sure you want to leave?
+  </div>
+  <div class="w-100 d-flex align-items-center justify-content-end p-3">
+    <button df-button
+      type="button"
+      theme="danger"
+      class="mr-2"
+      (click)="cancelSave(close)">
+      <span>Cancel</span>
+    </button>
+    <button df-button
+      type="button"
+      theme="success"
+      (click)="saveAndLeave(close)">
+      <span>Save &amp; Leave</span>
+    </button>
+  </div>
+</ng-template>

@@ -1,0 +1,55 @@
+<div class="container-fluid" *ngIf="detail">
+  <div class="row">
+    <div class="col-md-6 offset-md-3">
+      <app-page-alert *ngIf="error" [text]="error" class="my-3"></app-page-alert>
+      <df-card>
+        <df-card-content>
+
+          <div class="background-check-icon"></div>
+          <div class="onboarding__steps">
+            <div class="onboarding__step onboarding__step--completed"></div>
+            <div class="onboarding__step onboarding__step--completed"></div>
+            <div class="onboarding__step onboarding__step--completed"></div>
+            <div class="onboarding__step onboarding__step--completed"></div>
+            <div class="onboarding__step onboarding__step--active"></div>
+            <strong>Step 5</strong>
+          </div>
+
+          <h1>Finishing Up</h1>
+          <p class="my-3">
+            Well done! All mandatory steps are finished. Next, download and install WorkSmart on all devices you’re going to use for
+            work. Finally, contact your manager - {{managerName}} and let him know you’re all set.
+          </p>
+
+          <div class="my-4">
+            <div class="d-flex align-items-center au-gray-main pointer my-3" routerLink="/worksmart">
+              <div class="circle-icon circle-icon--bordered bg-au-white au-black">
+                <i class="fa fa-cloud-upload"></i>
+              </div>
+              <span class="ml-3">Download Worksmart</span>
+            </div>
+            <a class="d-flex align-items-center au-gray-main pointer my-3 text-decoration-none"
+               href="mailto:{{detail.assignment.manager.email}}">
+              <div class="circle-icon circle-icon bg-au-white au-black">
+                <img class="circle-icon__image" [src]="managerAvatar || 'assets/images/user.png'">
+              </div>
+              <div class="ml-3">
+                <strong>{{detail.assignment.manager.printableName}}</strong>
+                <br> {{detail.assignment.manager.email}}
+                <i class="ml-2 fa fa-envelope"></i>
+              </div>
+            </a>
+          </div>
+
+        </df-card-content>
+      </df-card>
+    </div>
+    <div class="col-3 d-none d-md-flex align-items-center pr-0">
+      <div class="onboarding__office-icon"></div>
+    </div>
+  </div>
+</div>
+
+<div class="df-loader-container" *ngIf="isLoading">
+  <i class="df-loader"></i>
+</div>

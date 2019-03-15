@@ -1,0 +1,22 @@
+<div class="has-edit"
+     [class.edit]="edit"
+     (click)="onEdit(true)"
+     *ngIf="isEditable">
+  <div class="badge badge-secondary p-3 mr-2 mb-2"
+       (click)="onDelete(entry)"
+       *ngFor="let entry of candidateSkills;">
+    {{ entry.skill.name }}
+    <i class="fa fa-times"></i>
+  </div>
+  <span class="edit-arrow">
+    <i class="fa fa-edit"></i>
+  </span>
+</div>
+<div class="has-edit"
+     [class.edit]="edit"
+     *ngIf="!isEditable">
+  <div class="badge badge-secondary p-3 mr-2 mb-2"
+       *ngFor="let entry of candidateSkills;">
+    {{ entry.skill.name }}
+  </div>
+</div>

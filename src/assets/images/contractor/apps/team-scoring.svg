@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="66px" height="66px" viewBox="0 0 66 66" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 40.3 (33839) - http://www.bohemiancoding.com/sketch -->
+    <title>Team Scoring_Icon</title>
+    <desc>Created with Sketch.</desc>
+    <defs>
+        <linearGradient x1="50%" y1="0%" x2="50%" y2="100%" id="linearGradient-1">
+            <stop stop-color="#E3F4FF" offset="0%"></stop>
+            <stop stop-color="#AFD3FF" offset="100%"></stop>
+        </linearGradient>
+        <filter x="-50%" y="-50%" width="200%" height="200%" filterUnits="objectBoundingBox" id="filter-2">
+            <feOffset dx="-1" dy="1" in="SourceAlpha" result="shadowOffsetOuter1"></feOffset>
+            <feGaussianBlur stdDeviation="0.5" in="shadowOffsetOuter1" result="shadowBlurOuter1"></feGaussianBlur>
+            <feColorMatrix values="0 0 0 0 0   0 0 0 0 0   0 0 0 0 0  0 0 0 0.22 0" type="matrix" in="shadowBlurOuter1" result="shadowMatrixOuter1"></feColorMatrix>
+            <feMerge>
+                <feMergeNode in="shadowMatrixOuter1"></feMergeNode>
+                <feMergeNode in="SourceGraphic"></feMergeNode>
+            </feMerge>
+        </filter>
+        <path d="M31.591006,31.6735294 L31.591006,34.5210285 C31.591006,35.1104305 31.1063667,35.5882353 30.5069984,35.5882353 L19.4970511,35.5882353 C18.8983702,35.5882353 18.4130435,35.1096619 18.4130435,34.5210285 L18.4130435,31.6735294 L1.0625721,31.6735294 C0.371513334,29.4206627 0,27.0310385 0,24.5558824 C0,10.994043 11.153377,0 24.9117647,0 C38.6701524,0 49.8235294,10.994043 49.8235294,24.5558824 C49.8235294,27.0310385 49.4520161,29.4206627 48.7609573,31.6735294 L48.7609573,31.6735294 L31.591006,31.6735294 Z" id="path-3"></path>
+        <mask id="mask-4" maskContentUnits="userSpaceOnUse" maskUnits="objectBoundingBox" x="-0.5378256" y="-0.5378256" width="50.8991806" height="36.6638865">
+            <rect x="-0.5378256" y="-0.5378256" width="50.8991806" height="36.6638865" fill="white"></rect>
+            <use xlink:href="#path-3" fill="black"></use>
+        </mask>
+    </defs>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Team-Scoring_Icon">
+            <rect id="icon_bg" fill="url(#linearGradient-1)" x="0" y="0" width="66" height="66" rx="14.625"></rect>
+            <g id="Group-5" filter="url(#filter-2)" transform="translate(8.411765, 14.882353)">
+                <g id="Combined-Shape">
+                    <use fill="#FFFFFF" fill-rule="evenodd" xlink:href="#path-3"></use>
+                    <use stroke="#FFFFFF" mask="url(#mask-4)" stroke-width="1.0756512" stroke-linecap="round" stroke-linejoin="round" xlink:href="#path-3"></use>
+                </g>
+                <g id="old"></g>
+                <g id="Group-2" transform="translate(2.166240, 2.135294)">
+                    <rect id="Rectangle-8" fill="#F44336" x="0" y="21.5308824" width="10.650682" height="1.60147059" rx="0.7171008"></rect>
+                    <rect id="Rectangle-8" fill="#4CAF50" x="34.8403666" y="21.5308824" width="10.650682" height="1.60147059" rx="0.7171008"></rect>
+                    <g id="01">
+                        <path d="M6.67924126,6.56683826 C10.7953716,2.50950982 16.4817526,5.88496572e-13 22.7627557,5.88496572e-13 C29.0437588,5.88496572e-13 34.7301399,2.50950982 38.8462702,6.56683826 L31.3151007,13.9904196 C29.1263648,11.8329513 26.1026542,10.4985294 22.7627557,10.4985294 C19.4228573,10.4985294 16.3991467,11.8329513 14.2104107,13.9904196 L6.67924126,6.56683826 L6.67924126,6.56683826 Z" id="Combined-Shape" fill="#FFD54F"></path>
+                        <path d="M38.8290388,6.56683826 C42.9451691,10.6241667 45.4910486,16.2293138 45.4910486,22.4205882 L45.4910486,22.4205882 L34.8403666,22.4205882 C34.8403666,19.1284026 33.4866052,16.1478879 31.2978693,13.9904196 L38.8290388,6.56683826 L38.8290388,6.56683826 Z" id="Combined-Shape" fill="#4CAF50"></path>
+                        <path d="M6.66200983,6.56683826 C2.54587953,10.6241667 0,16.2293138 0,22.4205882 L10.650682,22.4205882 C10.650682,19.1284026 12.0044433,16.1478879 14.1931793,13.9904196 L6.66200983,6.56683826 L6.66200983,6.56683826 Z" id="Combined-Shape" fill="#F44336"></path>
+                    </g>
+                    <g id="2" transform="translate(20.037724, 8.007353)">
+                        <path d="M5.40967501,13.8793498 C5.41360499,13.9381839 5.41560102,13.9975386 5.41560102,14.0573529 C5.41560102,15.5314659 4.20327744,16.7264706 2.70780051,16.7264706 C1.21232358,16.7264706 0,15.5314659 0,14.0573529 C0,13.9783515 0.00348198515,13.9001517 0.0103029318,13.8228946 L0,13.8227868 L0.0240713483,13.6999074 C0.0379725537,13.5975251 0.057762003,13.49698 0.08309292,13.3986139 L2.70780051,0 L5.2981303,13.2772904 C5.35291839,13.4542844 5.38954833,13.6390861 5.40588035,13.8295864 L5.41560102,13.8794118 L5.40967501,13.8793498 Z M2.70780051,15.3029412 C3.40568974,15.3029412 3.97144075,14.7452723 3.97144075,14.0573529 C3.97144075,13.3694336 3.40568974,12.8117647 2.70780051,12.8117647 C2.00991128,12.8117647 1.44416027,13.3694336 1.44416027,14.0573529 C1.44416027,14.7452723 2.00991128,15.3029412 2.70780051,15.3029412 Z" id="Combined-Shape" fill="#575B62"></path>
+                        <path d="M2.70780051,16.7264706 C4.20327744,16.7264706 5.41560102,15.5314659 5.41560102,14.0573529 C5.41560102,13.9975386 5.41360499,13.9381839 5.40967501,13.8793498 L5.41560102,13.8794118 L5.40588035,13.8295864 C5.38954833,13.6390861 5.35291839,13.4542844 5.2981303,13.2772904 L2.70780051,0 L2.70780051,12.8117647 C3.40568974,12.8117647 3.97144075,13.3694336 3.97144075,14.0573529 C3.97144075,14.7452723 3.40568974,15.3029412 2.70780051,15.3029412 L2.70780051,16.7264706 Z" id="Combined-Shape" fill="#3D4147"></path>
+                    </g>
+                </g>
+                <text id="POOR" font-family="Lato-Bold, Lato" font-size="3.2269536" font-weight="bold" fill="#F44336">
+                    <tspan x="2.52728048" y="28.6235294">POOR</tspan>
+                </text>
+                <text id="GOOD" font-family="Lato-Bold, Lato" font-size="3.2269536" font-weight="bold" fill="#4CAF50">
+                    <tspan x="37.5481671" y="28.6235294">GOOD</tspan>
+                </text>
+                <g id="123" transform="translate(19.676684, 29.360294)">
+                    <rect id="Background" fill="#3D4146" x="0" y="0" width="10.831202" height="4.98235294" rx="1.0756512"></rect>
+                    <rect id="line" fill="#575B62" x="3.42988065" y="0" width="0.362681159" height="4.98235294"></rect>
+                    <rect id="line" fill="#575B62" x="7.04028133" y="0" width="0.362681159" height="4.98235294"></rect>
+                    <text id="1" font-family="Lato-Bold, Lato" font-size="2.5098528" font-weight="bold" fill="#FFFFFF">
+                        <tspan x="1.0831202" y="2.88970588">1</tspan>
+                    </text>
+                    <text id="2" font-family="Lato-Bold, Lato" font-size="2.5098528" font-weight="bold" fill="#FFFFFF">
+                        <tspan x="4.69352089" y="2.88970588">2</tspan>
+                    </text>
+                    <text id="3" font-family="Lato-Bold, Lato" font-size="2.5098528" font-weight="bold" fill="#FFFFFF">
+                        <tspan x="8.30392157" y="2.88970588">3</tspan>
+                    </text>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

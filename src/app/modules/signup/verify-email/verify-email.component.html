@@ -1,0 +1,61 @@
+<div class="container-fluid text-center my-5">
+  <div class="row">
+    <div class="offset-md-2 col-md-8">
+      <div *ngIf="isLoading">
+        <h1>
+          Verifying... Please wait a short while.
+        </h1>
+      </div>
+
+      <h1 *ngIf="isSuccessed">
+        <i class="fa fa-check-circle fa-5x blue"></i>
+        <br/> Congratulations! Your email address is verified.
+        <br/> Let's
+        <a [routerLink]="startUrl">start</a>.
+      </h1>
+      <div *ngIf="isAlreadyActive">
+        <h2>
+          Your email address is already verified, please try to
+          <a routerLink="/auth/login">login</a>.
+        </h2>
+      </div>
+      <div *ngIf="isTokenExpired">
+        <i class="fa fa-exclamation-circle fa-5x"></i>
+        <br/>
+        <h1>Oops... The link has expired.</h1>
+        <div (click)="showResendForm()" class="blue pointer">
+          <br>
+          <h2>Send me a new verification link.</h2>
+        </div>
+        <form class="text-left" *ngIf="showResend" (submit)="resend()" [formGroup]="form">
+          <df-input-container>
+            <input type="text" formControlName="email" placeholder="Enter your email...">
+          </df-input-container>
+          <df-validation-messages [control]="form.controls.email"></df-validation-messages>
+          <div class="form-group">
+            <button type="submit" df-button theme="success">
+              SEND
+            </button>
+          </div>
+        </form>
+      </div>
+      <div *ngIf="isUnknowError || isBadToken">
+        <i class="fa fa-exclamation-circle fa-5x"></i>
+        <br/>
+        <h1>We are sorry, unexpected error happened.</h1>
+        <a href="contact-us">Contact us</a>.
+      </div>
+      <div *ngIf="testExists">
+        <i class="fa fa-exclamation-circle fa-5x"></i>
+        <br/>
+        <h2>There is already an application active for this mail id. Please re-apply after completion of that application. Contact
+          <a href="https://support.crossover.com" target="_blank">Support</a> for further assistance.</h2>
+      </div>
+      <div *ngIf="isResent">
+        <i class="fa fa-paper-plane fa-5x"></i>
+        <br/>
+        <h1>A new verification email is sent. It will last for another 7 days.</h1>
+      </div>
+    </div>
+  </div>
+</div>

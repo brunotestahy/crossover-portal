@@ -1,0 +1,38 @@
+.table-layout-auto {
+  .df-grid__table {
+    table-layout: auto !important;
+  }
+}
+
+.table-layout-fixed {
+  .df-grid__table {
+    table-layout: auto !important;
+  }
+}
+
+.table-responsive-40-60 {
+  .df-grid-table-body__cell-column-title {
+    min-width: 40% !important;
+    max-width: 40% !important;
+    word-wrap: normal;
+  }
+}
+
+.table-responsive-50-50 {
+  .df-grid-table-body__cell-column-title {
+    min-width: 50% !important;
+    max-width: 50% !important;
+    word-wrap: normal;
+  }
+}
+
+.table-responsive-left-selector {
+  .df-grid__selection-column, .df-grid-column--selectable {
+    .df-grid-table-body__cell-column-title {
+      display: none;
+    }
+    .df-checkbox {
+      margin-left: 5px;
+    }
+  }
+}

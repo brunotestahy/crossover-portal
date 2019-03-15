@@ -1,0 +1,406 @@
+<div
+  class="section__header section__header--aligned d-flex align-items-center justify-content-between flex-wrap flex-md-nowrap">
+  <span class="mb-2 mb-md-0 w-100">Applicants Endorsement</span>
+  <button df-button
+          (click)="saveScores()"
+          [disabled]="rubricScoresArray.length < 1">
+    <span>Save Scores</span>
+  </button>
+</div>
+<div class="page-content page-scroll">
+  <df-card class="p-4">
+    <app-page-alert *ngIf="error" [text]="error" class="my-2"></app-page-alert>
+    <df-card-header>
+      <form [formGroup]="jobForm"
+            class="standard-form d-flex flex-wrap align-items-end">
+        <div class="job flex-column mr-2">
+          <label>
+            Select Job
+          </label>
+          <div class="w-100">
+            <df-select formControlName="jobId"
+                       filterable="true"
+                       (change)="jobChange($event)"
+                       placeholder="-- Choose one --">
+              <df-option *ngFor="let job of jobs"
+                         [value]="job">
+                {{ job.id }} {{ job.title }}
+              </df-option>
+            </df-select>
+          </div>
+        </div>
+        <div class="flex-column mr-2"
+             [class.d-none]="!jobForm.value.jobId"
+             [class.d-flex]="jobForm.value.jobId">
+          <label>
+            Email / Name
+          </label>
+          <div class="w-100">
+            <df-input-container>
+              <input type="text"
+                     formControlName="searchWord"
+                     (focus)="temporaryFilterValues.searchWord = $event.target.value"
+                     (keyup.enter)="onEnterPressNameFilterInput()"
+                     (blur)="onBlurNameFilterInput()"/>
+            </df-input-container>
+          </div>
+        </div>
+        <div class="flex-column mr-2"
+             [class.d-none]="!jobForm.value.jobId"
+             [class.d-flex]="jobForm.value.jobId">
+          <label>
+            Resume Keyword Search
+          </label>
+          <div class="w-100">
+            <df-input-container>
+              <input type="text"
+                     formControlName="resumeSearchQuery"
+                     (focus)="temporaryFilterValues.resumeSearchQuery = $event.target.value"
+                     (keyup.enter)="onEnterPressKeywordFilterInput()"
+                     (blur)="onBlurKeywordFilterInput()"/>
+            </df-input-container>
+          </div>
+        </div>
+        <button df-button
+                type="button"
+                class="mt-2 mt-md-0"
+                (click)="showFilter()"
+                [class.d-none]="!jobForm.value.jobId">
+          <span>{{ hasFilter ? 'Filtering is applied' : 'Filter' }}</span>
+        </button>
+      </form>
+    </df-card-header>
+    <df-card-content>
+      <div class="df-loader-container" *ngIf="isLoading">
+        <i class="df-loader"></i>
+      </div>
+      <div class="d-flex flex-wrap mb-4" *ngIf="!isLoading && data">
+        <button df-button
+                class="btn-red mr-2"
+                (click)="close()">
+          <span>Close</span>
+        </button>
+        <button df-button
+                class="btn-red mr-2"
+                (click)="reject()"
+                [disabled]="selectedRows.length < 1">
+          <span>Reject</span>
+        </button>
+        <button *ngIf="allowEndorse"
+                df-button
+                class="mr-2 mt-2 mt-sm-0"
+                (click)="endorsement()"
+                [disabled]="hasSelectedInEndorsementPhase">
+          <span>Endorsement</span>
+        </button>
+        <button df-button
+                *ngIf="isAccountManager"
+                class="mr-2 mt-2 mt-sm-0"
+                (click)="previewResumes()"
+                [disabled]="hasSelectedNotInPreview">
+          <span>Preview Resumes</span>
+        </button>
+        <button df-button
+                *ngIf="isAccountManager"
+                class="mr-2 mt-2 mt-sm-0"
+                (click)="previewPassers()"
+                [disabled]="hasSelectedForPassersPreview">
+          <span>Preview Passers</span>
+        </button>
+      </div>
+      <ng-container *ngIf="!isLoading && data">
+        <div class="df-loader-container" *ngIf="isTableLoading">
+          <i class="df-loader"></i>
+        </div>
+
+        <df-grid class="table-responsive-50-50 table-responsive-left-selector"
+                 [class.loading-opacity]="isTableContentLoading"
+                 *ngIf="!isTableLoading"
+                 [value]="data"
+                 [emptyMessage]="emptyMessage"
+                 [(selection)]="selectedRows"
+                 [scrollable]="!isMobile && data.length"
+                 scrollHeight="300px"
+                 [virtualScroll]="true"
+                 [totalRecords]="data.length || rowsPerPage"
+                 [loading]="isTableContentLoading"
+                 lazy="true"
+                 [rows]="data.length"
+                 #endorsementGrid
+                 (sortEvent)="onTableSort(endorsementGrid)"
+                 (lazyLoad)="onScrollEnd()"
+                 [responsive]="isMobile">
+
+          <df-grid-column *ngIf="isAccountManager"
+                          selectionMode="multiple"
+                          styleClass="align-middle icon-column">
+          </df-grid-column>
+
+          <df-grid-column styleClass="align-middle icon-column">
+            <ng-template dfGridTemplate="body"
+                         let-col
+                         let-item="rowData"
+                         let-index="rowIndex">
+              <i *ngIf="item.previewToHiringManager || item.previewTestPasser"
+                 class="fa fa-star link"
+                 [class.au-blue]="item.previewToHiringManager"
+                 [class.au-red]="item.previewTestPasser"
+                 (click)="removePreview(item)">
+              </i>
+            </ng-template>
+          </df-grid-column>
+
+          <df-grid-column field="Name"
+                          header="Name"
+                          styleClass="align-middle column-lg"
+                          [sortable]="true">
+            <ng-template dfGridTemplate="body"
+                         let-col
+                         let-item="rowData">
+              <a [routerLink]="'../../profile/user-profile/' + item.id"
+                 class="au-blue">{{ item.candidate.printableName }}</a>
+            </ng-template>
+          </df-grid-column>
+
+          <df-grid-column field="createdOn"
+                          header="Date"
+                          styleClass="align-middle column-sm"
+                          [sortable]="true">
+            <ng-template dfGridTemplate="body"
+                         let-col
+                         let-item="rowData">
+              <span>{{ item.createdOn | date: 'MMM d' }}</span>
+            </ng-template>
+          </df-grid-column>
+
+          <df-grid-column field="taskStatus"
+                          header="Status"
+                          styleClass="align-middle column-xl"
+                          [sortable]="true">
+          </df-grid-column>
+
+          <df-grid-column field="score"
+                          header="Total Application Score"
+                          styleClass="align-middle column-lg text-md-center"
+                          [sortable]="true">
+            <ng-template dfGridTemplate="body"
+                         let-col
+                         let-item="rowData">
+              <span>{{ item?.score ? (item?.score | number : 0) : '-' }}</span>
+            </ng-template>
+          </df-grid-column>
+
+          <df-grid-column field="resumeFile"
+                          header="Resume"
+                          styleClass="align-middle column-sm text-md-center">
+            <ng-template dfGridTemplate="body"
+                         let-col
+                         let-item="rowData">
+              <a [href]="'https://docs.google.com/gview?embedded=true&url=' + item.id"
+                 target="_blank"
+                 class="au-blue">{{ item.resumeFile.label }}</a>
+            </ng-template>
+          </df-grid-column>
+
+          <df-grid-column field="score.RESUME_KEYWORD"
+                          header="Keyword Score"
+                          styleClass="align-middle column-sm text-md-center"
+                          [sortable]="true">
+            <ng-template dfGridTemplate="body"
+                         let-col
+                         let-item="rowData">
+              <span class="keyword-score"
+                    [class.label-success]="hasKeywordSuccessLabel(item?.rkScore, item?.rkScore?.score, item?.RESUME_KEYWORD?.normalizedHighThreshold, item?.matScore, item?.matScore?.score)"
+                    [class.label-warning]="hasKeywordWarningLabel(item?.rkScore, item?.rkScore?.score, item?.RESUME_KEYWORD?.normalizedHighThreshold, item?.matScore, item?.matScore?.score)"
+                    [class.label-default]="item?.matScore?.score === 0">
+                {{ item?.rkScore && item?.rkScore?.score !== undefined ? (item?.rkScore?.score | number : 0) : '' }}
+              </span>
+            </ng-template>
+          </df-grid-column>
+
+          <ng-container *ngIf="endorsementService.rubrics.length">
+            <df-grid-column *ngFor="let column of endorsementService.rubrics"
+                            styleClass="align-middle column-md text-md-center">
+              <ng-template dfGridTemplate="header"
+                           let-col>
+                <span class="au-blue link"
+                      (click)="openRubricDescriptionModal(rubricDescriptionModal, column.resumeRubric)">
+                  {{ column.resumeRubric.name }}
+                </span>
+              </ng-template>
+              <ng-template dfGridTemplate="body"
+                           let-col
+                           let-item="rowData">
+                <df-input-container>
+                  <input type="number"
+                         class="text-md-center"
+                         min="0"
+                         max="100"
+                         #overalResumeInput
+                         (blur)="addRubricScores(item, overalResumeInput.value)"
+                         [ngModel]="item.overAllResumeGrad"/>
+                </df-input-container>
+              </ng-template>
+            </df-grid-column>
+
+            <df-grid-column field="score.RESUME_RUBRIC"
+                            header="Overall Resume Grade"
+                            [sortable]="true"
+                            styleClass="align-middle column-md text-md-center">
+              <ng-template dfGridTemplate="body"
+                           let-col
+                           let-item="rowData">
+                <span>{{ getOverAllResumeGrad(item) }}</span>
+              </ng-template>
+            </df-grid-column>
+          </ng-container>
+
+          <ng-container>
+            <df-grid-column field="score.HACKER_RANK"
+                            header="Technical Screen Score"
+                            [sortable]="true"
+                            styleClass="align-middle column-sm text-md-center">
+              <ng-template dfGridTemplate="body"
+                           let-col
+                           let-item="rowData">
+                <span>{{ item.hackerRankScore ? (item.hackerRankScore  | number : 0) : '-' }}</span>
+              </ng-template>
+            </df-grid-column>
+          </ng-container>
+
+          <ng-container *ngIf="assignmentScore">
+            <df-grid-column field="assignmentScore"
+                            header="Assignment Score"
+                            styleClass="align-middle column-sm text-md-center">
+              <ng-template dfGridTemplate="body"
+                           let-col
+                           let-item="rowData">
+                <span>{{ item.assignmentScore ? (item.assignmentScore  | number : 0) : '-' }}</span>
+              </ng-template>
+            </df-grid-column>
+          </ng-container>
+
+          <ng-container>
+            <df-grid-column *ngFor="let question of fiveQResponseColumns"
+                            [field]="'Q' + question.sequenceNumber"
+                            [header]="'Q' + question.sequenceNumber"
+                            styleClass="align-middle icon-column text-md-center">
+              <ng-template dfGridTemplate="body"
+                           let-col
+                           let-item="rowData">
+                <span>{{ getFiveQAnswer(item.fiveQResponse?.answers, question.sequenceNumber) }}</span>
+              </ng-template>
+            </df-grid-column>
+
+            <df-grid-column field="score.FIVEQ"
+                            header="Total"
+                            styleClass="align-middle column-xs text-md-center">
+              <ng-template dfGridTemplate="body"
+                           let-col
+                           let-item="rowData">
+                <span>{{item.fiveQScore ? (item.fiveQScore.toFixed(2)) : '-'}}</span>
+              </ng-template>
+            </df-grid-column>
+
+            <df-grid-column field="fiveLink"
+                            header="5Q Link"
+                            styleClass="align-middle column-xs text-md-center">
+              <ng-template dfGridTemplate="body"
+                           let-col
+                           let-item="rowData">
+              <span *ngIf="item.fiveQScore"
+                    (click)="viewFiveLink()"
+                    class="au-blue link">
+                {{ 'View' }}
+              </span>
+              </ng-template>
+            </df-grid-column>
+          </ng-container>
+
+          <ng-container *ngIf="otherTests.length">
+            <df-grid-column *ngFor="let test of otherTests"
+                            field="otherTests"
+                            [header]="test.name"
+                            styleClass="align-middle column-sm text-md-center">
+            </df-grid-column>
+          </ng-container>
+
+          <df-grid-column field="notes"
+                          header="Notes"
+                          styleClass="align-middle column-sm text-md-center">
+            <ng-template dfGridTemplate="body"
+                         let-col
+                         let-item="rowData">
+              <div (click)="showNotes(item)"
+                    class="au-blue link comment-overflow">
+                {{ item.lastNoteContent || 'No notes' }}
+              </div>
+            </ng-template>
+          </df-grid-column>
+
+          <df-grid-column field="hmComments"
+                          header="HM Comments"
+                          styleClass="align-middle column-sm text-md-center">
+            <ng-template dfGridTemplate="body"
+                         let-col
+                         let-item="rowData">
+              <span (click)="showComments(item)"
+                    class="au-blue link">
+                {{ 'View' + (isAccountManager ? '/Add' : '') }}
+              </span>
+            </ng-template>
+          </df-grid-column>
+
+          <df-grid-column field="Rating"
+                          header="Rating"
+                          styleClass="align-middle column-sm text-md-center"
+                          [sortable]="true">
+            <ng-template dfGridTemplate="body"
+                         let-col
+                         let-item="rowData">
+              {{ item.averageRating }}
+            </ng-template>
+          </df-grid-column>
+
+          <df-grid-column *ngIf="isAccountManager"
+                          field="actions"
+                          header="Actions"
+                          styleClass="align-middle column-xl action-buttons">
+            <ng-template dfGridTemplate="body"
+                         let-col
+                         let-item="rowData">
+              <button *ngIf="shouldShowRejectButton(item)"
+                      df-button
+                      class="btn-red mr-2"
+                      (click)="reject()">
+                <span>Reject</span>
+              </button>
+              <button *ngIf="shouldShowEndorsementButton(item)"
+                      df-button
+                      class="mr-2"
+                      (click)="endorsement()">
+                <span>Endorsement</span>
+              </button>
+            </ng-template>
+          </df-grid-column>
+
+        </df-grid>
+      </ng-container>
+    </df-card-content>
+  </df-card>
+</div>
+<ng-template #rubricDescriptionModal
+             let-close="close"
+             let-data="data">
+  <div class="au-modal-header p-3 d-flex align-items-center w-100">
+    <h3 class="m-0">
+      <span>Rubric: {{data.name}}</span>
+    </h3>
+    <i (click)="close()"
+       class="au-modal-close fa fa-times">
+    </i>
+  </div>
+  <div class="p-3 text-left">
+    <p>{{data.description}}</p>
+  </div>
+</ng-template>

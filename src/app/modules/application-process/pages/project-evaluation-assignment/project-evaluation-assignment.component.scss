@@ -1,0 +1,69 @@
+@import "~@devfactory/ngx-df/core/theming/aurea-skin/theming";
+@import "variables";
+
+df-card {
+  overflow: unset;
+}
+
+.project-evaluation__title {
+  border-bottom: $border;
+}
+
+h4 {
+  flex: 1;
+}
+
+.project-evaluation__assignment-block {
+  border: $border;
+  color: $au-gray-main;
+
+  &:hover {
+    text-decoration: none;
+  }
+
+  &__icon {
+    max-width: 150px;
+    min-width: 150px;
+    height: 150px;
+    min-height: 150px;
+    border-right: $border;
+  }
+
+  small {
+    font-size: 11px;
+    text-transform: uppercase;
+    bottom: 0;
+    border-top: $border;
+    flex: 1;
+  }
+}
+
+.days {
+  .df-input-container {
+    width: 30px;
+  }
+}
+
+@media screen and (max-width: $breakpoint-md) {
+  .project-evaluation__assignment-block__icon {
+    //max-width: 100%;
+    border-right: 0;
+  }
+}
+
+.project-evaluation__assignment-block__icon {
+  small, i {
+    position: relative;
+  }
+
+  i {
+    top: 0px;
+    left: 0px;
+  }
+
+  small {
+    top: 50px;
+    left: 0px;
+  }
+}
+

@@ -1,0 +1,123 @@
+@import "variables";
+
+.user-id {
+  color: map-get($au-neutral, 3);
+}
+
+.portrait-container {
+  width: 200px;
+  height: 200px;
+}
+
+.overlay-container {
+  width: 200px;
+  height: 200px;
+  position: absolute;
+  top: 0;
+  left: 0;
+  background-color: rgba(0,0,0,.5);
+  opacity: 0;
+  transition: opacity .3s ease;
+  color: $au-white;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  &:hover {
+    opacity: 1;
+  }
+}
+
+.file-upload {
+  margin: 0 auto;
+  text-align: center;
+  line-height: 200px;
+}
+
+.delete-image {
+  width: 15px;
+  height: 17px;
+  position: absolute;
+  top: 160px;
+  left: 50%;
+  -webkit-transform: translatex(-50%);
+  transform: translatex(-50%);
+}
+
+.working-through-entity {
+  padding-bottom: 15px;
+}
+
+.fixed-button-width {
+  min-width: 140px;
+}
+
+.connection-section {
+  font-size: 12px;
+}
+
+.working-through-entity-label {
+  font-size: 20px;
+  min-width: auto;
+}
+
+.account-buttons {
+  flex-basis: 200px;
+  flex-shrink: 0;
+  .fixed-button-width {
+    width: 140px;
+  }
+}
+
+.connect-item {
+  border-top: 1px solid #ccc;
+  padding: 15px 0;
+  &:first-child {
+    border-top: none;
+  }
+}
+
+.connect-fixed-size-btn {
+  min-width: 150px;
+}
+
+.connect-icon {
+  width: 24px;
+  height: 24px;
+  background-size: contain;
+  background-position: center;
+  background-repeat: no-repeat;
+  flex-shrink: 0;
+}
+
+.slack-icon {
+  background-image: url('/assets/images/slack-icon.svg')
+}
+
+.google-icon {
+  background-image: url('/assets/images/google-icon.png')
+}
+
+.grayscale {
+  filter: grayscale(100%);
+  opacity: .6;
+}
+
+:host {
+  ::ng-deep {
+    .popover .arrow {
+      display: none;
+    }
+    app-profile-image-selector {
+      width: 100%;
+      max-width: 200px;
+      display: block;
+      margin-left: auto;
+      margin-right: auto;
+      @media screen and (min-width: 768px) {
+        margin-left: 0;
+        margin-right: 0;
+      }
+    }
+  }
+}

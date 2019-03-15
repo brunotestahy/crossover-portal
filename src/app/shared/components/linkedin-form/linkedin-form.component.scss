@@ -1,0 +1,9 @@
+.linkedin-btn {
+  width: 210px;
+}
+
+::ng-deep {
+  df-alert .btn {
+    font-size: 12px;
+  }
+}

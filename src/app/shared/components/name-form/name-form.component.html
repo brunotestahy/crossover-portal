@@ -1,0 +1,20 @@
+<form [formGroup]="form" class="container-fluid standard-form" (submit)="onSubmit()">
+  <div>
+    <label>Name</label>
+    <df-input-container>
+      <input type="text" formControlName="firstName">
+    </df-input-container>
+    <df-validation-messages [control]="form.get('firstName')"></df-validation-messages>
+  </div>
+  <div>
+    <label>Last Name</label>
+    <df-input-container>
+      <input type="text" formControlName="lastName">
+    </df-input-container>
+    <df-validation-messages [control]="form.get('lastName')"></df-validation-messages>
+  </div>
+  <div class="d-flex">
+    <button class="mr-2" type="submit" df-button theme="info">Save</button>
+    <button class="mr-2" type="button" df-button theme="danger" (click)="cancel.emit()">Cancel</button>
+  </div>
+</form>

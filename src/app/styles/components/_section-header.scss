@@ -1,0 +1,38 @@
+.section__header {
+  background-color: map-get($map: $au-neutral, $key: 4);
+  padding: 15px 15px;
+  color: $au-white;
+  margin: 0;
+  font-size: 18px;
+  flex-shrink: 0;
+
+  .df-input,
+  .df-input-container input[type=email],
+  .df-input-container input[type=number],
+  .df-input-container input[type=password],
+  .df-input-container input[type=search],
+  .df-input-container input[type=text],
+  .df-input-container input[type=url],
+  .df-input-container textarea {
+    color: $au-white;
+    font-size: 14px;
+  }
+
+
+  @media screen and (min-width: $breakpoint-md) {
+    &--aligned {
+      padding: 15px 35px;
+    }
+  }
+}
+
+
+.section-subheader {
+  font-weight: 500;
+  background-color: map-get($map: $au-neutral, $key: 4);
+  padding-top: 10px;
+  padding-bottom: 10px;
+  color: $au-white;
+  margin: 0;
+  font-size: 16px;
+}

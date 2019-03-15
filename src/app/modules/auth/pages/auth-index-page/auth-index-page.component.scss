@@ -1,0 +1,73 @@
+@import "variables";
+
+:host {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  background-size: cover;
+  background-position: center;
+  background: #313541;
+  justify-content: center;
+  position: relative;
+  align-items: center;
+}
+
+.login-wrapper {
+  max-width: calc(100vw - 20px);
+  display: flex;
+  align-items: center;
+  flex-grow: 1;
+  flex-shrink: 1;
+}
+
+.login {
+  flex-grow: 1;
+  box-shadow: 0 7px 23px rgba(0, 0, 0, 0.35);
+  margin: 5px 10px;
+  &__header {
+    background-color: #002855;
+    padding: 15px;
+    border-radius: 3px 3px 0 0;
+  }
+  &__logo {
+    height: 32px;
+  }
+  &__form-container {
+    background: white;
+    padding: 25px 40px;
+    border-radius: 0 0 3px 3px;
+  }
+}
+
+
+
+.login-footer {
+  width: 100%;
+  flex-grow: 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  opacity: 0.4;
+  padding: 18px 28px;
+  color: #ffffff;
+  &__img {
+    height: 35px;
+  }
+
+  &__copyright {
+    color: white;
+    text-align: right;
+    font-size: 11px;
+    font-weight: 500;
+  }
+
+  &__privacy {
+    color: white;
+    &:hover {
+      color: white;
+    }
+  }
+}
+
+

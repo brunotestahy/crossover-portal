@@ -1,0 +1,456 @@
+<df-card-content>
+  <div class="row mb-2">
+    <div class="col-12 col-md-6">
+      <div class="align-self-center">
+        <strong>Metric: {{metricInputData.metricDescription}}</strong>
+      </div>
+    </div>
+    <div class="col-12 col-md-6 d-flex flex-column au-neutral-3 mt-2 mt-lg-0">
+      <div class="text-right"><small>{{getLastUpdate()}}</small></div>
+      <div class="text-right"><small>This data is updated automatically every 2 hrs</small></div>
+    </div>
+  </div>
+  <div class="d-flex">
+    <df-checkbox  class="ml-0 ml-md-5"
+                  [class.invisible]="teamIndividualMode === metricsConstants.TEAM"
+                  container="body"
+                  [formControl]="normalizeChartCheck"
+                  dfToolTipColor="dark"
+                  dfToolTip="Normalize the values based on the hours logged, assuming a 40-hour work week for the whole team"
+                  dfToolTipPlacement="top">
+      Normalize
+    </df-checkbox>
+    <df-checkbox class="ml-3"
+                 [disabled]="metricInputData.unitsCostMode === metricsConstants.COST"
+                 [formControl]="currentWeekCheck">
+      Show Current Week
+    </df-checkbox>
+  </div>
+  <div *ngIf="metricInputData.unitsCostMode === metricsConstants.UNITS">
+    <div *ngIf="teamIndividualMode === metricsConstants.TEAM"
+         class="row">
+      <div class="col-12 col-xl-4 d-block">
+        <df-grid [value]="weekTeamData"
+                 class="chart-grid"
+                 scrollable="true"
+                 scrollHeight="400px"
+                 [responsive]="true">
+          <df-grid-column header="Week"
+                          field="week">
+          </df-grid-column>
+          <df-grid-column header="Total Units">
+            <ng-template dfGridTemplate="body"
+                         let-col
+                         let-item="rowData">
+              <div class="d-flex justify-content-between">
+                <div class="align-self-center flex-1">
+                  <i class="fa fa-circle"
+                     [ngClass]="getWeeklyTeamScoreClass(item.ticketsResolved)"></i>
+                  {{formatMetric(item.ticketsResolved)}}
+                </div>
+                <div class="align-self-center position-relative flex-1"
+                     dfToolTipColor="dark"
+                     dfToolTip="% of the target"
+                     dfToolTipPlacement="left">
+                  ({{getTeamMetricPercentage(item.ticketsResolved)}}%)
+                </div>
+              </div>
+            </ng-template>
+          </df-grid-column>
+        </df-grid>
+        <div class="row mt-2 mx-0 weekly-average-record">
+          <span class="col-6 weekly-average-cell d-flex">Weekly Average</span>
+          <div class="col-6 d-flex justify-content-between weekly-average-cell">
+            <div class="align-self-center position-relative flex-1"
+                 dfToolTipColor="dark"
+                 dfToolTip="This average does not include the week in progress"
+                 dfToolTipPlacement="left">
+              <i class="fa fa-circle"
+                 [ngClass]="getTeamScoreClass(weeklyTeamAveragePercentage)"></i>
+              {{weeklyTeamAverage}}
+            </div>
+            <div class="align-self-center position-relative flex-1"
+                 dfToolTipColor="dark"
+                 dfToolTip="% of the target"
+                 dfToolTipPlacement="left">
+              ({{weeklyTeamAveragePercentage}}%)
+            </div>
+          </div>
+        </div>
+        <div class="mt-2 metric-target">
+          <span><i class="fa fa-ellipsis-h align-self center mr-2"></i>
+            Metric Target: {{metricInputData.metricTarget * metricInputData.activeTeamMembers}}</span>
+        </div>
+      </div>
+      <div class="col-12 col-xl-8 d-block mt-4 mt-lg-0"
+           [class.six-months]="metricInputData.queryOption > 12 "
+           [class.twelve-weeks]="metricInputData.queryOption === 12">
+        <df-bar [data]="teamUnitsChartData"
+                [colors]="[barChartColor]"
+                [padding]="0.4"
+                [tooltipTemplate]="teamUnitsTooltipTemplate"
+                [showLegend]="false"
+                [wrapTickText]="true">
+        </df-bar>
+      </div>
+    </div>
+    <div *ngIf="teamIndividualMode === metricsConstants.INDIVIDUAL"
+         class="row">
+      <div class="col-12 col-lg-4 d-block">
+        <df-grid [value]="metricsTableData"
+                 class="chart-grid"
+                 [(selection)]="selectedContractors"
+                 dataKey="assignmentId"
+                 scrollable="true"
+                 scrollHeight="400px"
+                 (selectionChange)="updateChartData()"
+                 [responsive]="true">
+          <df-grid-column [style]="{'width':'38px'}"
+                          selectionMode="multiple">
+          </df-grid-column>
+          <df-grid-column field="name"
+                          [sortable]="true">
+            <ng-template dfGridTemplate="header">
+              Team Member
+            </ng-template>
+            <ng-template dfGridTemplate="body"
+                         let-col
+                         let-item="rowData">
+              <span>
+                <i class="fa fa-square"
+                   [style.color]="item.color"></i>
+              </span>
+              <span *ngIf="!item.isActiveAssignment"
+                    class="inactive-user position-relative"
+                    dfToolTipColor="dark"
+                    [dfToolTip]="getContractorTerminationTooltip(item.effectiveDateEndInTeam)"
+                    dfToolTipPlacement="right">
+                {{item.name}}
+              </span>
+              <span *ngIf="item.isActiveAssignment">
+                {{item.name}}
+              </span>
+            </ng-template>
+          </df-grid-column>
+          <df-grid-column field="cost"
+                          [sortable]="true">
+            <ng-template dfGridTemplate="header">
+              Avg. Units ({{getSelectedQuery()}})
+              <span container="body"
+                    dfToolTipColor="dark"
+                    [dfToolTip]="'Weekly average from ' + getPeriodFormat()"
+                    dfToolTipPlacement="top">
+                        <i class="fa fa-info-circle align-self-center"></i>
+                      </span>
+            </ng-template>
+            <ng-template dfGridTemplate="body"
+                         let-col
+                         let-item="rowData">
+              <div class="d-flex justify-content-between">
+                <div class="align-self-center position-relative flex-1"
+                     dfToolTipColor="dark"
+                     [dfToolTip]="'Weekly average from ' + getPeriodFormat()"
+                     dfToolTipPlacement="left">
+                  <i class="fa fa-circle"
+                     [ngClass]="getTeamScoreClass(item.metric)"></i>
+                  {{formatMetric(item.metric)}}
+                </div>
+                <div class="align-self-center position-relative flex-1"
+                     dfToolTipColor="dark"
+                     dfToolTip="% of the target"
+                     dfToolTipPlacement="left">
+                  ({{getMetricPercentage(item.metric)}}%)
+                </div>
+              </div>
+            </ng-template>
+          </df-grid-column>
+        </df-grid>
+        <div class="row mt-2 mx-0 weekly-average-record">
+          <div class="col-6 team-average-cell-1 d-flex">
+            <df-checkbox [formControl]="teamAverageUnitsCheck">
+            </df-checkbox>
+            <div class="align-self-center team-average-label">
+              <i class="fa fa-square team-average"></i>
+              Team Average
+            </div>
+          </div>
+          <div class="col-6 d-flex justify-content-between team-average-cell-units">
+            <div class="align-self-center position-relative flex-1"
+                  dfToolTipColor="dark"
+                  [dfToolTip]="'Weekly average from ' + getPeriodFormat()"
+                  dfToolTipPlacement="left">
+              {{formatMetric(teamRecord.metric)}}
+            </div>
+            <div class="align-self-center position-relative flex-1"
+                 dfToolTipColor="dark"
+                 dfToolTip="% of the target"
+                 dfToolTipPlacement="left">
+              ({{getMetricPercentage(teamRecord.metric)}}%)
+            </div>
+          </div>
+        </div>
+        <div class="mt-2 metric-target">
+          <span><i class="fa fa-ellipsis-h align-self center mr-2"></i> Metric Target: {{metricInputData.metricTarget}}</span>
+        </div>
+      </div>
+      <div class="col-12 col-lg-8 mt-4 mt-lg-0">
+        <df-line-chart [data]="individualUnitsChartData"
+                       [showDots]="true"
+                       [showValues]="false"
+                       [smoothLine]="false"
+                       [showLegend]="false"
+                       [colorFn]="colorFn"
+                       [individualTooltipsEnabled]="true"
+                       [tooltipTemplate]="unitsTooltip"
+                       [numTicks]="4"
+                       [xAxisTickFormatter]="getWeeklyFormat">
+        </df-line-chart>
+      </div>
+    </div>
+  </div>
+  <div *ngIf="metricInputData.unitsCostMode === metricsConstants.COST">
+    <div *ngIf="teamIndividualMode === metricsConstants.TEAM"
+         class="row">
+      <div class="col-12 col-xl-4 d-block">
+        <df-grid [value]="weekTeamData"
+                 scrollable="true"
+                 class="chart-grid"
+                 scrollHeight="400px"
+                 [responsive]="true">
+          <df-grid-column header="Week"
+                          field="week">
+          </df-grid-column>
+          <df-grid-column header="Cost per Unit">
+            <ng-template dfGridTemplate="body"
+                         let-col
+                         let-item="rowData">
+              <div class="d-flex justify-content-between">
+                <div class="align-self-center position-relative flex-1"
+                     container="body"
+                     dfToolTipColor="dark"
+                     dfToolTip="The cost per unit is total number of units divided by the amount paid to the team members"
+                     dfToolTipPlacement="left"
+                     (mouseover)="showTooltip(item.week)"
+                     (mouseleave)="hideTooltip(item.week)">
+                  ${{formatMetric(item.cost)}}
+                </div>
+                <div *ngIf="isMonday && item.isLastWeek"
+                     class="align-self-center position-relative flex-1"
+                     container="body"
+                     dfToolTipColor="dark"
+                     dfToolTip="Estimated value. The exact cost will be available on Tuesday."
+                     dfToolTipPlacement="left">
+                  <i class="fa fa-info-circle align-self-center"></i>
+                </div>
+              </div>
+            </ng-template>
+          </df-grid-column>
+        </df-grid>
+        <div class="row mt-2 mx-0 weekly-average-record">
+          <span class="col-6 weekly-average-cell d-flex">Weekly Average</span>
+          <div class="col-6 d-flex justify-content-between weekly-average-cell">
+            <div class="align-self-center flex-1"
+              container="body"
+              dfToolTipColor="dark"
+              [dfToolTip]="getTeamAverageCostTooltip()"
+              dfToolTipPlacement="left">
+              ${{formatMetric(teamRecord.cost)}}
+            </div>
+            <div *ngIf="isMonday"
+                 class="align-self-center flex-1"
+                 container="body"
+                 dfToolTipColor="dark"
+                 dfToolTip="Estimated value. The exact cost will be available on Tuesday."
+                 dfToolTipPlacement="left">
+              <i class="fa fa-info-circle align-self-center"></i>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-12 col-xl-8 mt-4 mt-lg-0"
+           [class.six-months]="metricInputData.queryOption > 12 "
+           [class.twelve-weeks]="metricInputData.queryOption === 12">
+        <df-bar #teamCostBarChart
+                [data]="teamCostChartData"
+                [colors]="[barChartColor]"
+                [padding]="0.4"
+                [tooltipTemplate]="teamCostTooltipTemplate"
+                [showLegend]="false"
+                [wrapTickText]="true">
+        </df-bar>
+      </div>
+    </div>
+    <div *ngIf="teamIndividualMode === metricsConstants.INDIVIDUAL"
+         class="row">
+      <div class="col-12 col-lg-4 d-block">
+        <df-grid [value]="metricsTableData"
+                 [(selection)]="selectedContractors"
+                 dataKey="assignmentId"
+                 scrollable="true"
+                 scrollHeight="400px"
+                 class="chart-grid"
+                 (selectionChange)="updateChartData()"
+                 [responsive]="true">
+          <df-grid-column [style]="{'width':'38px'}"
+                          selectionMode="multiple">
+          </df-grid-column>
+          <df-grid-column field="name"
+                          [sortable]="true">
+            <ng-template dfGridTemplate="header">
+              Team Member
+            </ng-template>
+            <ng-template dfGridTemplate="body"
+                         let-col
+                         let-item="rowData">
+              <span>
+                <i class="fa fa-square"
+                   [style.color]="item.color"></i>
+              </span>
+              <span *ngIf="!item.isActiveAssignment"
+                   class="inactive-user position-relative"
+                   dfToolTipColor="dark"
+                   [dfToolTip]="getContractorTerminationTooltip(item.effectiveDateEndInTeam)"
+                   dfToolTipPlacement="right">
+                {{item.name}}
+              </span>
+              <span *ngIf="item.isActiveAssignment">
+                {{item.name}}
+              </span>
+            </ng-template>
+          </df-grid-column>
+          <df-grid-column field="cost"
+                          [sortable]="true">
+            <ng-template dfGridTemplate="header">
+              Avg. CpU ({{getSelectedQuery()}})
+              <span container="body"
+                    dfToolTipColor="dark"
+                    [dfToolTip]="'Weekly average from ' + getPeriodFormat()"
+                    dfToolTipPlacement="top">
+                      <i class="fa fa-info-circle align-self-center"></i>
+                    </span>
+            </ng-template>
+            <ng-template dfGridTemplate="body"
+                         let-col
+                         let-item="rowData">
+              <span
+                class="position-relative"
+                dfToolTipColor="dark"
+                [dfToolTip]="'Weekly average from ' + getPeriodFormat()"
+                dfToolTipPlacement="left">
+                ${{formatMetric(item.cost)}}
+              </span>
+            </ng-template>
+          </df-grid-column>
+        </df-grid>
+        <div class="row mt-2 mx-0 weekly-average-record">
+          <div class="col-6 team-average-cell-1 d-flex">
+            <df-checkbox [formControl]="teamAverageCostCheck">
+            </df-checkbox>
+            <div class="align-self-center team-average-label">
+              <i class="fa fa-square team-average"></i>
+              Team Average
+            </div>
+          </div>
+          <div class="col-6 d-flex justify-content-between team-average-cell-cost">
+            <div class="align-self-center position-relative"
+                container="body"
+                dfToolTipColor="dark"
+                [dfToolTip]="'Weekly average from ' + getPeriodFormat()"
+                dfToolTipPlacement="left">
+              ${{formatMetric(teamRecord.cost)}}
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-12 col-lg-8 mt-4 mt-lg-0">
+        <df-line-chart [data]="individualCostChartData"
+                       [showDots]="true"
+                       [showValues]="false"
+                       [smoothLine]="false"
+                       [showLegend]="false"
+                       [individualTooltipsEnabled]="true"
+                       [tooltipTemplate]="costTooltip"
+                       [colorFn]="colorFn"
+                       [numTicks]="4">
+        </df-line-chart>
+      </div>
+    </div>
+  </div>
+  <div class="d-flex justify-content-end mt-2">
+    <span>You have {{metricInputData.activeTeamMembers}} member(s) in <strong>{{metricInputData.team.name}}</strong> team</span>
+  </div>
+</df-card-content>
+
+<ng-template #individualCostTooltipTemplate
+             let-selected="selected">
+  <div class="df-bar__tooltip">
+    <div *ngIf="!selected.teamRecord">
+      <div><strong>{{selected.date}}</strong></div>
+    </div>
+    <div *ngIf="selected.teamRecord">
+      <div>Cost per Unit: {{selected.score}}%</div>
+      <div>Total Units: {{selected.score}}% </div>
+      <div>: {{selected.score}}% </div>
+      <div>Team Size: {{metricsTableData.length}}</div>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #teamCostTooltipTemplate
+             let-selected="selected">
+  <div class="df-bar__tooltip">
+    <div *ngIf="selected">
+      <div>Cost Per Unit: <strong>{{formatMetric(selected?.yKey)}}</strong></div>
+      <div>Total Units: <strong>{{formatMetric(selected?.metric)}}</strong></div>
+      <div>Per Team Member: <strong>{{getMetricPerTeamMember(selected?.metric, selected?.teamSize)}}</strong></div>
+      <div>Team Size: <strong>{{selected?.teamSize}}</strong></div>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #teamUnitsTooltipTemplate
+             let-selected="selected">
+  <div class="df-bar__tooltip">
+    <div *ngIf="selected">
+      <div>Total Units: <strong>{{formatMetric(selected?.yKey)}}</strong></div>
+      <div>Per Team Member: <strong>{{getMetricPerTeamMember(selected?.yKey, selected?.teamSize)}}</strong></div>
+      <div>Team Size: <strong>{{selected?.teamSize}}</strong></div>
+      <div>Cost Per Unit: <strong>{{formatMetric(selected?.cost)}}</strong></div>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #costTooltip let-data="data">
+  <div *ngIf="getContractorWeekData(data.id, data.xKey)"
+       class="chart-tooltip d-flex flex-column">
+    <strong>{{data.id}}</strong>
+    <strong>Cost Per Unit: ${{formatMetric(data.yKey)}}</strong>
+    <span>Units: {{getContractorWeekData(data.id, data.xKey)?.ticketsResolved}}</span>
+    <span>Week Salary: {{formatMetric(getContractorWeekData(data.id, data.xKey)?.weekSalary)}}</span>
+  </div>
+  <div *ngIf="!getContractorWeekData(data.id, data.xKey)"
+       class="chart-tooltip d-flex flex-column">
+    <span>Cost Per Unit: <strong>${{formatMetric(data.yKey)}}</strong></span>
+    <span>Total Units: {{formatMetric(getWeekTeamWeekData(data.xKey)?.ticketsResolved || 0)}}</span>
+    <span>Per Team Member: {{formatMetric((getWeekTeamWeekData(data.xKey)?.ticketsResolved || 0) / (getWeekTeamWeekData(data.xKey)?.teamSize || 1))}}</span>
+    <span>Team Size: <strong>{{getWeekTeamWeekData(data.xKey)?.teamSize || 0}}</strong></span>
+  </div>
+</ng-template>
+
+<ng-template #unitsTooltip let-data="data">
+  <div *ngIf="data.id === 'Metric Target'"
+       class="chart-tooltip d-flex flex-column">
+    Metric Target
+  </div>
+  <div *ngIf="data.id !== 'Metric Target' && data.id !== 'Team Average'"
+        class="chart-tooltip d-flex flex-column">
+    <strong>{{data.id}}</strong>
+    <span>Units: {{getContractorWeekData(data.id, data.xKey)?.ticketsResolved}}</span>
+  </div>
+  <div *ngIf="data.id === 'Team Average'"
+        class="chart-tooltip d-flex flex-column">
+    <span>Total Units: {{formatMetric(getWeekTeamWeekData(data.xKey)?.ticketsResolved || 0)}}</span>
+    <span>Team Size: <strong>{{getWeekTeamWeekData(data.xKey)?.teamSize || 0}}</strong></span>
+    <span>Per Team Member: {{formatMetric((getWeekTeamWeekData(data.xKey)?.ticketsResolved || 0) / (getWeekTeamWeekData(data.xKey)?.teamSize || 1))}}</span>
+  </div>
+</ng-template>

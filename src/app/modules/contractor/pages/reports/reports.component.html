@@ -1,0 +1,72 @@
+<div class="section__header section__header--aligned">
+  Reports
+</div>
+
+<div class="page-content padding-aligned page-scroll">
+  <app-page-alert
+    *ngIf="error"
+    [text]="error"
+    class="my-3"></app-page-alert>
+  <div class="row justify-content-center">
+    <div class="col-xl-4 col-lg-6 col-md-8 p-0">
+      <form [formGroup]="form" (ngSubmit)="downloadReports()">
+        <df-card>
+          <df-card-content class="d-flex flex-column">
+            <label>
+              Type
+            </label>
+            <df-select formControlName="type">
+              <df-option *ngFor="let report of availableReports; let i = index" [value]="i">
+                {{report}}
+              </df-option>
+            </df-select>
+
+            <ng-template [ngIf]="form.value.type != reportsTypes.loggedHoursReportOrder">
+              <label class="mt-3">
+                Activity
+              </label>
+              <df-select formControlName="activity">
+                <df-option *ngFor="let activity of activities; let i = index" [value]="activity">
+                  {{activity}}
+                </df-option>
+              </df-select>
+              <p class="text-muted" *ngIf="activitiesDescription[form.value.activity]">
+                {{activitiesDescription[form.value.activity].hint}}
+              </p>
+              <p class="clickable-text" (click)="openActivityInfoModal(activitiesDescription[form.value.activity.toLowerCase()])">
+                Read more...
+              </p>
+            </ng-template>
+
+            <label class="mt-3">
+              Period
+            </label>
+            <df-datepicker formControlName="date"
+                           [formatFn]="weekFormatFn"
+                           [direction]="-2">
+            </df-datepicker>
+            <ng-template [ngIf]="form.value.type != reportsTypes.individualReportOrder">
+              <label class="mt-3">
+                Teams
+              </label>
+              <app-teams-selector *ngIf="!isTeamsLoading" [teams]="activeTeams" (change)="form.controls['selectedTeams'].setValue($event)"></app-teams-selector>
+
+              <div *ngIf="isTeamsLoading" class="d-flex justify-content-center">
+                <i class="df-loader"></i>
+              </div>
+            </ng-template>
+
+          </df-card-content>
+          <df-card-footer>
+            <button class="m-auto"
+                    type="submit"
+                    df-button
+                    [disabled]="isTeamsLoading || (form.value.type != reportsTypes.individualReportOrder && form.value.selectedTeams.length === 0)">
+              Download
+            </button>
+          </df-card-footer>
+        </df-card>
+      </form>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,13 @@
+<div class="df-loader-container"
+*ngIf="isLoading; else loadedContent">
+<i class="df-loader"></i>
+</div>
+<ng-template #loadedContent>
+    <app-page-alert *ngIf="error"
+      [text]="error"
+      class="m-3">
+  </app-page-alert>
+  <div *ngIf="noOpenApplications" class="container-fluid">
+    <div class="m-3 note note--info"> You have no open job applications. </div>
+  </div>
+  </ng-template>

@@ -1,0 +1,28 @@
+export const SAMPLE_EARNINGS = [
+  {
+    'team': 'Eng.CoreSEM',
+    'platform': 'PAYONEER',
+    'workedHours': 13,
+    'manualHours': 0,
+    'disputedHours': 0,
+    'paidHours': 13,
+    'weeklyHourLimit': 40,
+    'amount': 650.00,
+    'status': 'CURRENT',
+    'periodStartDate': '2018-06-11',
+    'periodEndDate': '2018-06-17',
+  },
+  {
+    'team': 'Eng.CoreSEM',
+    'platform': 'PAYONEER',
+    'workedHours': 28.16666666666667,
+    'manualHours': 0,
+    'disputedHours': 0,
+    'paidHours': 28.16666666666667,
+    'weeklyHourLimit': 40,
+    'amount': 1408.333333333334,
+    'status': 'PENDING',
+    'periodStartDate': '2018-06-04',
+    'periodEndDate': '2018-06-10',
+  },
+];

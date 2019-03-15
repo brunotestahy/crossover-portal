@@ -1,0 +1,87 @@
+<div class="section__header section__header--aligned d-flex align-items-center justify-content-between flex-wrap flex-md-nowrap">
+  <span class="mb-2 mb-md-0 w-100">Team Performance Report</span>
+</div>
+<div class="page-content">
+  <div class="df-loader-container"
+       *ngIf="isLoading; else loadedContent">
+    <i class="df-loader"></i>
+  </div>
+  <ng-template #loadedContent>
+    <df-card class="p-4">
+      <app-page-alert *ngIf="error"
+                      [text]="error"
+                      class="mb-3">
+      </app-page-alert>
+      <app-page-info *ngIf="info"
+                     [text]="info"
+                     class="mb-3">
+      </app-page-info>
+      <form [formGroup]="form"
+            class="standard-form d-flex flex-column flex-md-row mb-md-4">
+        <div class="d-flex flex-wrap">
+          <div class="form-field flex-column col-12 col-md-auto p-0 mr-md-4 mb-4 mb-md-0"
+               *ngIf="isAdmin">
+            <label>
+            Company
+          </label>
+            <div class="w-100">
+              <df-select formControlName="company"
+                         filterable="true">
+                <df-option value="All Companies"
+                           [selected]="true">
+                  All Companies
+                </df-option>
+                <df-option *ngFor="let company of companies"
+                           [value]="company">
+                  {{ company.name }}
+                </df-option>
+              </df-select>
+            </div>
+          </div>
+          <div class="form-field flex-column col-12 col-md-auto p-0 mr-md-4 mb-4 mb-md-0"
+               *ngIf="!isAdmin">
+            <label>
+            Team
+          </label>
+            <div class="w-100">
+              <df-select formControlName="company"
+                         filterable="true">
+                <df-option value="All Teams"
+                           [selected]="true">
+                  All Teams
+                </df-option>
+                <df-option *ngFor="let team of teams"
+                           [value]="team">
+                  {{ team.name }}
+                </df-option>
+              </df-select>
+            </div>
+          </div>
+          <div class="form-field flex-column col-12 col-md-auto p-0 mb-4 mb-md-0">
+            <label>
+            Granularity
+          </label>
+            <div class="w-100">
+              <df-select formControlName="period"
+                         (change)="periodChange($event)"
+                         [(ngModel)]="selectedGranularity">
+                <df-option *ngFor="let p of peroid"
+                           value="{{p.value}}">
+                  {{p.label}}
+                </df-option>
+              </df-select>
+            </div>
+          </div>
+        </div>
+      </form>
+      <div class="w-100 d-flex">
+        <button df-button
+                [loading]="isDownloading"
+                class="btn-primary col-auto"
+                (click)="downloadCsv()">
+        <span>Download CSV</span>
+      </button>
+      </div>
+    </df-card>
+  </ng-template>
+</div>

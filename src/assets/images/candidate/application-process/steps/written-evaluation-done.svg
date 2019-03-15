@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="74px" height="74px" viewBox="0 0 74 74" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 42 (36781) - http://www.bohemiancoding.com/sketch -->
+    <title>Icon Written Evaluation</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Desktop-HD" transform="translate(-420.000000, -39.000000)" fill-rule="nonzero">
+            <g id="Icon-Written-Evaluation" transform="translate(420.000000, 39.000000)">
+                <g id="Page-1" opacity="0.799999952">
+                    <g>
+                        <g id="Techtrial---Instructions">
+                            <g id="First-tab">
+                                <g id="Content">
+                                    <g id="Icon-Written-Evaluation">
+                                        <g id="Layer_1">
+                                            <circle id="Oval" fill-opacity="0.408769248" fill="#FFCA4F" cx="37" cy="37" r="37"></circle>
+                                            <polygon id="Shape" fill="#FFFFFF" points="40.8685149 33.1314851 30.7869307 23.0645545 27.4752475 26.3762376 16.5144555 57.4855447 47.6237624 46.5247525 50.9354455 43.2130693"></polygon>
+                                            <polygon id="Shape" fill-opacity="0.200000003" fill="#324A5E" points="20.7932673 45.3524752 16.5144555 57.4855447 28.6475248 53.2067326"></polygon>
+                                            <path d="M27.4752475,26.3762376 L51.0819802,2.78415841 C52.6059406,3.39960396 54.0859403,4.13227723 55.5366337,4.98217822 L34.1132673,26.3908911 L27.4752475,26.3762376 Z" id="Shape" fill="#FFC99E"></path>
+                                            <g id="Group" transform="translate(33.996040, 4.835644)">
+                                                <path d="M13.6277228,35.0510891 L35.0510891,13.6277228 C35.8863366,15.0637624 36.6190099,16.5437624 37.2344555,18.0677228 L13.6277228,41.6891089 L13.6277228,35.0510891 Z" id="Shape" fill="#FAC198"></path>
+                                                <path d="M0.117227723,21.5552475 L21.5259406,0.131881188 C24.2514851,1.71445545 26.830495,3.66336634 29.160396,6.00792077 L6.87247525,28.2958416 L0.117227723,28.2958416 L0.117227723,21.5552475 Z" id="Shape" fill-opacity="0.868914176" fill="#FABC93"></path>
+                                            </g>
+                                            <path d="M40.8685149,33.1314851 L63.1564359,10.8435644 C65.4863365,13.1734654 67.4499011,15.7524752 69.0324751,18.4780198 L47.6237624,39.8867327 L40.8685149,39.8867327 L40.8685149,33.1314851 Z" id="Shape" fill-opacity="0.270000011" fill="#FF7058"></path>
+                                        </g>
+                                    </g>
+                                </g>
+                            </g>
+                        </g>
+                    </g>
+                </g>
+                <circle id="Oval" fill="#FDFDFD" style="mix-blend-mode: color;" cx="37" cy="37" r="37"></circle>
+            </g>
+        </g>
+    </g>
+</svg>

@@ -1,0 +1,11 @@
+<div class="d-flex align-items-center">
+  <i class="fa fa-chevron-left p-2 pointer"
+     (click)="previous()"></i>
+  <df-datepicker [formControl]="dateControl"
+                 [formatFn]="dateFormatFn"
+                 [direction]="-2" class="dashboard-datepicker">
+  </df-datepicker>
+  <i class="fa fa-chevron-right p-2 pointer"
+     (click)="next()"
+     *ngIf="showNext()"></i>
+</div>

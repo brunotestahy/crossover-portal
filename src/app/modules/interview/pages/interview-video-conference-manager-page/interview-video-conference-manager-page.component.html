@@ -1,0 +1,118 @@
+<div class="df-loader-container"
+     *ngIf="isLoading; else loadedContent">
+  <i class="df-loader"></i>
+</div>
+<ng-template #loadedContent>
+  <div class="section__header">
+    Interview for {{interview.selection.marketplaceMember.application.job.title}}
+  </div>
+  <div class="page-scroll">
+    <div class="container-fluid my-3">
+      <app-page-alert [text]="error"
+                      *ngIf="error"
+                      class="my-3"></app-page-alert>
+      <df-card>
+        <df-card-content>
+          <div class="row">
+            <div class="col-md-8">
+              <div class="d-flex flex-wrap">
+                <img [src]="interview.interviewee.photoUrl"
+                     class="mr-2">
+                <div>
+                  <h5>{{interview.interviewee.printableName}}</h5>
+                  <div>
+                    <i class="fa fa-fw fa-map-marker"></i> {{interview.interviewee.location.country.name}}
+                  </div>
+                  <div>
+                    <i class="fa fa-fw fa-clock-o"></i> {{candidateTime$ | async}} (UTC {{interview.interviewee.location.timeZone.hourlyOffset}})
+                  </div>
+                  <div>
+                    <span class="fake-link">View Profile</span>
+                  </div>
+                </div>
+
+              </div>
+
+            </div>
+            <div class="col-md-4 text-center">
+              <a [href]="interview.zoomJoinUrl"
+                 target="_blank"
+                 class="my-3 d-block">
+                <button df-button
+                        theme="info"
+                        class="w-100 w-md-auto"
+                        type="button">
+                  Go to Interview Room
+                </button>
+              </a>
+              <div>
+                <i class="fa fa-clock-o"></i>
+                <ng-container *ngIf="!(interviewHasStarted$ | async); else interviewHasStarted">Your interview starts {{timeToInterview$ | async}}</ng-container>
+                <ng-template #interviewHasStarted>Your interview started {{timeToInterview$ | async}}</ng-template>
+              </div>
+            </div>
+          </div>
+          <hr>
+          <form class="standard-form"
+                [formGroup]="form"
+                (submit)="rateCandidate()">
+            <div class="interview-timeline">
+              <div class="p-relative">
+                <div class="interview-step"></div>
+                <h5>Rate Candidate</h5>
+                <div class="row  text-center">
+                  <div class="col-md-4 mb-3">
+                    <div class="mb-3">Culture Fit</div>
+                    <df-star-rating formControlName="cultureFit"
+                                    class="d-inline-block"
+                                    size="md"
+                                    [disabled]="form.value.interviewDidntTakePlace"
+                                    [max]="5"
+                                    [color]="blue"></df-star-rating>
+                  </div>
+                  <div class="col-md-4 mb-3">
+                    <div class="mb-3">Attitude/Professionalism</div>
+                    <df-star-rating formControlName="attitudeProfessionalism"
+                                    class="d-inline-block"
+                                    size="md"
+                                    [disabled]="form.value.interviewDidntTakePlace"
+                                    [max]="5"
+                                    [color]="blue"></df-star-rating>
+                  </div>
+                  <div class="col-md-4 mb-3">
+                    <div class="mb-3">Relevant Knowledge/Experience</div>
+                    <df-star-rating formControlName="knowledgeExperience"
+                                    class="d-inline-block"
+                                    size="md"
+                                    [disabled]="form.value.interviewDidntTakePlace"
+                                    [max]="5"
+                                    [color]="blue"></df-star-rating>
+                  </div>
+                </div>
+              </div>
+              <div class="p-relative">
+                <div class="interview-step"></div>
+                <h5>Leave Interview Feedback</h5>
+                <df-input-container label="Add feedback on the candidate you interviewed">
+                  <textarea formControlName="feedback"></textarea>
+                </df-input-container>
+                <df-validation-messages controlName="feedback"></df-validation-messages>
+              </div>
+            </div>
+            <div class="text-right">
+              <df-checkbox formControlName="interviewDidntTakePlace"
+                           class="d-inline-block ml-auto">Interview didn't take place</df-checkbox>
+            </div>
+            <div class="text-right">
+              <button type="submit"
+                      class="ml-auto w-100 w-md-auto"
+                      df-button
+                      theme="info"
+                      [disabled]="form.invalid">Continue</button>
+            </div>
+          </form>
+        </df-card-content>
+      </df-card>
+    </div>
+  </div>
+</ng-template>

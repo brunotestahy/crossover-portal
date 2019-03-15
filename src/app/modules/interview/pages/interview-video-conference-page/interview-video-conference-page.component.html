@@ -1,0 +1,54 @@
+<div class="df-loader-container"
+     *ngIf="isLoading; else loadedContent">
+  <i class="df-loader"></i>
+</div>
+<ng-template #loadedContent>
+  <div class="section__header">
+    Interview with {{interview?.selection?.manager?.printableName}}
+    from {{interview?.selection?.manager?.company?.name}}
+    for {{interview?.selection?.marketplaceMember?.application?.job?.title}}
+  </div>
+  <div class="page-scroll">
+    <div class="container-fluid padding-aligned my-3">
+      <app-page-alert [text]="error"
+                      *ngIf="error"
+                      class="my-3"></app-page-alert>
+      <a *ngIf="interview?.zoomJoinUrl"
+         [href]="interview?.zoomJoinUrl"
+         target="_blank"
+         class="my-3 d-block">
+        <button df-button
+                theme="info"
+                class="w-100 w-md-auto"
+                type="button">
+          Start Interview
+        </button>
+      </a>
+      <h4>Location</h4>
+      <div class="row">
+        <div class="col-lg-6 mb-2">
+          <df-card>
+            <df-card-title class="d-flex p-3 bg-au-neutral-4 au-white">
+              <span>Your Hiring Manager Time Zone</span>
+            </df-card-title>
+            <df-card-content>
+              {{interview?.selection?.manager?.location?.timeZone?.name}}
+              <br> GMT {{interview?.selection?.manager?.location?.timeZone?.hourlyOffset}}
+            </df-card-content>
+          </df-card>
+        </div>
+        <div class="col-lg-6">
+          <df-card>
+            <df-card-title class="d-flex p-3 bg-au-neutral-4 au-white">
+              <span>Your Time Zone</span>
+            </df-card-title>
+            <df-card-content>
+              {{interview?.interviewee?.location?.timeZone?.name}}
+              <br> GMT {{interview?.interviewee?.location?.timeZone?.hourlyOffset}}
+            </df-card-content>
+          </df-card>
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-template>

@@ -1,0 +1,58 @@
+<form [formGroup]="form" class="container-fluid standard-form" (submit)="onSubmit()">
+  <div formGroupName="location">
+    <label>Country</label>
+    <df-select
+      (change)="onCountryChange()"
+      formControlName="country">
+      <df-option
+        *ngFor="let country of countries"
+        [value]="country"
+        [displayText]="country.name">
+          {{country.name}}
+      </df-option>
+    </df-select>
+    <df-validation-messages [control]="form.get('location.country')"></df-validation-messages>
+  </div>
+  <div formGroupName="location">
+    <label>City</label>
+    <df-input-container>
+      <input type="text" formControlName="city">
+    </df-input-container>
+    <df-validation-messages [control]="form.get('location.city')"></df-validation-messages>
+  </div>
+  <div formGroupName="location">
+    {{ form.value.country?.timezones }}
+    <label>Time zone</label>
+    <df-select formControlName="timeZone">
+      <df-option [value]="null" displayText="-- Please choose time zone --">
+        -- Please choose time zone --
+      </df-option>
+      <df-option
+        *ngFor="let timezone of form.value.location?.country?.timezones"
+        [value]="timezone"
+        [displayText]="timezone.name + ' ' + timezone.hourlyOffset">
+          {{timezone.name + ' ' + timezone.hourlyOffset}}
+      </df-option>
+    </df-select>
+    <df-validation-messages [control]="form.get('location.timeZone')"></df-validation-messages>
+  </div>
+  <div>
+    <label>Industry</label>
+    <df-select formControlName="industry">
+      <df-option [value]="null" displayText="-- Please select industry --">
+        -- Please select industry --
+      </df-option>
+      <df-option
+        *ngFor="let industry of industries"
+        [value]="industry"
+        [displayText]="industry.name">
+        {{industry.name}}
+      </df-option>
+    </df-select>
+    <df-validation-messages [control]="form.get('industry')"></df-validation-messages>
+  </div>
+  <div class="d-flex">
+    <button class="mr-2" type="submit" df-button theme="info">Save</button>
+    <button class="mr-2" type="button" df-button theme="danger" (click)="cancel.emit()">Cancel</button>
+  </div>
+</form>

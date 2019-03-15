@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="38px" height="38px" viewBox="0 0 38 38" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 41.2 (35397) - http://www.bohemiancoding.com/sketch -->
+    <title>Pools Icon</title>
+    <desc>Created with Sketch.</desc>
+    <defs>
+        <linearGradient x1="50%" y1="0%" x2="50%" y2="97.4509726%" id="linearGradient-1">
+            <stop stop-color="#5EC9FF" offset="0%"></stop>
+            <stop stop-color="#1EA9F0" offset="100%"></stop>
+        </linearGradient>
+        <path d="M0,22.2076471 L1.91024631,16.4786802 C0.941537607,14.8495956 0.382758074,12.9464374 0.382758074,10.9133305 C0.382758074,4.88430017 5.27001162,0 11.2966793,0 C17.3233469,0 22.2106004,4.88430017 22.2106004,10.9133305 C22.2106004,16.9399981 17.3233469,21.8272517 11.2966793,21.8272517 C9.46263015,21.8272517 7.73667477,21.3724311 6.21804667,20.5720651 L0,22.2076471 Z M14.0607211,10.1137236 C14.0607211,9.90419877 14.2263093,9.73434535 14.4331045,9.73434535 L16.2120568,9.73434535 C16.4177185,9.73434535 16.5844402,9.90228266 16.5844402,10.1137236 L16.5844402,14.4024054 C16.5844402,14.6119303 16.418852,14.7817837 16.2120568,14.7817837 L14.4331045,14.7817837 C14.2274428,14.7817837 14.0607211,14.6138464 14.0607211,14.4024054 L14.0607211,10.1137236 Z M10.0948767,7.59648986 C10.0948767,7.38338324 10.2604649,7.21062619 10.4672601,7.21062619 L12.2462124,7.21062619 C12.4518741,7.21062619 12.6185958,7.3829857 12.6185958,7.59648986 L12.6185958,14.39592 C12.6185958,14.6090266 12.4530076,14.7817837 12.2462124,14.7817837 L10.4672601,14.7817837 C10.2615984,14.7817837 10.0948767,14.6094242 10.0948767,14.39592 L10.0948767,7.59648986 Z M6.12903226,11.1962011 C6.12903226,10.9861883 6.29462052,10.8159393 6.50141571,10.8159393 L8.28036797,10.8159393 C8.48602967,10.8159393 8.65275142,10.9863467 8.65275142,11.1962011 L8.65275142,14.4015218 C8.65275142,14.6115347 8.48716316,14.7817837 8.28036797,14.7817837 L6.50141571,14.7817837 C6.29575401,14.7817837 6.12903226,14.6113763 6.12903226,14.4015218 L6.12903226,11.1962011 Z" id="path-2"></path>
+        <filter x="-50%" y="-50%" width="200%" height="200%" filterUnits="objectBoundingBox" id="filter-3">
+            <feOffset dx="-1" dy="1" in="SourceAlpha" result="shadowOffsetOuter1"></feOffset>
+            <feGaussianBlur stdDeviation="0.5" in="shadowOffsetOuter1" result="shadowBlurOuter1"></feGaussianBlur>
+            <feColorMatrix values="0 0 0 0 0   0 0 0 0 0   0 0 0 0 0  0 0 0 0.22 0" type="matrix" in="shadowBlurOuter1"></feColorMatrix>
+        </filter>
+    </defs>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Opened-app_Polls-App_final" transform="translate(-553.000000, -16.000000)">
+            <g id="Header" transform="translate(0.000000, -1.000000)">
+                <g id="Dropdown-win" transform="translate(553.000000, 17.000000)">
+                    <g id="Apps_DropDown">
+                        <g id="Frame">
+                            <g id="Pools-Icon">
+                                <rect id="icon_bg" fill="url(#linearGradient-1)" x="0" y="0" width="38" height="38" rx="8.4825"></rect>
+                                <g id="Icon" transform="translate(7.823529, 7.450980)">
+                                    <g id="Combined-Shape">
+                                        <use fill="black" fill-opacity="1" filter="url(#filter-3)" xlink:href="#path-2"></use>
+                                        <use fill="#FFFFFF" fill-rule="evenodd" xlink:href="#path-2"></use>
+                                    </g>
+                                </g>
+                            </g>
+                        </g>
+                    </g>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

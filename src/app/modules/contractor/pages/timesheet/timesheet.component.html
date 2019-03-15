@@ -1,0 +1,111 @@
+<div class="section__header section__header--aligned">
+  Timesheet
+</div>
+<div class="page-content padding-aligned page-scroll">
+  <app-page-alert *ngIf="error"
+                  [text]="error"
+                  class="my-3"></app-page-alert>
+  <div *ngIf="isTimeSheetAvailable">
+    <df-card>
+      <df-card-content class="row">
+        <div class="d-flex justify-content-end align-items-center mr-3">
+          <app-my-dashboard-datepicker [view]="'week'"
+                                       [date]="currentDate"
+                                       (update)="onDateChange($event)"></app-my-dashboard-datepicker>
+        </div>
+      </df-card-content>
+    </df-card>
+    <df-card class="my-3">
+      <div class="df-loader-container"
+           *ngIf="loadState.component">
+        <i class="df-loader"></i>
+      </div>
+      <df-card-content *ngIf="!loadState.component"
+                       class="d-flex flex-column">
+        <df-grid [value]="teamTimesheet"
+                 [responsive]="true"
+                 id="timesheetGrid">
+          <df-grid-column header="Team Member">
+            <ng-template dfGridTemplate="body"
+                         let-col
+                         let-item="rowData">
+              <div [dfToolTip]="getTooltipText(item.lastDay)"
+                   dfToolTipPlacement="top"
+                   container="body"
+                   [disabled]="!item.leftTeam">
+                <div class="user-cell row"
+                     [class.disabled-user]="item.leftTeam">
+                  <div class="col-4 px-3 justify-content-center d-flex">
+                    <img class="align-self-center"
+                         [src]="item.photoUrl || '/assets/images/user.png'">
+                  </div>
+                  <div class="col-8 px-0 d-flex flex-column justify-content-center">
+                    <a (click)="$event.preventDefault(); showContractorModal(item, profileModal,'Summary')"
+                       href="#">{{item.name}}</a>
+                    <div>
+                      <i class="fa fa-map-marker mr-2"></i>{{item.country}}</div>
+                  </div>
+                </div>
+                <div class="tablet-cell px-3 text-left d-flex flex-column"
+                     [class.disabled-user]="item.leftTeam">
+                  <a (click)="$event.preventDefault(); showContractorModal(item, profileModal,'Summary')"
+                     href="#">{{item.name}}</a>
+                  <div>
+                    <i class="fa fa-map-marker mr-2"></i>{{item.country}}</div>
+                </div>
+              </div>
+            </ng-template>
+          </df-grid-column>
+          <df-grid-column *ngFor="let day of days; let i = index"
+                          [header]="day">
+            <ng-template dfGridTemplate="body"
+                         let-col
+                         let-item="rowData">
+              <div [dfToolTip]="getTooltipText(item.lastDay)"
+                   dfToolTipPlacement="top"
+                   container="body"
+                   [disabled]="!item.leftTeam">
+                <div class="d-flex flex-column justify-content-center weekday-cell pointer {{getHoursClassification(item.stats[i].hours)}}"
+                     [class.future-date]="isFutureDate(item.stats[i].date)"
+                     [class.disabled-user]="item.leftTeam"
+                     (click)="showContractorModal(item, profileModal,'Logbook')">
+                  {{item.stats[i].hours | formatHours :hh:mm}}
+                </div>
+              </div>
+            </ng-template>
+          </df-grid-column>
+          <df-grid-column header="Total">
+            <ng-template dfGridTemplate="body"
+                         let-col
+                         let-item="rowData">
+              <div class="total-hours">
+                {{ item.totalHours | formatHours :hh:mm}}
+              </div>
+            </ng-template>
+          </df-grid-column>
+        </df-grid>
+        <div class="d-flex justify-content-end mt-2">
+          <span>You have {{teamTimesheet.length}} member{{ teamTimesheet.length > 1 ? 's' : ''}}
+            <b>{{teamName}}</b> team
+          </span>
+        </div>
+      </df-card-content>
+    </df-card>
+  </div>
+</div>
+<ng-template #profileModal
+             let-close="close">
+  <div class="df-loader-container"
+       *ngIf="loadState.model">
+    <i class="df-loader"></i>
+  </div>
+  <app-my-dashboard-page *ngIf="!loadState.model"
+                         [includeProfile]="true"
+                         [option]="preselectedTab"
+                         [managerControl]="true"
+                         [assignmentId]="currentUserAssignmentId"
+                         [manager]="currentUserManager"
+                         [teamId]="currentUserTeamId"
+                         (close)="close()"
+                         [userDetail]="currentContractor"></app-my-dashboard-page>
+</ng-template>

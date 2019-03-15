@@ -1,0 +1,137 @@
+<div class="section__header section__header--aligned">
+  Metrics
+</div>
+
+<div class="page-content padding-aligned page-scroll">
+  <app-page-alert *ngIf="error !== ''"
+                  [text]="error"
+                  class="my-3"></app-page-alert>
+  <div *ngIf="isAppAvailable">
+    <df-card class="overflow-visible">
+      <df-card-content [class.disabled-card]="!hasMetricSetting">
+        <div class="row">
+          <div class="d-flex col-12 col-lg-6 flex-wrap">
+            <df-group-toggle class="mt-1 mx-auto mr-lg-2 ml-lg-0"
+                              [items]="unitsCostItems"
+                              [(ngModel)]="unitsCostMode"
+                              (change)="buildInputData()">
+            </df-group-toggle>
+            <df-group-toggle *ngIf="viewMode.id === metricConstants.CHART"
+                              class="mt-1 mx-auto mr-lg-2 ml-lg-0"
+                              [items]="teamIndividualItems"
+                              [(ngModel)]="teamIndividualMode">
+            </df-group-toggle>
+            <df-group-toggle class="mt-1 mx-auto mr-lg-2 ml-lg-0"
+                              [items]="viewModeItems"
+                              [(ngModel)]="viewMode"
+                              (change)="buildInputData()">
+            </df-group-toggle>
+          </div>
+          <div class="d-flex col-12 col-lg-6 flex-wrap justify-content-end ml-auto mt-3 mt-lg-0">
+            <button df-button
+                    theme="light"
+                    class="mx-auto mr-lg-2 ml-lg-0 align-self-center"
+                    type="button"
+                    container="body"
+                    (click)="downloadCsv()"
+                    dfToolTipColor="dark"
+                    dfToolTip="Download CSV"
+                    dfToolTipPlacement="bottom">
+              <i class="fa fa-download"></i>
+            </button>
+            <button *ngIf="hasMetricSetting"
+                    df-button
+                    theme="light"
+                    [ngClass]="updateMetricsBtn.isDisabled ? 'disabled-refresher' : ''"
+                    (click)="updateMetricsBtn.isDisabled ? false : update()"
+                    class="mx-auto mr-lg-2 ml-lg-0 align-self-center"
+                    type="button"
+                    container="body"
+                    dfToolTipColor="dark"
+                    dfToolTip="Refresh metrics. You can do this once every 10 minutes."
+                    dfToolTipPlacement="bottom">
+              <i class="fa fa-refresh"></i>
+            </button>
+            <button *ngIf="metricAuthorization.canSaveMetrics"
+                    df-button
+                    theme="light"
+                    (click)="openSettingsModal()"
+                    class="mx-auto mr-lg-2 ml-lg-0 align-self-center"
+                    type="button">
+              <i class="fa fa-cog"></i>
+              Settings
+            </button>
+            <div class="mx-auto mr-lg-0 ml-lg-0 d-flex justify-content-center align-items-center mt-1 mt-lg-0 option-select">
+              <df-select class="w-100"
+                          [formControl]="queryOption">
+                <df-option *ngFor="let option of queryOptions"
+                            [value]="option.value"
+                            [displayText]="option.text">
+                </df-option>
+              </df-select>
+            </div>
+          </div>
+        </div>
+      </df-card-content>
+    </df-card>
+    <df-card class="mt-2 overflow-visible">
+      <div class="df-loader-container"
+            *ngIf="isLoading">
+        <i class="df-loader"></i>
+      </div>
+      <df-card-content *ngIf="!isLoading && noSettings">
+        <div class="d-flex flex-column text-center justify-content-center">
+          <h6 class="mt-3">Track the metric of your team on Crossover.</h6>
+          <h6 class="mb-3">Connect Crossover to your preferred metric source and track the productivity and efficiency of your team members over time.</h6>
+          <button *ngIf="hasMetricSetting || metricAuthorization.canEditMetrics"
+                  df-button
+                  df-large-button
+                  class="w-100 w-md-75 align-self-center"
+                  theme="primary"
+                  (click)="openSettingsModal()"
+                  type="button">
+            Open Metrics Settings
+          </button>
+          <div *ngIf="!hasMetricSetting && !metricAuthorization.canEditMetrics"
+               dfToolTipColor="dark"
+               dfToolTip="Please contact the team owner or company administrator to set up the team's metric."
+               dfToolTipPlacement="right"
+               class="w-100 w-md-75 align-self-center">
+            <button df-button
+                    df-large-button
+                    class="w-100"
+                    theme="primary"
+                    type="button"
+                    disabled>
+              Open Metrics Settings
+            </button>
+          </div>
+        </div>
+        <div class="d-flex justify-content-end mt-2">
+          <span>You have {{assignments.length}} member(s) in <strong>{{team.name}}</strong> team</span>
+        </div>
+      </df-card-content>
+
+
+      <ng-container *ngIf="!isLoading && !noSettings; then templateIfTrue"></ng-container>
+
+      <ng-template #templateIfTrue>
+        <app-metric-chart *ngIf="viewMode.id === metricConstants.CHART"
+                          [metricInputData]="metricInputData"
+                          [teamIndividualMode]="teamIndividualMode">
+        </app-metric-chart>
+        <app-metric-table *ngIf="viewMode.id === metricConstants.TABLE"
+                          [metricInputData]="metricInputData">
+        </app-metric-table>
+      </ng-template>
+    </df-card>
+  </div>
+</div>
+
+<ng-template #settingsModal
+             let-close="close">
+  <app-team-metrics-settings class="text-left"
+                             (close)="close()"
+                             (update)="updateMetricsPage()"></app-team-metrics-settings>
+</ng-template>
+

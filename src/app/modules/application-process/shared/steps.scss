@@ -1,0 +1,28 @@
+.step__image {
+  background-repeat: no-repeat;
+  background-position: center;
+  min-height: 78px;
+  min-width: 78px;
+
+  &.create-basic-profile {
+    background-image: url('/assets/images/candidate/application-process/steps/create-basic-profile.svg');
+  }
+  &.technical-screen {
+    background-image: url('/assets/images/candidate/application-process/steps/technical-screen.svg');
+  }
+  &.written-evaluation {
+    background-image: url('/assets/images/candidate/application-process/steps/written-evaluation.svg');
+  }
+  &.project-evaluation {
+    background-image: url('/assets/images/candidate/application-process/steps/project-evaluation.svg');
+  }
+  &.meet-your-advocate {
+    background-image: url('/assets/images/candidate/application-process/steps/meet-advocate.svg');
+  }
+  &.marketplace {
+    background-image: url('/assets/images/candidate/application-process/steps/marketplace.svg');
+  }
+  &.manager-interviews {
+    background-image: url('/assets/images/candidate/application-process/steps/managerhire.svg');
+  }
+}

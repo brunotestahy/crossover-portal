@@ -1,0 +1,312 @@
+button[df-button].df-button {
+  &.primary {
+    background-color: $au-blue;
+  }
+  &.success {
+    background-color: $au-green;
+    &:hover {
+      background-color: darken($au-green, 8%);
+    }
+  }
+  &.danger {
+    background-color: $au-red;
+    &:hover {
+      background-color: darken($au-red, 8%);
+    }
+  }
+  &.info {
+    background-color: $au-blue;
+    &:hover {
+      background-color: darken($au-blue, 8%);
+    }
+  }
+  &.warning {}
+  &.light {}
+}
+
+button[df-button].df-button--clear {
+  background-color: transparent;
+  &.primary,
+  &.info,
+  &.warning,
+  &.danger {
+    background-color: transparent;
+  }
+}
+
+.df-toast-container {
+  padding: 0;
+  margin: 15px;
+}
+
+df-toast {
+  &.success {
+    background-color: $au-green;
+    &:hover {
+      background-color: $au-green;
+    }
+  }
+  &.danger {
+    background-color: $au-red;
+    &:hover {
+      background-color: $au-red;
+    }
+  }
+  &.info {
+    background-color: $au-blue;
+    &:hover {
+      background-color: $au-blue;
+    }
+  }
+}
+
+.df-button.df-button--loader-after .df-button-loader,
+a[df-button].df-button--loader-after .df-button-loader,
+button[df-button].df-button--loader-after .df-button-loader {
+  top: 50%;
+  margin-top: -0.575em;
+}
+
+.df-modal {
+  white-space: normal;
+}
+
+df-user-profile div.d-flex.justify-content-between>.df-user-profile__img-container::before {
+  display: none;
+}
+
+.df-bubble-wizard__item {
+  cursor: pointer;
+}
+
+.df-select-wrapper .df-select__filter--shadow-box {
+  min-width: auto;
+}
+
+
+
+.df-grid-column--sortable__icon {
+  margin-left: 0;
+  position: absolute;
+  left: 5px;
+  top: 8.5px;
+}
+
+.df-grid-column--sortable {
+  position: relative;
+  .df-grid-column__title {
+    display: inline-block;
+    position: relative;
+    margin-left: 19px;
+    top: 0;
+  }
+}
+.df-grid__row--header {
+  vertical-align: top;
+  height: auto;
+  padding: 8.5px 8.5px;
+}
+
+.df-grid__data {
+  word-wrap: break-word;
+
+}
+
+.df-grid-table-body__cell-data, .df-grid-column-footer {
+  padding-left: 4px;
+  padding-right: 4px;
+  display: block;
+}
+
+.df-grid {
+  overflow-x: auto;
+}
+
+.df-grid .df-grid__table {
+  table-layout: fixed;
+}
+
+.df-grid-table-body__cell-data {
+  flex-grow: 1;
+}
+
+@media screen and (max-width: $breakpoint-md - 1px) {
+  .df-grid--reflow .df-grid-table-body__cell {
+    align-items: center;
+  }
+}
+
+
+@media screen and (max-width: $breakpoint-md - 1px) {
+  .df-grid-scrollable-view__table {
+    table-layout: auto !important;
+  }
+
+  .df-grid--reflow .df-grid-table-body__cell {
+    float: none;
+    clear: none;
+    display: flex;
+  }
+}
+
+.df-grid__row--data {
+  &:nth-child(even) {
+    background-color: lighten(map-get($map: $au-gray, $key: 2), 10%);
+  }
+}
+
+.df-grid-column-footer__cell {
+  padding-top: 10px !important;
+  padding-bottom: 10px !important;
+}
+
+.df-alert__box__buttons {
+  justify-content: flex-end;
+}
+
+.df-alert__box__content {
+  flex: 1;
+}
+
+.df-radio-input__label {
+  white-space: normal;
+}
+
+.df-hamburger {
+  display: block;
+  cursor: pointer;
+}
+
+.df-topbar-links--right {
+  position: relative;
+  left: 0;
+}
+
+.df-topbar {
+  flex-shrink: 0;
+}
+
+.df-portal__container--show {
+  height: auto;
+}
+
+.df-topbar-links {
+  left: 240px;
+}
+
+.df-topbar-links a {
+  display: block;
+}
+
+.df-topbar__left .left-group {
+  padding-left: 47px;
+}
+
+.product-logo {
+  cursor: pointer;
+  height: 100%;
+  text-align: left;
+  width: 190px;
+}
+
+.left-group {
+  padding-left: 47px;
+}
+
+@media screen and (max-width: $breakpoint-lg - 1px) {
+  .df-topbar-links a {
+    padding: 0 10px;
+  }
+}
+
+df-sidebar {
+  flex-shrink: 0;
+  position: relative;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  height: calc(100vh - 50px);
+}
+
+.df-sidebar {
+  height: calc(100vh - 50px);
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  @media screen and (min-width: $breakpoint-md) {
+    position: relative;
+  }
+}
+
+.df-sidebar__item__menu::before {
+  width: calc(100% + 30px);
+  left: -30px;
+}
+
+.product-logo {
+  text-align: left;
+  width: 190px;
+}
+
+.df-sidebar__item--active>a:before {
+  content: "\2022"!important;
+}
+
+// https://github.com/trilogy-group/dfproto-frontend-library/issues/987
+.cdk-overlay-container {
+  z-index: 9999;
+}
+
+df-group-toggle {
+  display: block;
+}
+
+.df-group-toggle__nav {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.df-group-toggle__item {
+  flex-grow: 1;
+  cursor: pointer;
+
+  /*This will work for firefox*/
+  @supports (-moz-appearance:none) {
+    box-shadow: 0 0 0.15rem rgba(0,0,0,0.4) !important; /*Normalize the box-shadow in the button-group*/
+  }
+  /*This will work for IE10+*/
+  @media screen and (-ms-high-contrast: active), screen and (-ms-high-contrast: none) {
+    box-shadow: 0 0 0.2rem rgba(0,0,0,0.4) !important; /*Normalize the box-shadow in the button-group*/
+  }
+  /*This will work for Edge*/
+  @supports (-ms-ime-align: auto) {
+    box-shadow: 0 0 0.8rem rgba(0,0,0,0.4) !important;
+    filter: progid:DXImageTransform.Microsoft.Blur(PixelRadius=3,MakeShadow=true,ShadowOpacity=0.30);
+    zoom: 1;
+  }
+}
+
+df-datepicker div.df-datepicker__input {
+  margin-bottom: 0;
+}
+
+.df-portal__container--bottom {
+  left: 0;
+}
+
+.df-bar {
+  .df-bar__axis text,
+  .df-bar__label {
+    fill: $au-gray-main;
+    font-size: 12px;
+  }
+}
+
+.df-timepicker__input {
+  margin-bottom: 0;
+}
+
+.df-custom-scroll::-webkit-scrollbar {
+  width: 10px;
+}

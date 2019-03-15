@@ -1,0 +1,8 @@
+<div class="my-3 container">
+  <app-markdown-viewer [markdown]="markdown$ | async"></app-markdown-viewer>
+  <form [formGroup]="form" (submit)="accept()">
+    <df-checkbox formControlName="accept">I have read this agreement and agree to the terms</df-checkbox>
+    <df-validation-messages [control]="form.get('accept')"></df-validation-messages>
+    <button type="submit" df-button theme="success">Next</button>
+  </form>
+</div>

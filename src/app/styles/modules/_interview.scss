@@ -1,0 +1,46 @@
+.inverview__slot {
+  cursor: pointer;
+  text-align: center;
+  border-width: 1px;
+  border-style: solid;
+  border-collapse: collapse;
+  border-color: map-get($au-gray, 1);
+  &--selected {
+    background-color: map-get($au-gray, 2);
+  }
+}
+
+.interview {
+  &__select-slot {
+    height: 80px;
+  }
+  &__card {
+    &__heading {
+      font-weight: 400;
+      font-size: 14px;
+      padding-bottom: 10px;
+      margin: 0 0 18px;
+      border-bottom: 1px solid;
+    }
+    &__line {
+      font-weight: 200;
+      margin-bottom: 5px;
+    }
+    &--part {
+      .interview__card__heading {
+        border-color: $au-red;
+      }
+      .interview__card__line--first {
+        color: $au-red;
+      }
+    }
+    &--counterpart {
+      .interview__card__heading {
+        border-color: $au-blue;
+      }
+      .interview__card__line--first {
+        color: $au-blue;
+      }
+    }
+  }
+}

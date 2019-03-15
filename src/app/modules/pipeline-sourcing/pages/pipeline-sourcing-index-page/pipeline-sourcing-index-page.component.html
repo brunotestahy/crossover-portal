@@ -1,0 +1,178 @@
+<div class="section__header section__header--aligned d-flex align-items-center">
+  <span class="mr-2">Pipeline Sourcing</span>
+</div>
+<div class="container-fluid page-scroll pipeline-sourcing">
+  <app-page-alert class="my-3"
+                  *ngIf="error; else noErrorTemplate"
+                  [text]="error"></app-page-alert>
+  <ng-template #noErrorTemplate>
+    <div class="df-loader-container"
+         *ngIf="isLoading; else loadedContent">
+      <i class="df-loader"></i>
+    </div>
+    <ng-template #loadedContent>
+      <df-card class="my-3">
+        <df-card-header>
+          <h5 class="my-0">Totals</h5>
+        </df-card-header>
+        <df-card-content>
+          <div class="d-flex justify-content-between flex-wrap">
+            <span class="mr-4">Total Number of Applicants: {{ total }}</span>
+            <span class="mr-4">Last day: {{ totalDay }}</span>
+            <span class="mr-4">Last 7 days: {{ totalWeek }}</span>
+            <div class="ml-auto">
+              <a routerLink="/campaign-sourcing"
+                 class="pr-4">Campaign Dashboard</a>
+              <button df-button
+                      (click)="exportCsv()">Export to CSV</button>
+            </div>
+          </div>
+        </df-card-content>
+      </df-card>
+      <df-card class="my-3">
+        <df-card-content>
+          <df-grid [value]="sourcingRow"
+                   [responsive]="isResponsive"
+                   [paginator]=true
+                   (refresh)=getJobsSourcing()
+                   [rows]=10
+                   class="table-layout-auto">
+            <df-grid-column header="Job ID"
+                            field="jobId"
+                            [sortable]="true"></df-grid-column>
+            <df-grid-column header="Job Name"
+                            field="jobName"
+                            [sortable]="true"
+                            [styleClass]="'job-name-column'">
+              <ng-template dfGridTemplate="body"
+                           let-col
+                           let-item="rowData">
+                <a [routerLink]="item.jobId">
+                  {{item.jobName}}
+                </a>
+              </ng-template>
+            </df-grid-column>
+            <df-grid-column header="Priority (1-5)"
+                            field="priority"
+                            [sortable]="true">
+              <ng-template dfGridTemplate="body"
+                           let-col
+                           let-item="rowData">
+                <df-select placeholder="1-5"
+                           class="w-100"
+                           [(ngModel)]="item.priority"
+                           (change)="onRowChange(item)">
+                  <df-option [value]="1"
+                             displayText="1">1</df-option>
+                  <df-option [value]="2"
+                             displayText="2">2</df-option>
+                  <df-option [value]="3"
+                             displayText="3">3</df-option>
+                  <df-option [value]="4"
+                             displayText="4">4</df-option>
+                  <df-option [value]="5"
+                             displayText="5">5</df-option>
+                </df-select>
+              </ng-template>
+            </df-grid-column>
+            <df-grid-column header="Days Open"
+                            field="daysOpen"
+                            [sortable]="true">
+              <ng-template dfGridTemplate="body"
+                           let-col
+                           let-item="rowData">
+                {{item.daysOpen ? item.daysOpen : '-'}}
+              </ng-template>
+            </df-grid-column>
+            <df-grid-column header="Demand"
+                            [sortable]="true"
+                            field="demand">
+              <ng-template dfGridTemplate="body"
+                           let-col
+                           let-item="rowData">
+                {{item.demand !== undefined ? item.demand : '-'}}
+              </ng-template>
+            </df-grid-column>
+            <df-grid-column header="Total #"
+                            [sortable]="true"
+                            field="total"></df-grid-column>
+            <df-grid-column header="Last Day"
+                            [sortable]="true"
+                            field="lastDay"></df-grid-column>
+            <df-grid-column header="Last 7 Days"
+                            [sortable]="true"
+                            field="last7Days"></df-grid-column>
+            <df-grid-column header="#Quality"
+                            [sortable]="true"
+                            field="quality"></df-grid-column>
+            <df-grid-column header="#Quality 1d"
+                            [sortable]="true"
+                            field="quality1d"></df-grid-column>
+            <df-grid-column header="#Quality 7d"
+                            [sortable]="true"
+                            field="quality7d"></df-grid-column>
+            <df-grid-column header="Sourcing Instructions"
+                            field="sourcingInstructions"
+                            [sortable]="true">
+              <ng-template dfGridTemplate="body"
+                           let-col
+                           let-item="rowData">
+                <df-input-container class="w-100">
+                  <input type="text"
+                         [(ngModel)]="item.sourcingInstructions"
+                         (change)="onRowChange(item)">
+                </df-input-container>
+              </ng-template>
+            </df-grid-column>
+            <df-grid-column header="JBP"
+                            field="jbp"
+                            [sortable]="true">
+              <ng-template dfGridTemplate="body"
+                           let-col
+                           let-item="rowData">
+                <df-checkbox [(ngModel)]="item.jbp"
+                             (change)="onRowChange(item)"></df-checkbox>
+              </ng-template>
+            </df-grid-column>
+            <df-grid-column header="JBP Instructions"
+                            field="jbpInstructions"
+                            [sortable]="true">
+              <ng-template dfGridTemplate="body"
+                           let-col
+                           let-item="rowData">
+                <df-input-container class="w-100">
+                  <input type="text"
+                         [(ngModel)]="item.jbpInstructions"
+                         (change)="onRowChange(item)">
+                </df-input-container>
+              </ng-template>
+            </df-grid-column>
+            <df-grid-column header="Outbound"
+                            field="outbound"
+                            [sortable]="true">
+              <ng-template dfGridTemplate="body"
+                           let-col
+                           let-item="rowData">
+                <df-checkbox [(ngModel)]="item.outbound"
+                             (change)="onRowChange(item)"></df-checkbox>
+              </ng-template>
+            </df-grid-column>
+            <df-grid-column header="Outbound Instructions"
+                            field="outboundInstructions"
+                            [sortable]="true">
+              <ng-template dfGridTemplate="body"
+                           let-col
+                           let-item="rowData">
+                <df-input-container class="w-100">
+                  <input type="text"
+                         [(ngModel)]="item.outboundInstructions"
+                         (change)="onRowChange(item)">
+                </df-input-container>
+              </ng-template>
+            </df-grid-column>
+          </df-grid>
+        </df-card-content>
+      </df-card>
+    </ng-template>
+  </ng-template>
+</div>

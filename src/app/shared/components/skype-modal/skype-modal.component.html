@@ -1,0 +1,59 @@
+<div class="skype-modal mr-2"
+     [dfToolTipShowOnClick]="true"
+     [container]="container"
+     dfToolTipColor="light"
+     dfToolTip="empty"
+     trigger="manual"
+     [dftoolTipTemplate]="skypeContent"
+     dfToolTipPlacement="top">
+  <i class="fa fa-ellipsis-v fa-2x" (click)="toggle()"></i>
+</div>
+
+<ng-template #skypeContent>
+  <div class="d-flex flex-column px-2">
+    <div dfToolTip="Please ask this person to enter their Skype ID in the profile."
+         [disabled]="skypeId"
+         dfToolTipColor="dark">
+      <button type="button"
+              [disabled]="!skypeId"
+              df-button
+              class="w-100"
+              (click)="call()"
+              theme="info">
+        <i class="fa fa-skype"></i>
+        Call on Skype
+      </button>
+    </div>
+    <div dfToolTip="Please ask this person to enter their Skype ID in the profile."
+         [disabled]="skypeId"
+         dfToolTipPlacement="bottom"
+         dfToolTipColor="dark">
+      <button type="button"
+              [disabled]="!skypeId"
+              df-button
+              class="w-100 mt-2"
+              (click)="chat()"
+              theme="info">
+        <i class="fa fa-comments"></i>
+        Chat on Skype
+      </button>
+    </div>
+    <button *ngIf="includeChangeAvatar"
+            type="button"
+            df-button
+            class="w-100 mt-2"
+            (click)="openChangeAvatarModal()"
+            theme="info">
+      <i class="fa fa-user"></i>
+      Change Avatar
+    </button>
+  </div>
+</ng-template>
+
+<ng-template #changeAvatarModal
+             let-close="close">
+  <app-change-contractor-avatar
+    [assignment]="assignment"
+    (close)="close()">
+  </app-change-contractor-avatar>
+</ng-template>

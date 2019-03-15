@@ -1,0 +1,48 @@
+<div class="au-modal-header p-3">
+  <div class="d-flex align-items-center m-0">
+    <h5>Idle Time Cards</h5>
+    <i (click)="close()"
+       class="au-modal-close fa fa-times">
+    </i>
+  </div>
+</div>
+<app-page-alert class="mt-3 ml-3 mr-3 mb-0"
+                *ngIf="error"
+                [text]="error"></app-page-alert>
+<ng-container>
+  <form class="standard-form"
+  [formGroup]="form"
+  (submit)="saveNotIdle()">
+    <div class="px-3 pt-3 text-left">
+      <p>You are marking the following idle time cards as not idle. Are you sure?</p>
+      <div class="container-fluid">
+        <div class="row">
+          <div *ngFor="let card of idleTimeCards"
+               class="col-6 col-md-4 col-lg-3">{{card.localDate | date: 'hh:mm a'}}</div>
+        </div>
+        <hr>
+        <df-input-container label="Reason*:">
+          <textarea formControlName="reason"></textarea>
+        </df-input-container>
+        <df-validation-messages controlName="reason"></df-validation-messages>
+      </div>
+
+    </div>
+    <div class="w-100 d-flex align-items-center justify-content-end p-3">
+      <button df-button
+              type="submit"
+              class="mr-2"
+              theme="success"
+              [loading]="isSaving"
+              loaderPosition="after">
+        <span>Yes</span>
+      </button>
+      <button df-button
+              type="button"
+              theme="danger"
+              (click)="close()">
+        <span>No</span>
+      </button>
+    </div>
+  </form>
+</ng-container>

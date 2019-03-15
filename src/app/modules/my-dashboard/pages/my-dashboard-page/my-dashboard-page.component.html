@@ -1,0 +1,100 @@
+<div class="section__header section__header--aligned d-flex align-items-center">
+  <span class="mr-2"
+        *ngIf="!managerControl">My Dashboard</span>
+  <span class="mr-2"
+        *ngIf="managerControl">Contractor's Dashboard</span>
+  <i (click)="onClose()"
+     *ngIf="managerControl"
+     class="au-modal-close fa fa-times">
+  </i>
+</div>
+<div class="container-fluid page-scroll d-flex flex-column p-3">
+  <app-page-alert *ngIf="error; else noErrorTemplate"
+                  [text]="error"></app-page-alert>
+  <ng-template #noErrorTemplate>
+    <div class="df-loader-container"
+         *ngIf="isLoading; else loadedContent">
+      <i class="df-loader"></i>
+    </div>
+    <ng-template #loadedContent>
+      <div>
+        <df-card class="mb-3">
+          <df-card-content>
+            <div class="row">
+              <div class="col-lg-6 mb-3 mb-lg-0">
+                <app-picture-card [userDetail]="userDetail"
+                                  [assignment]="assignment"
+                                  [managerControl]="managerControl"></app-picture-card>
+              </div>
+              <div class="col-lg-6"
+                   *ngIf="timesheets">
+                <app-time-logged [timesheets]="timesheets"></app-time-logged>
+              </div>
+            </div>
+          </df-card-content>
+        </df-card>
+        <df-card class="mb-3">
+          <df-card-content>
+            <div class="d-flex align-items-center flex-wrap">
+              <df-group-toggle [items]="getItems()"
+                               [(ngModel)]="option"
+                               (change)="onToggleChange($event)"></df-group-toggle>
+              <div *ngIf="period !== periodLabels.WEEKLY && option !== dashboardItems.METRIC"
+                   class="ml-auto d-flex align-items-center">
+                <i class="fa fa-chevron-left p-2 pointer"
+                   (click)="previousDay()"></i>
+                <df-datepicker class="daily-date-picker"
+                               [formControl]="dateControl"
+                               [formatFn]="getDailyFormat"
+                               [direction]="-2">
+                </df-datepicker>
+                <i class="fa fa-chevron-right p-2 pointer"
+                   (click)="nextDay()"
+                   *ngIf="dateControl.value < today"></i>
+              </div>
+              <div *ngIf="period === periodLabels.WEEKLY && option !== dashboardItems.METRIC"
+                   class="ml-auto d-flex align-items-center">
+                <i class="fa fa-chevron-left p-2 pointer"
+                   (click)="previousWeek()"></i>
+                <df-datepicker [formControl]="dateControl"
+                               [formatFn]="weekFormatFn"
+                               [direction]="-2">
+                </df-datepicker>
+                <i class="fa fa-chevron-right p-2 pointer"
+                   (click)="nextWeek()"
+                   *ngIf="dateControl.value < startOfThisWeek"></i>
+              </div>
+            </div>
+          </df-card-content>
+        </df-card>
+        <df-card class="overflow-initial">
+          <df-card-content>
+            <app-my-summary-page *ngIf="option === dashboardItems.SUMMARY"
+                                 [userDetail]="userDetail"
+                                 [assignmentId]="assignmentId"
+                                 [teamId]="teamId"
+                                 [managerId]="manager?.id"
+                                 [userId]="userId"></app-my-summary-page>
+            <app-my-activity-page *ngIf="option === dashboardItems.ACTIVITY"
+                                  [userDetail]="userDetail"
+                                  [assignmentId]="assignmentId"
+                                  [teamId]="teamId"
+                                  [manager]="manager"></app-my-activity-page>
+            <app-my-logbook-page *ngIf="option === dashboardItems.LOGBOOK"
+                                 [userDetail]="userDetail"
+                                 [managerControl]="managerControl"
+                                 [assignmentId]="assignmentId"></app-my-logbook-page>
+            <app-my-metric-page *ngIf="option === dashboardItems.METRIC"
+                                [userDetail]="userDetail"
+                                [assignmentId]="assignmentId"
+                                [managerControl]="managerControl"></app-my-metric-page>
+            <app-user-profile *ngIf="option === dashboardItems.PROFILE"
+                              [candidate]="userDetail"
+                              [showBodyOnly]="true"
+                              [isEditable]="false"></app-user-profile>
+          </df-card-content>
+        </df-card>
+      </div>
+    </ng-template>
+  </ng-template>
+</div>

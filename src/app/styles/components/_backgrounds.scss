@@ -1,0 +1,108 @@
+.overlay,
+.stripes {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+}
+
+.black20 {
+  background: rgba(0, 0, 0, .2);
+}
+
+.stripes {
+  background-image: linear-gradient( transparent 0, rgba(0, 0, 0, .5) 5%, rgba(0, 0, 0, .5) 5%, transparent 10%, transparent 10%, rgba(0, 0, 0, .5) 15%, rgba(0, 0, 0, .5) 15%, transparent 20%, transparent 20%, rgba(0, 0, 0, .5) 25%, rgba(0, 0, 0, .5) 25%, transparent 30%, transparent 30%, rgba(0, 0, 0, .5) 35%, rgba(0, 0, 0, .5) 35%, transparent 40%, transparent 40%, rgba(0, 0, 0, .5) 45%, rgba(0, 0, 0, .5) 45%, transparent 50%, transparent 50%, rgba(0, 0, 0, .5) 55%, rgba(0, 0, 0, .5) 55%, transparent 60%, transparent 60%, rgba(0, 0, 0, .5) 65%, rgba(0, 0, 0, .5) 65%, transparent 70%, transparent 70%, rgba(0, 0, 0, .5) 75%, rgba(0, 0, 0, .5) 75%, transparent 80%, transparent 80%, rgba(0, 0, 0, .5) 85%, rgba(0, 0, 0, .5) 85%, transparent 90%, transparent 90%, rgba(0, 0, 0, .5) 95%, rgba(0, 0, 0, .5) 95%, transparent 100%);
+  background-size: 30px 30px;
+}
+
+.full-img {
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  width: 100%;
+  position: relative;
+  color: #fff;
+}
+
+.full-img-heading-container {
+  position: relative;
+  padding: 20% 0 18%;
+}
+
+.full-img-heading {
+  font-weight: 200;
+  font-size: 59px;
+  margin-bottom: 23px;
+}
+
+.full-img-subline {
+  width: 60%;
+  margin: 24px auto;
+  font-size: 16px;
+  font-weight: 200;
+  letter-spacing: .1px;
+}
+
+.au-primary-background {
+  background: $au-primary;
+}
+
+.bg-au-blue {
+  background-color: $au-blue !important;
+}
+.bg-au-white {
+  background-color: $au-white !important;
+}
+.bg-au-green {
+  background-color: $au-green !important;
+}
+.bg-au-red {
+  background-color: $au-red !important;
+}
+.bg-au-black {
+  background-color: $au-black !important;
+}
+.bg-au-amber {
+  background-color: $au-amber !important;
+}
+.bg-au-orange {
+  background-color: $au-orange !important;
+}
+.bg-au-light-gray {
+  background-color: $au-light-gray !important;
+}
+.bg-au-gray-main {
+  background-color: $au-gray-main !important;
+}
+.bg-au-pink {
+  background-color: $au-pink !important;
+}
+.bg-au-neutral-1 {
+  background-color: map-get($au-neutral, 1) !important;
+}
+.bg-au-neutral-2 {
+  background-color: map-get($au-neutral, 2) !important;
+}
+.bg-au-neutral-3 {
+  background-color: map-get($au-neutral, 3) !important;
+}
+.bg-au-neutral-4 {
+  background-color: map-get($au-neutral, 4) !important;
+}
+.bg-au-neutral-5 {
+  background-color: map-get($au-neutral, 5) !important;
+}
+.bg-au-gray-1 {
+  background-color: map-get($au-gray, 1) !important;
+}
+.bg-au-gray-2 {
+  background-color: map-get($au-gray, 2) !important;
+}
+.bg-au-gray-3 {
+  background-color: map-get($au-gray, 3) !important;
+}
+.bg-au-gray-4 {
+  background-color: map-get($au-gray, 4) !important;
+}
+

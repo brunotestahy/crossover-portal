@@ -1,0 +1,124 @@
+<div class="container-fluid padding-aligned">
+  <app-page-alert [text]="error" *ngIf="error" class="mt-3"></app-page-alert>
+</div>
+<div class="df-loader-container" *ngIf="isLoading; else loadedContent">
+  <i class="df-loader"></i>
+</div>
+<ng-template #loadedContent>
+  <div class="hiring__heading padding-aligned mt-3" *ngIf="otherAssignments.length > 0">
+    Jobs Applied For
+  </div>
+  <div class="container-fluid padding-aligned" *ngIf="otherAssignments.length > 0">
+    <div class="row">
+      <div *ngFor="let assignment of otherAssignments" class="col-sm-6 col-md-4 col-lg-3 col-xl-2 my-3">
+        <df-card>
+          <df-card-content class="p-0">
+            <div class="hiring__card-image d-flex align-items-center w-100"
+                 [style.background-image]="getImageUrl(assignment?.selection?.marketplaceMember?.application?.job.imageUrl)">
+              <div class="hiring__card-text au-white p-2 text-center w-100">
+                <strong class="d-inline-block flex-1">{{assignment?.selection?.marketplaceMember?.application?.job?.title}}</strong>
+              </div>
+            </div>
+          </df-card-content>
+          <df-card-footer class="d-block text-center" *ngIf="assignment.status === 'PENDING'">
+            <div>
+              <strong>Hiring Manager :</strong> {{assignment?.manager?.printableName}}
+              <br>
+            </div>
+            <button type="button"
+                    class="w-100 mt-3"
+                    df-button theme="info"
+                    [routerLink]="['/contract', assignment.id, 'view']">
+              View details
+            </button>
+          </df-card-footer>
+          <df-card-footer class="d-block text-center" *ngIf="assignment.status === 'CANDIDATE_REJECTED'">
+            <div class="col-12">
+              <i class="fa fa-times-circle au-red"></i> Rejected
+            </div>
+          </df-card-footer>
+        </df-card>
+      </div>
+    </div>
+  </div>
+
+  <div class="hiring__heading padding-aligned mt-3" *ngIf="acceptedAssignments.length > 0">
+    Jobs Offered
+  </div>
+  <div class="container-fluid padding-aligned" *ngIf="acceptedAssignments.length > 0">
+    <div class="row">
+      <div *ngFor="let assignment of acceptedAssignments" class="col-sm-6 col-md-4 col-lg-3 col-xl-2 my-3">
+        <df-card>
+          <df-card-content class="p-0">
+            <div class="hiring__card-image d-flex align-items-center w-100"
+                 [style.background-image]="getImageUrl(assignment?.selection?.marketplaceMember?.application?.job?.imageUrl)">
+              <div class="hiring__card-text au-white p-2 text-center w-100">
+                <strong class="d-inline-block flex-1">
+                  {{assignment?.selection?.marketplaceMember?.application?.job?.title}}
+                </strong>
+              </div>
+            </div>
+          </df-card-content>
+          <df-card-footer class="d-block text-center">
+            <div>
+              <strong>Step :</strong> {{assignment.currentStep}} / 5
+            </div>
+            <button type="button"
+                    class="w-100 mt-3"
+                    df-button theme="info"
+                    [routerLink]="['../../onboarding-process', assignment.id]">
+              Onboard
+            </button>
+          </df-card-footer>
+        </df-card>
+      </div>
+    </div>
+  </div>
+  <div class="hiring__heading padding-aligned mt-3" *ngIf="interviewsInProgress.length > 0">
+    Upcoming Interviews
+  </div>
+  <div class="container-fluid padding-aligned" *ngIf="interviewsInProgress.length > 0">
+    <div class="row">
+      <div *ngFor="let interview of interviewsInProgress" class="col-sm-6 col-md-4 col-lg-3 col-xl-2 my-3">
+        <df-card>
+          <df-card-content class="p-0">
+            <div class="hiring__card-image d-flex align-items-center w-100"
+                 [style.background-image]="getImageUrl(interview?.selection?.marketplaceMember?.application?.job?.imageUrl)">
+            <div class="hiring__card-text au-white p-2 text-center w-100">
+                <strong class="d-inline-block flex-1">
+                  {{interview?.selection?.marketplaceMember?.application?.job?.title}}
+                </strong>
+              </div>
+            </div>
+          </df-card-content>
+          <df-card-footer class="d-block text-center">
+            <div>
+              <strong>Hiring Manager :</strong> {{interview?.selection?.manager?.printableName}}
+            </div>
+            <div *ngIf="interview.status === 'CANDIDATE_ACCEPTED'"
+                 class="form-row my-3"
+                 style="font-size: 12px;">
+              <div class="col-12">
+                <i class="fa fa-fw fa-calendar au-blue"></i> {{ interview.startDateTime | date : 'MMM dd (EEE) HH:mm'}}
+              </div>
+            </div>
+            <button *ngIf="interview.status === 'INITIAL'"
+                    type="button"
+                    class="w-100 mt-3"
+                    df-button theme="info"
+                    [routerLink]="['/interview', interview.id, 'view']">
+              Schedule
+            </button>
+            <button [disabled]="interview.status !== 'CANDIDATE_ACCEPTED'"
+                    type="button"
+                    class="w-100 mt-3"
+                    df-button theme="success"
+                    [routerLink]="['/interview', interview.id, 'video-conference']">
+              Begin Interview
+            </button>
+          </df-card-footer>
+        </df-card>
+      </div>
+    </div>
+  </div>
+</ng-template>

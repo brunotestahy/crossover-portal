@@ -1,0 +1,31 @@
+<div class="section__header section__header--aligned">
+  My Assignment History
+</div>
+<div class="df-loader-container" *ngIf="isLoading">
+  <i class="df-loader"></i>
+</div>
+<div class="page-content padding-aligned assignment-grid" *ngIf="!isLoading">
+  <app-page-alert *ngIf="error"
+                  [text]="error"
+                  class="my-3"></app-page-alert>
+  <df-grid [value]="data" emptyMessage="There is no data to show." [responsive]="isResponsive$ | async">
+    <df-grid-column field="date" header="Date" [sortable]="true">
+    </df-grid-column>
+    <df-grid-column field="job" header="Job" [sortable]="true">
+    </df-grid-column>
+    <df-grid-column field="company" header="Company" [sortable]="true">
+    </df-grid-column>
+    <df-grid-column field="team" header="Team" [sortable]="true">
+    </df-grid-column>
+    <df-grid-column field="manager" header="Manager" [sortable]="true">
+    </df-grid-column>
+    <df-grid-column field="rate" header="Rate" [sortable]="true">
+    </df-grid-column>
+    <df-grid-column field="contractType" header="Contract Type" [sortable]="true">
+    </df-grid-column>
+    <df-grid-column field="weeklyLimit" header="Weekly Limit" [sortable]="true">
+    </df-grid-column>
+    <df-grid-column field="status" header="Status" [sortable]="true">
+    </df-grid-column>
+  </df-grid>
+</div>

@@ -1,0 +1,44 @@
+@import "variables";
+
+.hiring {
+  &__heading {
+    font-weight: 500;
+    background-color: map-get($map: $au-neutral, $key: 4);
+    padding-top: 10px;
+    padding-bottom: 10px;
+    color: #ffffff;
+    margin: 0;
+    font-size: 16px;
+  }
+  &__card-image {
+    padding-top: 100%;
+    max-height: 350px;
+    position: relative;
+    cursor: default;
+    background-size: cover;
+    background-position: center center;
+    background-repeat: no-repeat;
+    &:before {
+      content: '';
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      opacity: .3;
+      background: #333;
+    }
+  }
+  &__card-text {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    text-align: center;
+    justify-content: center;
+    font-size: 150%;
+  }
+}

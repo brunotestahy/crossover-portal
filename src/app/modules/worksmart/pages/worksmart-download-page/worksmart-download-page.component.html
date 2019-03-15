@@ -1,0 +1,40 @@
+<div>
+  <div class="tracker-cover">
+    <div class="container text-center tracker-cover__text">
+      <p>
+        <strong>WorkSmart</strong> is a software application that ensures you get paid for the
+        <br class="d-none d-lg-block"> number of hours you work, provides you with productivity coaching and insights,
+        <br class="d-none d-lg-block"> and monitors computer use to promote transparency.
+      </p>
+      <br>
+      <p> Your WorkSmart login is the same user name and password
+        <br class="d-none d-lg-block"> as your primary Crossover login and password. </p>
+    </div>
+  </div>
+  <div class="container text-center mb-5">
+    <div class="buttons-container">
+      <h2 class="m-0 p-0 os-header">Please select your OS:</h2>
+      <div class="download-buttons my-4">
+        <a href="https://s3.amazonaws.com/crossover-clients/crossovertool.exe" class="download-worksmart-link">
+          <button type="button" df-button theme="info" class="download-worksmart-button">
+            <i class="fa fa-fw fa-windows"></i> Windows
+          </button>
+        </a>
+        <a href="https://s3.amazonaws.com/crossover-clients/CrossOver.dmg" class="download-worksmart-link">
+          <button type="button" df-button theme="info" class="download-worksmart-button">
+            <i class="fa fa-fw fa-apple"></i> Mac OS X
+          </button>
+        </a>
+        <a href="https://s3.amazonaws.com/crossover-clients/crossovertool.bin" class="download-worksmart-link">
+          <button type="button" df-button theme="info" class="download-worksmart-button">
+            <i class="fa fa-fw fa-linux"></i> Linux
+          </button>
+        </a>
+      </div>
+    </div>
+    <button type="button" df-button theme="dark" routerLink="dashboard/contractor/my-dashboard"
+            class="go-to-dashboard-btn" *ngIf="hasDashboardLink">
+      GO TO DASHBOARD
+    </button>
+  </div>
+</div>

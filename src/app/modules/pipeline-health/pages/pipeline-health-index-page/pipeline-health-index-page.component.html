@@ -1,0 +1,313 @@
+<div class="section__header d-flex align-items-center">
+  <span class="mr-2">Pipeline Health</span>
+</div>
+<div class="container-fluid page-scroll">
+  <app-page-alert class="my-3"
+                  *ngIf="error; else noErrorTemplate"
+                  [text]="error"></app-page-alert>
+  <ng-template #noErrorTemplate>
+    <div class="df-loader-container"
+         *ngIf="isLoading; else loadedContent">
+      <i class="df-loader"></i>
+    </div>
+    <ng-template #loadedContent>
+      <df-card class="my-3 flex-no-shrink">
+        <df-card-content class="pb-0">
+          <form class="form-row"
+                [formGroup]="form"
+                (submit)="search(form.value)">
+            <div class="col-12 col-md-6 col-lg-3 col-xl-2 form-group">
+              <df-group-toggle class=""
+                               [items]="jobTypeItems"
+                               formControlName="jobType"></df-group-toggle>
+            </div>
+            <div class="col-12 col-md-6 col-lg-3 col-xl-2 form-group">
+              <df-group-toggle class=""
+                               [items]="periodItems"
+                               formControlName="period"></df-group-toggle>
+            </div>
+            <div class="col-12 col-md-6 col-lg-3 form-group"
+                 *ngIf="form.value.period.id === 'WEEKLY'">
+              <df-datepicker class=""
+                             formControlName="week"
+                             [formatFn]="weekFormatFn"
+                             [direction]="-1"
+                             [disabledDates]="currentWeekDays">
+              </df-datepicker>
+            </div>
+            <div class="col-12 col-md-6 col-lg-3 form-group"
+                 *ngIf="form.value.jobType.id === 'CUSTOM'">
+              <div class="d-flex">
+                <df-input-container class="w-100">
+                  <input type="text"
+                         formControlName="search"
+                         placeholder="Search Company/HM">
+                </df-input-container>
+                <button type="submit"
+                        df-button
+                        theme="info">
+                  Search
+                </button>
+              </div>
+            </div>
+            <div class="col-12 col-md-auto ml-auto form-group">
+              <a class=""
+                 href="https://crossover.atlassian.net/wiki/display/XOPO/Pipeline+Health+Dashboard"
+                 target="_blank">
+                <i class="fa fa-exclamation"></i> Help
+              </a>
+            </div>
+          </form>
+        </df-card-content>
+      </df-card>
+      <df-card class="my-3">
+        <df-card-content>
+          <df-grid [value]="data"
+                   [responsive]="isResponsive"
+                   [scrollable]="true"
+                   [frozenValue]="[]"
+                   [scrollHeight]="'600px'"
+                   sortField="jobTitle"
+                   sortOrder="1">
+            <df-grid-column header="Pipeline"
+                            field="jobTitle"
+                            headerStyleClass="column-lg"
+                            bodyStyleClass="column-lg"
+                            [sortable]="true">
+              <ng-template dfGridTemplate="body"
+                           let-col
+                           let-pipeline="rowData">
+                <a [routerLink]="pipeline.jobId">
+                  {{pipeline.jobTitle}}
+                </a>
+              </ng-template>
+            </df-grid-column>
+            <df-grid-column header="Payband"
+                            field="payband"
+                            headerStyleClass="column-sm"
+                            bodyStyleClass="column-sm"
+                            [sortable]="true"
+                            [sortFn]="sortByPayband">
+              <ng-template dfGridTemplate="body"
+                           let-col
+                           let-pipeline="rowData">
+                {{pipeline.payband}}
+              </ng-template>
+            </df-grid-column>
+            <df-grid-column header="Days since open"
+                            field="daysSinceOpen"
+                            headerStyleClass="column-md"
+                            bodyStyleClass="column-md"
+                            [sortable]="true"
+                            [sortFn]="sortbyDaysOpen">
+              <ng-template dfGridTemplate="body"
+                           let-col
+                           let-pipeline="rowData">
+                <strong>
+                  {{pipeline.daysSinceOpen}}
+                </strong>
+              </ng-template>
+            </df-grid-column>
+            <df-grid-column header="Applications"
+                            field="applications"
+                            headerStyleClass="column-md"
+                            bodyStyleClass="column-md"
+                            [sortable]="true">
+              <ng-template dfGridTemplate="body"
+                           let-col
+                           let-pipeline="rowData">
+                <div class="p-md-3">
+                  <div class="d-block d-md-none">
+                    <df-progress-bar [percentage]="1"
+                                     [showText]="true"
+                                     [formatText]="progressBarTextGenerator(pipeline, 'applications')"
+                                     [color]="bars[pipeline.applicationsIndicator]"
+                                     [showTextOnMobile]="true">
+                    </df-progress-bar>
+                  </div>
+                  <div class="d-none d-md-flex  mx-auto circle-icon circle-icon--{{pipeline.applicationsIndicator}}">
+                    {{pipeline.applications}}
+                  </div>
+                </div>
+
+              </ng-template>
+            </df-grid-column>
+            <df-grid-column header="Technical Screen"
+                            field="technicalScreen"
+                            headerStyleClass="column-md"
+                            bodyStyleClass="column-md"
+                            [sortable]="true"
+                            [sortFn]="sortbyTechnicalScreen">
+              <ng-template dfGridTemplate="body"
+                           let-col
+                           let-pipeline="rowData">
+                <div class="p-md-3 ">
+                  <div class="d-block d-md-none">
+                    <df-progress-bar [percentage]="1"
+                                     [showText]="true"
+                                     [formatText]="progressBarTextGenerator(pipeline, 'technicalScreen')"
+                                     [color]="bars[pipeline.technicalScreenIndicator]"
+                                     [showTextOnMobile]="true">
+                    </df-progress-bar>
+                  </div>
+                  <div class="d-none d-md-flex  mx-auto circle-icon circle-icon--{{pipeline.technicalScreenIndicator}}">
+                    {{pipeline.technicalScreen}}
+                  </div>
+                </div>
+
+              </ng-template>
+            </df-grid-column>
+            <df-grid-column header="Project/Written Evaluation"
+                            field="projectWrittenEvaluation"
+                            headerStyleClass="column-md"
+                            bodyStyleClass="column-md"
+                            [sortable]="true">
+              <ng-template dfGridTemplate="body"
+                           let-col
+                           let-pipeline="rowData">
+                <div class="p-md-3 ">
+                  <div class="d-block d-md-none">
+                    <df-progress-bar [percentage]="1"
+                                     [showText]="true"
+                                     [formatText]="progressBarTextGenerator(pipeline, 'projectWrittenEvaluation')"
+                                     [color]="bars[pipeline.projectWrittenEvaluationIndicator]"
+                                     [showTextOnMobile]="true">
+                    </df-progress-bar>
+                  </div>
+                  <div class="d-none d-md-flex  mx-auto circle-icon circle-icon--{{pipeline.projectWrittenEvaluationIndicator}}">
+                    {{pipeline.projectWrittenEvaluation}}
+                  </div>
+                </div>
+
+              </ng-template>
+            </df-grid-column>
+            <df-grid-column header="Marketplace"
+                            field="marketplace"
+                            headerStyleClass="column-md"
+                            bodyStyleClass="column-md"
+                            [sortable]="true">
+              <ng-template dfGridTemplate="body"
+                           let-col
+                           let-pipeline="rowData">
+                <div class="p-md-3">
+                  <div class="d-block d-md-none">
+                    <df-progress-bar [percentage]="1"
+                                     [showText]="true"
+                                     [formatText]="progressBarTextGenerator(pipeline, 'marketplace')"
+                                     [color]="bars[pipeline.marketplaceIndicator]"
+                                     [showTextOnMobile]="true">
+                    </df-progress-bar>
+                  </div>
+                  <div class="d-none d-md-flex  mx-auto circle-icon circle-icon--{{pipeline.marketplaceIndicator}}">
+                    {{pipeline.marketplace}}
+                  </div>
+                  <div class="text-center">
+                    <small class="text-nowrap">{{pipeline.marketplaceTimeAgo}}</small>
+                  </div>
+                </div>
+
+              </ng-template>
+            </df-grid-column>
+            <df-grid-column header="Interviews"
+                            field="interviews"
+                            headerStyleClass="column-md"
+                            bodyStyleClass="column-md"
+                            [sortable]="true">
+              <ng-template dfGridTemplate="body"
+                           let-col
+                           let-pipeline="rowData">
+                <div class="p-md-3">
+                  <div class="d-block d-md-none">
+                    <df-progress-bar [percentage]="1"
+                                     [showText]="true"
+                                     [formatText]="progressBarTextGenerator(pipeline, 'interviews')"
+                                     [color]="bars[pipeline.interviewsIndicator]"
+                                     [showTextOnMobile]="true">
+                    </df-progress-bar>
+                  </div>
+                  <div class="d-none d-md-flex  mx-auto circle-icon circle-icon--{{pipeline.interviewsIndicator}}">
+                    {{pipeline.interviews}}
+                  </div>
+                  <div class="text-center">
+                    <small class="text-nowrap">{{pipeline.interviewsTimeAgo}}</small>
+                  </div>
+                </div>
+
+              </ng-template>
+            </df-grid-column>
+            <df-grid-column header="Hires"
+                            field="hires"
+                            headerStyleClass="column-md"
+                            bodyStyleClass="column-md"
+                            [sortable]="true">
+              <ng-template dfGridTemplate="body"
+                           let-col
+                           let-pipeline="rowData">
+                <div class="p-md-3">
+                  <div *ngIf="isResponsive">
+                    <df-progress-bar [percentage]="pipeline.hiresPercent"
+                                     [showText]="true"
+                                     [formatText]="progressBarTextGenerator(pipeline, 'hires')"
+                                     [color]="bars[pipeline.hiresIndicator]"
+                                     [showTextOnMobile]="true">
+                    </df-progress-bar>
+                  </div>
+                  <df-donut *ngIf="!isResponsive"
+                            [percentage]="pipeline.hiresPercent"
+                            [ranges]="[ranges[pipeline.hiresIndicator]]"
+                            colored>
+                    <span class="donut-label">
+                      {{pipeline.hires}}
+                    </span>
+                  </df-donut>
+                </div>
+
+              </ng-template>
+            </df-grid-column>
+            <df-grid-column header="Demand"
+                            field="demand"
+                            headerStyleClass="column-md"
+                            bodyStyleClass="column-md"
+                            [sortable]="true">
+              <ng-template dfGridTemplate="body"
+                           let-col
+                           let-pipeline="rowData">
+                <div (click)="isCustom ? openHiringManagersModal(pipeline.job) : null"
+                     [class.pointer]="isCustom">
+                  {{pipeline.demand}}
+                  <i class="fa fa-bolt"
+                     *ngIf="pipeline.demandIsAuto"></i>
+                  <i class="fa fa-info-circle"
+                     dfToolTip="View Hiring Managers"
+                     container="body"
+                     *ngIf="isCustom"></i>
+                </div>
+              </ng-template>
+            </df-grid-column>
+          </df-grid>
+        </df-card-content>
+      </df-card>
+    </ng-template>
+  </ng-template>
+</div>
+
+<ng-template #hiringManagersModalTemplate
+             let-close="close">
+  <div class="au-modal-header p-3">
+    <div class="d-flex align-items-center m-0">
+      <h5>HMs hiring for this job</h5>
+      <i (click)="close()"
+         class="au-modal-close fa fa-times">
+      </i>
+    </div>
+
+  </div>
+  <div class="p-3 text-left">
+    <df-grid [value]="selectedJob.visibleManagers">
+      <df-grid-column header="Company"
+                      field="company.name"></df-grid-column>
+      <df-grid-column header="Hiring Manager"
+                      field="name"></df-grid-column>
+    </df-grid>
+  </div>
+</ng-template>

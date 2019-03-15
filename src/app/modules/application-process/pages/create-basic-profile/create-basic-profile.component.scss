@@ -1,0 +1,26 @@
+@import "variables";
+
+df-card {
+  overflow: unset
+}
+
+.create-basic-profile__title {
+  border-bottom: $border;
+}
+
+.create-basic-profile__avatar {
+  border: $border;
+  cursor: pointer;
+  max-height: 210px;
+  max-width: 162px;
+
+  &__button {
+    border-top: $border;
+  }
+}
+
+@media screen and (max-width: $breakpoint-md) {
+  .create-basic-profile__avatar {
+    margin: 0 auto;
+  }
+}

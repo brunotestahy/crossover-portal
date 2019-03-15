@@ -1,0 +1,69 @@
+<div class="new-team-modal">
+  <div class="d-flex align-items-center m-0 new-team-modal__header section__header">
+    <h5>Build a New Team</h5>
+    <i (click)="close()"
+       class="au-modal-close fa fa-times">
+    </i>
+  </div>
+
+  <form [formGroup]="formGroup" (submit)="submit()">
+    <div class="new-team-modal__content">
+      <ng-container *ngIf="isLoading; then loadingState; else loadedState">
+      </ng-container>
+
+      <!-- Loading state -->
+      <ng-template #loadingState>
+        <div class="loader y-3 text-center">
+          <i _ngcontent-c8="" class="df-loader"></i>
+        </div>
+      </ng-template>
+
+      <!-- Loaded state -->
+      <ng-template #loadedState>
+        <app-page-alert
+          *ngIf="error"
+          [text]="error"
+          class="my-3"></app-page-alert>
+
+        <df-input-container label="Name your team">
+          <input type="text" placeholder="Team Name ..." formControlName="name" />
+        </df-input-container>
+        <df-validation-messages [control]="formGroup.get('name')"></df-validation-messages>
+
+        <div class="row">
+          <div class="col-6">
+            <div class="wizard-btn
+            wizard-btn--disabled">
+              <div class="wizard-btn__header">
+                <div class="wizard-btn__header__icon">
+                  <df-icon name="magic"></df-icon>
+                </div>
+                <p>Build from Template</p>
+              </div>
+              <div class="wizard-btn__content">Coming soon ...</div>
+            </div>
+          </div>
+          <div class="col-6">
+            <div class="wizard-btn wizard-btn--selected">
+              <div class="wizard-btn__header">
+                <div class="wizard-btn__header__icon">
+                  <df-icon name="laptop"></df-icon>
+                </div>
+                <p>Build from Scratch</p>
+              </div>
+              <div class="wizard-btn__content">You can always build your team from scratch adding all the roles yourself</div>
+            </div>
+          </div>
+        </div>
+      </ng-template>
+
+    </div>
+    <div class="new-team-modal__footer">
+      <button
+        type="submit"
+        class="right"
+        [disabled]="!formGroup.valid || isLoading"
+        df-button>Next</button>
+    </div>
+  </form>
+</div>

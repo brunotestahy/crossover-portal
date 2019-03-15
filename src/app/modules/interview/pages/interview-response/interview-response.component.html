@@ -1,0 +1,103 @@
+<div class="section__header section__header--aligned">
+  Interview Response
+</div>
+<div class="container-fluid page-scroll">
+  <div class="df-loader-container"
+       *ngIf="isLoading; else loadedContent">
+    <i class="df-loader"></i>
+  </div>
+  <ng-template #loadedContent>
+    <df-card class="my-3">
+      <df-card-content>
+        <h3>Please accept or decline the interview request</h3>
+        <div class="alert alert-danger my-4" 
+             *ngIf="error">
+          {{error}}
+        </div>
+        <div class="note note--info"
+             *ngIf="!error">
+          The interview status is {{statusMap[interview?.status]}}.
+        </div>
+        <div *ngIf="interview?.status === 'INITIAL'"
+             class="form-row">
+          <div class="col-6 col-md-auto">
+            <button type="button"
+                    class="w-100 w-md-auto"
+                    df-button
+                    theme="success"
+                    routerLink="../accept">Accept</button>
+          </div>
+          <div class="col-6 col-md-auto">
+            <button type="button"
+                    class="w-100 w-md-auto"
+                    df-button
+                    theme="danger"
+                    (click)="decline()">Decline</button>
+          </div>
+        </div>
+      </df-card-content>
+    </df-card>
+
+    <df-card class="my-3"
+             *ngIf="!error">
+      <df-card-content>
+        <h3>Job Details</h3>
+        Title: {{interview?.selection.marketplaceMember.application.job.title}}
+      </df-card-content>
+    </df-card>
+    
+    <df-card class="my-3"
+             *ngIf="!error">
+      <df-card-content>
+        <h3 class="my-0">{{interview?.selection.manager.company.name}}</h3>
+      </df-card-content>
+    </df-card>
+
+  </ng-template>
+</div>
+
+<ng-template #declineModal
+             let-close="close">
+  <div class="au-modal-header p-3">
+    <div class="d-flex align-items-center m-0">
+      <h5>Decline Interview</h5>
+      <i (click)="close()"
+         class="au-modal-close fa fa-times">
+      </i>
+    </div>
+  </div>
+  <ng-container>
+    <form class="standard-form"
+          [formGroup]="form">
+      <div class="px-3 pt-3 text-left">
+        <app-page-alert class="my-3"
+                        *ngIf="modalError"
+                        [text]="modalError"></app-page-alert>
+        <p>
+          Please enter your reason(s) for declining the interview.
+          <br> Your valuable feedback will help us improve our recruiting process.
+        </p>
+        <df-input-container>
+          <textarea formControlName="reason"></textarea>
+        </df-input-container>
+        <df-validation-messages controlName="reason"></df-validation-messages>
+      </div>
+      <div class="w-100 d-flex align-items-center justify-content-end p-3">
+        <button df-button
+                class="mr-2"
+                theme="success"
+                [loading]="isSaving"
+                (click)="declineInterview(close)"
+                loaderPosition="after">
+          <span>Decline</span>
+        </button>
+        <button df-button
+                type="button"
+                theme="danger"
+                (click)="close()">
+          <span>Cancel</span>
+        </button>
+      </div>
+    </form>
+  </ng-container>
+</ng-template>

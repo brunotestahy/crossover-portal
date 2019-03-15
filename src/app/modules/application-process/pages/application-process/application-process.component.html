@@ -1,0 +1,67 @@
+<div *ngIf="!isOpenApplication" class="container-fluid">
+  <div class="m-3 note note--info"> You have no open job applications. </div>
+</div>
+<div *ngIf="isOpenApplication" class="container-fluid d-flex flex-column p-0 w-100 h-100 col">
+  <div class="application-process__header px-5 py-4">
+    <h3 class="pull-left w-100">
+      {{ job?.title }}
+    </h3>
+    <span class="pull-left w-100">
+      ${{ job?.yearSalary }},000 per year
+    </span>
+  </div>
+  <div class="application-process__body p-0 overflow-y d-block d-lg-flex position-relative col">
+    <df-card #highway
+             class="highway-wrapper mt-3 mb-lg-3 ml-3 mr-3 mr-lg-0 pb-lg-4 d-flex"
+             [ngClass]="(steps?.length == 5)?'highway-wrapper step-5':'highway-wrapper'"
+             [class.visible]="highwayVisible">
+      <div class="highway-mobile-notice d-block d-lg-none text-center py-4"
+           (click)="highwayVisibility()">
+        Step {{ currentStep }} of {{ steps?.length }}
+      </div>
+      <div class="highway col-lg-12 flex-column align-items-center px-2 px-lg-5 py-2 py-lg-0 mb-lg-4"
+           [class.d-none]="!highwayVisible"
+           [class.d-lg-flex]="highwayVisible"
+           [class.d-block]="highwayVisible">
+        <div *ngFor="let step of steps; index as idx; odd as isOdd"
+             class="highway__step d-flex flex-nowrap align-items-center justify-content-center position-relative pull-left w-100 py-3 py-lg-0"
+             [class.current]="currentStep === (idx + 1)"
+             [class.done]="currentStep > (idx + 1)"
+             [class.pr-lg-4]="isOdd"
+             [class.pl-lg-4]="!isOdd">
+          <ng-container *ngIf="isOdd">
+            <h1 class="highway__step__number step__image mb-0 text-center">
+              {{ idx + 1 }}
+            </h1>
+            <div class="highway__step__status position-relative d-none d-lg-block">
+            </div>
+            <div class="highway__step__image step__image ml-lg-3 mr-lg-2 {{ step.clazz }}">
+            </div>
+            <h5 class="highway__step__title mb-0 mr-2 mr-lg-0">
+              {{ step.title }}
+            </h5>
+          </ng-container>
+          <ng-container *ngIf="!isOdd">
+            <h5 class="highway__step__title mb-0 mr-2 mr-lg-0">
+              {{ step.title }}
+            </h5>
+            <div class="highway__step__image step__image mr-lg-3 ml-lg-2 {{ step.clazz }}">
+            </div>
+            <div class="highway__step__status position-relative d-none d-lg-block">
+            </div>
+            <h1 class="highway__step__number step__image mb-0 text-center">
+              {{ idx + 1 }}
+            </h1>
+          </ng-container>
+        </div>
+      </div>
+      <div class="highway-mobile-trigger d-block d-lg-none text-center py-4"
+           (click)="highwayVisibility()">
+        Touch to {{ highwayVisible ? 'collapse' : 'expand' }}
+      </div>
+    </df-card>
+    <div class="col my-3">
+      <router-outlet></router-outlet>
+    </div>
+  </div>
+</div>

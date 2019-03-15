@@ -1,0 +1,54 @@
+<div class="au-modal-header p-3">
+  <div class="d-flex align-items-center m-0">
+    <div class="user flex-1">
+      <div class="user-name">
+        <img class="mr-1"
+             [src]="assignment.candidate.photoUrl || 'assets/images/user.png'"
+             (error)="assignment.candidate.photoUrl = undefined">
+        <h6 class="mt-2 d-inline-block">Choose an avatar for {{assignment.candidate.printableName}}</h6>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="d-block">
+  <div class="df-loader-container"
+       *ngIf="isLoading">
+    <i class="df-loader"></i>
+  </div>
+  <div *ngIf="error" class="row p-3 m-0">
+    <app-page-alert
+      [text]="error"
+      class="my-3">
+    </app-page-alert>
+  </div>
+  <div *ngIf="!isLoading"
+       class="row p-3 m-0">
+    <div *ngFor="let avatar of avatars; let i = index;"
+         class="col-6 col-md-4 col-lg-3 d-flex justify-content-center p-3">
+      <div
+        class="contractor-desk
+               contractor-desk__contractor-{{i + 1}}
+               align-self-center"
+        [class.contractor-desk--selected]="isSelectedClass(i + 1)"
+        (click)="selectAvatar(i + 1)">
+      </div>
+    </div>
+  </div>
+  <div class="w-100 d-flex align-items-center justify-content-end p-3 mr-3">
+    <button df-button
+            class="mr-2"
+            type="button"
+            theme="danger"
+            (click)="onClose()">
+      <span>Cancel</span>
+    </button>
+    <button df-button
+            theme="success"
+            (click)="saveAvatar()"
+            [loading]="isSaving"
+            [disabled]="!selectedAvatar"
+            loaderPosition="after">
+      <span>Save</span>
+    </button>
+  </div>
+</div>

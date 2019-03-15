@@ -1,0 +1,25 @@
+<div *ngIf="isEditable">
+  <div *ngFor="let entry of candidateLanguages"
+       (click)="onSelect(entry)"
+       class="has-edit">
+    <h5>
+      {{ entry.language.name }}
+      <span class="font-medium">
+        {{ proficiencies.fromId(entry.proficiency)?.name }}
+      </span>
+      <span class="edit-arrow">
+        <i class="fa fa-edit"></i>
+      </span>
+    </h5>
+  </div>
+</div>
+<div *ngIf="!isEditable">
+  <div *ngFor="let entry of candidateLanguages">
+    <h5>
+      {{ entry.language.name }}
+      <span class="font-medium">
+        {{ proficiencies.fromId(entry.proficiency)?.name }}
+      </span>
+    </h5>
+  </div>
+</div>

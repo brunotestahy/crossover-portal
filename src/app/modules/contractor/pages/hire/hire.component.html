@@ -1,0 +1,83 @@
+<div class="section__header section__header--aligned">
+  Hire
+</div>
+
+<ng-container *ngIf="!isLoading; then loadedState; else loadingState">
+</ng-container>
+
+<!-- Loading state -->
+<ng-template #loadingState>
+  <div class="page-content padding-aligned page-scroll d-flex flex-column flex-grow">
+    <df-card class="my-3 overflow-visible">
+      <div class="df-loader-container">
+        <i class="df-loader"></i>
+      </div>
+    </df-card>
+  </div>
+</ng-template>
+
+<!-- Loaded state -->
+<ng-template #loadedState>
+  <div class="page-content padding-aligned page-scroll d-flex flex-column flex-grow">
+
+    <df-card class="mb-2 no-shrink">
+      <df-card-content>
+        <button type="button"
+          df-button
+          (click)="openAddRoleModal()"
+          theme="info">
+          <i class="fa fa-plus"></i>
+          Add Role
+        </button>
+      </df-card-content>
+    </df-card>
+
+    <app-page-alert *ngIf="error" [text]="error" class="my-3"></app-page-alert>
+
+    <ng-container *ngIf="assignments?.length > 0; then withRecordsState; else emptyState;">
+    </ng-container>
+
+    <!-- Empty state -->
+    <ng-template #emptyState>
+      <div class="row d-flex flex-grow">
+        <div class="col-md-6 d-inline-flex">
+          <df-card class="mb-2 d-flex flex-column flex-grow">
+            <df-card-content class="center-all flex-column">
+              <p class="d-block w-100">
+                Team is empty Click
+                <span class="clickable-text" (click)="openAddRoleModal()">"Add Role"</span> to start hiring
+              </p>
+            </df-card-content>
+          </df-card>
+        </div>
+        <div class="col-md-6 d-inline-flex flex-column">
+          <df-card class="mb-2 d-flex flex-column flex-grow">
+            <df-card-content class="text-muted center-all flex-column">
+              <div>
+                <i class="fa fa-usd"></i>
+              </div>
+              <p class="d-block w-100">
+                When you add contractors to this team, you will see their cost and metric information here
+              </p>
+            </df-card-content>
+          </df-card>
+          <df-card class="mb-2 d-flex flex-column flex-grow">
+            <df-card-content class="text-muted center-all flex-column">
+              <div>
+                <i class="fa fa-clock-o"></i>
+              </div>
+              <p class="d-block w-100">
+                The team’s timezone overlap will be shown here
+              </p>
+            </df-card-content>
+          </df-card>
+        </div>
+      </div>
+    </ng-template>
+
+    <!-- With records state -->
+    <ng-template #withRecordsState>
+    </ng-template>
+
+  </div>
+</ng-template>

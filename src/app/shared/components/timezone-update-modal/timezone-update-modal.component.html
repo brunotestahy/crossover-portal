@@ -1,0 +1,53 @@
+<div class="au-modal-header p-3">
+  <div class="d-flex align-items-center m-0">
+    <h5>Update Timezone</h5>
+    <i (click)="close()"
+       class="au-modal-close fa fa-times">
+    </i>
+  </div>
+</div>
+<app-page-alert class="m-3"
+                *ngIf="error"
+                [text]="error"></app-page-alert>
+<ng-container>
+  <div class="df-loader-container"
+       *ngIf="isLoading; else loadedContent">
+    <i class="df-loader"></i>
+  </div>
+  <ng-template #loadedContent>
+    <div class="px-3 pt-3 text-left">
+      <p>
+        It looks like you are in
+        <span *ngIf="environmentTimezone?.humanReadable">
+          UTC{{environmentTimezone?.humanReadable}}.
+        </span>
+      </p>
+      <p>
+        Do you want to change your timezone
+        <span *ngIf="user?.location?.timeZone?.hourlyOffset">
+          from UTC{{user?.location?.timeZone?.hourlyOffset}}
+        </span>
+        <span *ngIf="environmentTimezone?.humanReadable">
+          to UTC{{environmentTimezone?.humanReadable}}?
+        </span>
+      </p>
+    </div>
+    <div class="w-100 d-flex align-items-center justify-content-end p-3">
+      <button df-button
+              type="button"
+              class="mr-2"
+              theme="success"
+              [loading]="isSaving"
+              loaderPosition="after"
+              (click)="change()">
+        <span>Change</span>
+      </button>
+      <button df-button
+              type="button"
+              theme="danger"
+              (click)="close()">
+        <span>Dismiss</span>
+      </button>
+    </div>
+  </ng-template>
+</ng-container>

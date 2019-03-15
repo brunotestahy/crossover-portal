@@ -1,0 +1,15 @@
+@import 'variables';
+
+.form-field {
+  min-width: 260px;
+}
+
+df-card {
+  overflow: visible;
+}
+
+@media screen and (max-width: $breakpoint-sm) {
+  .form-field {
+    min-width: 100%;
+  }
+}

@@ -1,0 +1,159 @@
+<div class="job-header">
+  <div class="container">
+    <h1>Welcome to Crossover</h1>
+    <p> Crossover provides Fortune 1000 companies with a marketplace of the top talent in the world. We put candidates through
+      a series of rigorous evaluations to find the best.
+      <br>
+      <br> Think you are one of them? Apply now. </p>
+  </div>
+</div>
+<div class="df-loader-container" *ngIf="isLoading">
+  <i class="df-loader"></i>
+</div>
+<div class="container" *ngIf="job && !isLoading">
+  <div class="page-content">
+
+    <app-page-alert *ngIf="error" [text]="error" class="mb-2"></app-page-alert>
+
+    <div>
+      <h2>{{ job?.title }}</h2>
+      <span class="salary-info">
+        <ng-container *ngIf="job?.salaryType === 'WEEKLY'">
+          ${{job?.salary | number : '2.0-0' }}/hr
+        </ng-container>
+        <ng-container *ngIf="job?.salaryType === 'MONTHLY'">
+          ${{job?.salary | number : '2.0-0' }}/month
+        </ng-container>
+      </span>
+      <button type="button" class="apply-now-btn my-4" (click)="scrollToApply()" df-button theme="info">
+        APPLY NOW
+      </button>
+
+      <h3>Job Description</h3>
+      <hr>
+      <div [innerHTML]="job?.candidateDescription"></div>
+      <div [innerHTML]="job?.managerDescription"></div>
+    </div>
+
+    <section class="skills" *ngIf="job?.skills?.length > 0">
+      <h2>Skills Required</h2>
+
+      <hr/>
+
+      <ul>
+        <li *ngFor="let skill of job?.skills">
+          <span class="">{{skill.name}}</span>
+        </li>
+      </ul>
+    </section>
+    <hr>
+
+    <div class="apply-form" #apply>
+      <ng-container *ngIf="!showHighway">
+        <h2 class="mt-4">Apply now</h2>
+        <df-bubble-wizard *ngIf="isAnonymous" class="my-3" [enableActiveStep]="true" [activeStep]="currentStep" activeColor="#23B1F7"
+        [clickableSteps]="true" [completedClickableSteps]="true" (bubbleClick)="onWizardBubbleClick($event)"
+          bgColor="#fdfdfd" notActiveColor="#ddd" notActiveBgColor="#fdfdfd" [steps]="steps">
+        </df-bubble-wizard>
+        <form [formGroup]="form" (submit)="onSubmit()" class="standard-form">
+          <ng-container *ngIf="currentStep === 0">
+            <div>
+              <df-input-container>
+                <input type="text" formControlName="name" placeholder="Name">
+              </df-input-container>
+              <df-validation-messages [control]="form.get('name')" [validationMessagesMap]="fullnameMessages"></df-validation-messages>
+            </div>
+            <div>
+              <df-input-container>
+                <input type="text" formControlName="email" placeholder="Email">
+              </df-input-container>
+              <df-validation-messages [control]="form.get('email')"></df-validation-messages>
+            </div>
+            <div>
+              <df-input-container>
+                <input type="password" formControlName="password" placeholder="Password">
+              </df-input-container>
+              <df-validation-messages [control]="form.get('password')" [validationMessagesMap]="passwordMessages"></df-validation-messages>
+            </div>
+            <div>
+              <df-select formControlName="country" placeholder="Country" class="w-100">
+                <df-option *ngFor="let country of allowedCountries$ | async" [value]="country" [displayText]="country.name">{{country.name}}</df-option>
+              </df-select>
+              <df-validation-messages [control]="form.get('country')"></df-validation-messages>
+              <div class="text-right" [dfToolTip]="countryTooltip$ | async" [dfToolTipShowOnClick]="true"
+                   dfToolTipPlacement="right">
+                <small class="blue text-right pointer">
+                  Your country is not listed?
+                </small>
+              </div>
+            </div>
+
+            <div class="my-3">
+              <re-captcha formControlName="recaptcha"></re-captcha>
+              <df-validation-messages [control]="form.get('recaptcha')"></df-validation-messages>
+            </div>
+            <button type="button" df-button theme="info" class="w-100 apply-now-btn my-3" (click)="currentStep = 1"
+            [disabled]="!isFirstStepFormValid()">NEXT STEP</button>
+
+          </ng-container>
+          <ng-container *ngIf="currentStep >= 1">
+            <label class="file-label w-100" for="cv-file-input">
+              <i class="fa fa-cloud-upload mr-2"></i>
+              {{form.value.resume ? fileName : 'Upload your resume'}}
+              <div class="file-label__clear" *ngIf="form.value.resume" (click)="clearFile($event)">
+                <i class="fa fa-times"></i>
+              </div>
+            </label>
+            <div class="position-relative">
+              <input id="cv-file-input" type="file" class="file-input" #fileInput (change)="onFileChange($event)" accept=".pdf,.md,.doc,.docx,.xml,.txt">
+            </div>
+            <df-validation-messages [control]="form.get('resume')"></df-validation-messages>
+            <div class="text-center d-flex">
+              <div>
+                <i class="fa fa-info-circle mr-2"></i>
+              </div>
+              <div class="text-left w-100">
+                <small>
+                  No cover letters please. Upload cannot be larger than 1MB. Only file with type '.pdf, .md, .doc, .docx, .xml, .txt'is acceptable.
+                </small>
+              </div>
+            </div>
+            <div class="mt-3 mb-2">
+              <label>Main role preference</label>
+              <df-select formControlName="mainRole" placeholder="Main role preference">
+                <df-option value="1">Android Developer</df-option>
+                <df-option value="2">Java Developer</df-option>
+              </df-select>
+              <df-validation-messages [control]="form.controls.mainRole"></df-validation-messages>
+            </div>
+            <div *ngIf="otherPreferences.length > 0">
+              <label>Other preference</label>
+              <div class="mb-2">
+                Select additional options you are comfortable with for this role.
+              </div>
+                <div class="row">
+                    <div class="col-sm-6" *ngFor="let preference of otherPreferences">
+                        <df-checkbox [(ngModel)]="preference.selected" [ngModelOptions]="{standalone: true}">{{preference.name}}</df-checkbox>
+                    </div>
+                  </div>
+            </div>
+
+
+            <button type="submit" df-button theme="info" class="w-100 apply-now-btn my-3" [loading]="isApplying" loaderPosition="after">APPLY NOW</button>
+          </ng-container>
+        </form>
+      </ng-container>
+      <div *ngIf="showHighway">
+        <p class="text-center">
+          <img src="/assets/images/marketplace/road.png" width="100" height="100">
+          <br>
+          <br> You're ready for Crossover Highway.
+          <br>
+          <br>
+          <button type="button" routerLink="/candidate/dashboard/applications" df-button theme="success">START THE CHALLENGE</button>
+          <br>
+          <br> </p>
+      </div>
+    </div>
+  </div>
+</div>

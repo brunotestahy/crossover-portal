@@ -1,0 +1,65 @@
+@import "variables";
+
+.answer-box {
+  padding: 15px;
+  border: 1px solid #d3d3d3;
+}
+
+.score-box {
+  width: 50px !important;
+}
+
+.scoring-grid {
+  overflow-x: auto;
+}
+
+.scoring-grid::-webkit-scrollbar {
+  -webkit-appearance: none;
+}
+
+.scoring-grid::-webkit-scrollbar:vertical {
+  width: 11px;
+}
+
+.scoring-grid::-webkit-scrollbar:horizontal {
+  height: 11px;
+}
+
+.scoring-grid::-webkit-scrollbar-thumb {
+  border-radius: 8px;
+  border: 2px solid white; /* should match background, can't be transparent */
+  background-color: rgba(0, 0, 0, .5);
+}
+
+::ng-deep {
+  app-five-q-grading {
+    th:nth-child(1) {
+      max-width: 500px !important;
+      min-width: 500px !important;
+      width: 500px !important;
+    }
+    th:not(:nth-child(1)) {
+      text-align: center !important;
+      width: 75px !important;
+      min-width: 75px !important;
+      max-width: 75px !important;
+    }
+
+    .df-grid-table-body__cell-data {
+      padding-left: 0px !important;
+      padding-right: 0px !important;
+    }
+
+    .df-grid-table-body__cell {
+      padding-left: 4px !important;
+      padding-right: 4px !important;
+    }
+
+    .df-grid__table {
+      width: 100%;
+      @media (min-width: $breakpoint-md) {
+        width: unset !important;
+      }
+    }
+  }
+}

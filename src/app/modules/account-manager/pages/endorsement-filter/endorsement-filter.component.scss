@@ -1,0 +1,11 @@
+:host {
+  .page-scroll {
+    overflow-x: hidden;
+  }
+
+  ::ng-deep {
+    .df-group-toggle__btn {
+      width: 100%;
+    }
+  }
+}

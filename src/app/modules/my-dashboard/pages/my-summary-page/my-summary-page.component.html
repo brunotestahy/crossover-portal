@@ -1,0 +1,14 @@
+<div class="row">
+  <div class="col-lg-6 mb-3 mb-lg-0">
+    <app-time-logged-week
+      [weeklyTimesheets]="weeklyTimesheets"
+      [isLoading]="isTimeLoggedLoading">
+    </app-time-logged-week>
+  </div>
+  <div class="col-lg-6">
+    <app-top-activities-week
+      [productivityGroups]="productivityGroups"
+      [isLoading]="isTopActivitiesLoading">
+    </app-top-activities-week>
+  </div>
+</div>

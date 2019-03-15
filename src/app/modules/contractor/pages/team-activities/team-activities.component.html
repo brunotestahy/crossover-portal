@@ -1,0 +1,624 @@
+<div class="section__header section__header--aligned">
+  Activities
+</div>
+
+<div class="page-content padding-aligned page-scroll">
+  <app-page-alert *ngIf="error"
+                  [text]="error"
+                  class="my-3">
+  </app-page-alert>
+  <df-card class="overflow-visible">
+    <df-card-content>
+      <div class="row">
+        <div class="d-flex col-12 col-lg-6 flex-wrap">
+          <df-group-toggle class="mt-1 mx-auto mr-lg-2 ml-lg-0"
+                           [items]="percentageTimeItems"
+                           #percentageTimeToggle
+                           [(ngModel)]="percentageTimeMode"
+                           (change)="refresh(percentageTimeToggle)">
+          </df-group-toggle>
+          <df-group-toggle class="mt-1 mx-auto mr-lg-2 ml-lg-0"
+                           [items]="viewModeItems"
+                           [(ngModel)]="viewMode"
+                           (change)="refresh()">
+          </df-group-toggle>
+        </div>
+        <div class="d-flex col-12 col-lg-6 flex-wrap justify-content-end ml-auto mt-3 mt-lg-0">
+          <button df-button
+                  theme="light"
+                  class="mx-auto mr-lg-2 ml-lg-0 align-self-center"
+                  type="button"
+                  container="body"
+                  dfToolTipColor="dark"
+                  dfToolTip="Download CSV"
+                  (click)="downloadCSV()"
+                  dfToolTipPlacement="bottom">
+            <i class="fa fa-download"></i>
+          </button>
+          <button df-button
+                  theme="light"
+                  [ngClass]="updateActivitiesBtn.isDisabled ? 'disabled-refresher' : ''"
+                  (click)="updateActivitiesBtn.isDisabled ? false : update()"
+                  class="mx-auto mr-lg-2 ml-lg-0 align-self-center"
+                  type="button"
+                  container="body"
+                  dfToolTipColor="dark"
+                  [dfToolTip]="formatLastUpdateDate"
+                  dfToolTipPlacement="bottom">
+            <i class="fa fa-refresh"></i>
+          </button>
+          <df-group-toggle class="mx-auto mr-lg-2 ml-lg-0 align-self-center"
+                           [(ngModel)]="periodMode"
+                           #periodToggle
+                           [items]="periodItems"
+                           (change)="refresh(periodToggle)">
+          </df-group-toggle>
+          <div *ngIf="isDailyPeriod"
+               class="mx-auto mr-lg-0 ml-lg-0 d-flex justify-content-center align-items-center mt-1 mt-lg-0">
+            <i class="fa fa-chevron-left pointer mx-1"
+               (click)="previousDay()"></i>
+            <df-datepicker class="daily-date-picker"
+                           [formControl]="dateControlDaily"
+                           [formatFn]="getDailyFormat"
+                           [direction]="-2">
+            </df-datepicker>
+            <i class="fa fa-chevron-right pointer mx-1"
+               (click)="nextDay()"
+               *ngIf="dateControlDaily.value < today"></i>
+          </div>
+          <div *ngIf="!isDailyPeriod"
+               class="mx-auto mr-lg-0 ml-lg-0 d-flex justify-content-center align-items-center mt-1 mt-lg-0">
+            <i class="fa fa-chevron-left pointer mx-1"
+               (click)="previousWeek()"></i>
+            <df-datepicker class="daily-date-picker"
+                           [formControl]="dateControlWeekly"
+                           [formatFn]="getWeeklyFormat"
+                           [direction]="-2">
+            </df-datepicker>
+            <i class="fa fa-chevron-right pointer mx-1"
+               (click)="nextWeek()"
+               *ngIf="dateControlWeekly.value < startOfThisWeek"></i>
+          </div>
+        </div>
+      </div>
+    </df-card-content>
+  </df-card>
+  <df-card class="mt-2">
+    <div class="df-loader-container"
+         *ngIf="isLoading">
+      <i class="df-loader"></i>
+    </div>
+    <df-card-content *ngIf="!isLoading && viewMode && viewMode.id === TABLE">
+      <df-grid *ngIf="isPercentageMode"
+               #teamPercentageTableGrid
+               [value]="teamPercentageActivity"
+               [responsive]="true"
+               class="team-activity-grid table-grid"
+               scrollable="true"
+               frozenWidth="430px"
+               unfrozenWidth="180px">
+        <df-grid-column field="name"
+                        frozen="true">
+          <ng-template dfGridTemplate="body"
+                       let-col
+                       let-item="rowData">
+            <div class="pl-2 activity-row d-flex"
+                 [class.table-activity-border]="getCellBorderColor(item.name)"
+                 [style.borderLeftColor]="getCellBorderColor(item.name)">
+              <div class="align-self-center">
+                {{item.name}}
+              </div>
+            </div>
+          </ng-template>
+        </df-grid-column>
+        <df-grid-column frozen="true"
+                        field="plan"
+                        styleClass="grid-column-sm">
+          <ng-template dfGridTemplate="header">
+            <div class="team-member d-flex flex-column">
+              <div class="px-2 justify-content-center d-none d-lg-flex photo">
+                <i class="align-self-center fa fa-list text-white"></i>
+              </div>
+              <div class="pl-1 pr-0 d-flex justify-content-center">
+                Plan
+              </div>
+            </div>
+          </ng-template>
+          <ng-template dfGridTemplate="body"
+                       let-col
+                       let-item="rowData">
+            <div class="d-flex justify-content-center activity-row">
+              <div class="align-self-center">
+                {{item.plan === '' ? '-' : (item.plan + '%')}}
+              </div>
+            </div>
+          </ng-template>
+        </df-grid-column>
+        <df-grid-column frozen="true"
+                        field="teamAverage"
+                        styleClass="grid-column-md">
+          <ng-template dfGridTemplate="header">
+            <div class="team-member d-flex flex-column">
+              <div class="px-2 justify-content-center d-none d-lg-flex photo">
+                <i class="align-self-center fa fa-users text-white"></i>
+              </div>
+              <div class="pl-1 pr-0 d-flex justify-content-center">
+                Team Average
+              </div>
+            </div>
+          </ng-template>
+          <ng-template dfGridTemplate="body"
+                       let-col
+                       let-item="rowData">
+            <div class="d-flex justify-content-center activity-row">
+              <div class="align-self-center">
+                <i *ngIf="item.name === 'Alignment Score'"
+                   class="fa fa-circle"
+                   [ngClass]="getScoreClass(item.teamAverage)"></i>
+                {{item.teamAverage}}%
+              </div>
+            </div>
+          </ng-template>
+        </df-grid-column>
+        <df-grid-column *ngFor="let contractor of groups"
+                        field="teamMembers.{{contractor.assignment.candidate.printableName}}"
+                        styleClass="grid-column-md">
+          <ng-template dfGridTemplate="header">
+            <div class="team-member d-flex flex-column table-display">
+              <div class="px-2 justify-content-center d-none d-lg-flex pointer"
+                   (click)="showContractorModal(contractor.assignment.id)">
+                <img class="align-self-center"
+                     [src]="contractor.assignment.candidate.photoUrl || 'assets/images/user.png'"
+                     (click)="showContractorModal(contractor.assignment.id)"
+                     (error)="contractor.assignment.candidate.photoUrl = undefined">
+              </div>
+              <div class="pl-1 pr-0 d-flex justify-content-center contractor-header pointer"
+                   (click)="showContractorModal(contractor.assignment.id)">
+                {{contractor.assignment.candidate.printableName}}
+              </div>
+            </div>
+          </ng-template>
+          <ng-template dfGridTemplate="body"
+                       let-col
+                       let-item="rowData">
+            <div *ngIf="item.teamMembers[contractor.assignment.candidate.printableName]"
+                 class="d-flex justify-content-center activity-row table-display">
+              <div class="align-self-center">
+                <i *ngIf="item.name === 'Alignment Score'"
+                   class="fa fa-circle"
+                   [ngClass]="getScoreClass(item.teamMembers[contractor.assignment.candidate.printableName])"></i>
+                {{item.teamMembers[contractor.assignment.candidate.printableName]}}%
+              </div>
+            </div>
+            <div *ngIf="!item.teamMembers[contractor.assignment.candidate.printableName]"
+                 class="d-flex justify-content-center activity-row table-display">
+              <div class="align-self-center">
+                -
+              </div>
+            </div>
+          </ng-template>
+        </df-grid-column>
+      </df-grid>
+      <df-grid *ngIf="!isPercentageMode"
+               #teamTimeTableGrid
+               [value]="teamTimeActivity"
+               [responsive]="true"
+               class="team-activity-grid table-grid"
+               scrollable="true"
+               frozenWidth="430px"
+               unfrozenWidth="180px">
+        <df-grid-column field="name"
+                        frozen="true">
+          <ng-template dfGridTemplate="body"
+                       let-col
+                       let-item="rowData">
+            <div class="pl-2 activity-row d-flex"
+                 [class.table-activity-border]="getCellBorderColor(item.name)"
+                 [style.borderLeftColor]="getCellBorderColor(item.name)">
+              <div class="align-self-center">
+                {{item.name}}
+              </div>
+            </div>
+          </ng-template>
+        </df-grid-column>
+        <df-grid-column frozen="true"
+                        field="plan">
+          <ng-template dfGridTemplate="header">
+            <div class="team-member d-flex flex-column">
+              <div class="px-2 justify-content-center d-none d-lg-flex photo">
+                <i class="align-self-center fa fa-list text-white"></i>
+              </div>
+              <div class="pl-1 pr-0 d-flex justify-content-center">
+                Plan
+              </div>
+            </div>
+          </ng-template>
+          <ng-template dfGridTemplate="body"
+                       let-col
+                       let-item="rowData">
+            <div class="d-flex justify-content-center activity-row">
+              <div class="align-self-center">
+                {{item.plan === '' ? '-' : item.plan}}
+              </div>
+            </div>
+          </ng-template>
+        </df-grid-column>
+        <df-grid-column styleClass="grid-column-md"
+                        field="teamAverage"
+                        frozen="true">
+          <ng-template dfGridTemplate="header">
+            <div class="team-member d-flex flex-column">
+              <div class="px-2 justify-content-center d-none d-lg-flex photo">
+                <i class="align-self-center fa fa-users text-white"></i>
+              </div>
+              <div class="pl-1 pr-0 d-flex justify-content-center">
+                Team Average
+              </div>
+            </div>
+          </ng-template>
+          <ng-template dfGridTemplate="body"
+                       let-col
+                       let-item="rowData">
+            <div class="d-flex justify-content-center activity-row">
+              <div class="align-self-center">
+                <div *ngIf="item.name === 'Alignment Score'">
+                  <i class="fa fa-circle"
+                     [ngClass]="getScoreClass(item.teamAverage)"></i>
+                  {{item.teamAverage}}%
+                </div>
+                <div *ngIf="item.name !== 'Alignment Score'">
+                  {{item.teamAverage}}
+                </div>
+              </div>
+            </div>
+          </ng-template>
+        </df-grid-column>
+        <df-grid-column *ngFor="let contractor of groups"
+                        field="teamMembers.{{contractor.assignment.candidate.printableName}}"
+                        styleClass="grid-column-md">
+          <ng-template dfGridTemplate="header">
+            <div class="team-member d-flex flex-column table-display">
+              <div class="px-2 justify-content-center d-none d-lg-flex pointer"
+                   (click)="showContractorModal(contractor.assignment.id)">
+                <img class="align-self-center"
+                     [src]="contractor.assignment.candidate.photoUrl || 'assets/images/user.png'"
+                     (error)="contractor.assignment.candidate.photoUrl = undefined">
+              </div>
+              <div class="pl-1 pr-0 d-flex justify-content-center contractor-header pointer"
+                   (click)="showContractorModal(contractor.assignment.id)">
+                {{contractor.assignment.candidate.printableName}}
+              </div>
+            </div>
+          </ng-template>
+          <ng-template dfGridTemplate="body"
+                       let-col
+                       let-item="rowData">
+            <div *ngIf="item.teamMembers[contractor.assignment.candidate.printableName]"
+                 class="d-flex justify-content-center activity-row table-display">
+              <div class="align-self-center">
+                <i *ngIf="item.name === 'Alignment Score'"
+                   class="fa fa-circle"
+                   [ngClass]="getScoreClass(item.teamMembers[contractor.assignment.candidate.printableName])"></i>
+                {{ showPercentageOrTime(item, contractor) }}
+              </div>
+            </div>
+            <div *ngIf="!item.teamMembers[contractor.assignment.candidate.printableName]"
+                 class="d-flex justify-content-center activity-row table-display">
+              <div class="align-self-center">
+                -
+              </div>
+            </div>
+          </ng-template>
+        </df-grid-column>
+      </df-grid>
+    </df-card-content>
+    <df-card-content *ngIf="!isLoading && viewMode && viewMode.id === CHART">
+      <df-grid *ngIf="isPercentageMode"
+               [value]="teamChartPercentageActivity"
+               [responsive]="true"
+               class="team-activity-grid bar-grid bar-grid--percentage"
+               scrollable="true"
+               frozenWidth="156px"
+               unfrozenWidth="454px">
+        <df-grid-column frozen="true"
+                        *ngIf="isAllDirectReports"
+                        field="plan">
+          <ng-template dfGridTemplate="header">
+            <div class="frozen-column d-flex flex-column justify-content-center">
+              <div class="d-flex h-50">
+                <div class="align-self-end w-100">
+                  To change the plan, select the <a [routerLink]="" (click)="switchToTimeMode();">Time Mode</a>
+                </div>
+              </div>
+              <div class="d-flex h-50">
+                <div class="align-self-end text-muted text-uppercase ">
+                  Plan of the {{ isDailyPeriod ? DAY : WEEK }}
+                </div>
+              </div>
+            </div>
+          </ng-template>
+          <ng-template dfGridTemplate="body"
+                       let-col
+                       let-item="rowData">
+            <div class="section-bar planned-section-bar">
+              <div #plannedSectionContainer
+                   *ngFor="let section of plannedSections; let i = index"
+                   class="section-bar__element
+                          d-flex
+                          ml-4
+                          mr-auto
+                          mx-lg-auto
+                          flex-column
+                          justify-content-center
+                          position-relative
+                          text-white
+                          w-100"
+                   [style.background]="section.color"
+                   [style.height]="section.percentageRounded + '%'"
+                   dfToolTipColor="dark"
+                   dfToolTip="empty"
+                   [dftoolTipData]="section"
+                   [dftoolTipTemplate]="tootlipPlannedSection"
+                   [dfToolTipPlacement]="getTooltipPlacement(plannedSections, i)">
+                <div class="text-center section-name"
+                     *ngIf="plannedSectionContainer.offsetHeight >= 20">
+                  {{section?.sectionName}}
+                </div>
+                <div class="text-center spent-time"
+                     *ngIf="plannedSectionContainer.offsetHeight >= 35">
+                  {{showSpentTimeInHoursFormat(section?.spentTime)}}
+                </div>
+                <div class="text-center spent-time-percentage"
+                     *ngIf="plannedSectionContainer.offsetHeight >= 44">
+                  {{section?.percentageRounded}}%
+                </div>
+              </div>
+            </div>
+          </ng-template>
+        </df-grid-column>
+        <df-grid-column styleClass="grid-column-lg"
+                        *ngFor="let contractor of groups"
+                        field="teamMembers.{{contractor.assignment.candidate.printableName}}"
+                        class="activity-column">
+          <ng-template dfGridTemplate="header">
+            <div class="frozen-column has-score-label d-flex flex-column time-box">
+              <div class="px-2 justify-content-center d-none d-lg-flex pointer"
+                   (click)="showContractorModal(contractor.assignment.id)">
+                <img class="align-self-center"
+                     [src]="contractor.assignment.candidate.photoUrl || 'assets/images/user.png'"
+                     (error)="contractor.assignment.candidate.photoUrl = undefined">
+              </div>
+              <div class="pl-1 pr-0 d-flex justify-content-center contractor-header pointer"
+                   (click)="showContractorModal(contractor.assignment.id)">
+                {{contractor.assignment.candidate.printableName}}
+              </div>
+              <div class="pl-1 pr-0 d-flex justify-content-center contractor-header hours-logged-header my-1">
+                {{contractor.assignment.jobTitle}}
+              </div>
+              <div class="pl-1 pr-0 d-flex justify-content-center contractor-header hours-logged-header text-muted">
+                {{showSpentTimeInHoursFormat(contractor.grouping.periodLong)}}
+              </div>
+              <div class="score-label d-none d-lg-flex pointer"
+                   id="score-label-{{contractor.assignment.id}}">
+                <div class="d-md-none mr-2">Alignment:</div>
+                <df-label [theme]="getTheme(contractor.grouping.alignmentScore)"
+                          container="score-label-{{contractor.assignment.id}}"
+                          dfToolTipColor="dark"
+                          dfToolTip="Alignment to the plan"
+                          dfToolTipPlacement="bottomright"
+                          class="position-relative pointer"
+                          (click)="showContractorModal(contractor.assignment.id)">
+                  {{contractor.grouping.alignmentScore}}%
+                </df-label>
+              </div>
+            </div>
+          </ng-template>
+          <ng-template dfGridTemplate="body"
+                       let-col
+                       let-item="rowData">
+            <div class="section-bar time-box"
+                 [style.height]="getSlotHeightPercentage(contractor?.grouping?.totalTrackedTime)">
+              <div #sectionContainer
+                   *ngFor="let section of item.teamMembers[contractor.assignment.candidate.printableName]; let i = index"
+                   class="section-bar__element
+                          d-flex
+                          ml-4
+                          mr-auto
+                          mx-lg-auto
+                          flex-column
+                          justify-content-center
+                          position-relative
+                          text-white
+                          w-100"
+                   [style.height]="section.percentageRounded + '%'"
+                   [style.background]="section.color"
+                   dfToolTipColor="dark"
+                   dfToolTip="empty"
+                   [dftoolTipTemplate]="tootlipSection"
+                   [dftoolTipData]="section"
+                   [dfToolTipPlacement]="getTooltipPlacement(item.teamMembers[contractor.assignment.candidate.printableName], i)">
+                <div *ngIf="sectionContainer.offsetHeight >= 25"
+                     class="text-center section-name">
+                  {{section?.sectionName}}
+                </div>
+                <div *ngIf="sectionContainer.offsetHeight >= 35"
+                     class="text-center spent-time">
+                  {{showSpentTimeInHoursFormat(section?.spentTime)}}
+                </div>
+                <div *ngIf="sectionContainer.offsetHeight >= 44"
+                     class="text-center spent-time-percentage">
+                  {{section?.percentageRounded}}%
+                </div>
+              </div>
+            </div>
+          </ng-template>
+        </df-grid-column>
+      </df-grid>
+      <div class="d-flex h-50 time-radio-group-mobile">
+        <df-radio-group [formControl]="dailyTimeControl">
+          <df-radio-input [value]="CONTRACTOR">
+            Contractor's Time
+          </df-radio-input>
+          <df-radio-input [value]="MANAGER">
+            Manager's Time
+          </df-radio-input>
+        </df-radio-group>
+      </div>
+      <df-grid *ngIf="!isPercentageMode"
+               [value]="teamChartTimeActivity"
+               [responsive]="true"
+               class="team-activity-grid bar-grid bar-grid--time"
+               scrollable="true"
+               frozenWidth="210px"
+               unfrozenWidth="400px">
+        <df-grid-column frozen="true"
+                        *ngIf="isAllDirectReports"
+                        field="plan">
+          <ng-template dfGridTemplate="header">
+            <div class="frozen-column d-flex flex-column justify-content-center">
+              <div class="d-flex h-50 time-radio-group-desktop">
+                <df-radio-group [formControl]="dailyTimeControl">
+                  <df-radio-input [value]="CONTRACTOR">
+                    Contractor's Time
+                  </df-radio-input>
+                  <df-radio-input [value]="MANAGER">
+                    Manager's Time
+                  </df-radio-input>
+                </df-radio-group>
+              </div>
+              <div class="d-flex h-50">
+                <div class="align-self-end text-muted text-uppercase ">
+                  Plan of the {{ isDailyPeriod ? DAY : WEEK }}
+                </div>
+              </div>
+            </div>
+          </ng-template>
+          <ng-template dfGridTemplate="body"
+                       let-col
+                       let-item="rowData">
+            <div class="d-flex"
+                 id="plannedTimeSlotsBar">
+              <div class="d-flex flex-column my-auto time-box-group">
+                <div class="w-100 px-0 py-0 text-center time-box-header"
+                     *ngFor="let header of timeSlotsHeaders">
+                  {{header}}
+                </div>
+              </div>
+              <div class="time-box d-flex mb-auto px-0 flex-column">
+                <div class="time-slot w-100 d-flex flex-column pointer"
+                     *ngFor="let slot of timeSlotsGrid; let i = index">
+                  <div *ngIf="plannedTimeSlots[i] && plannedTimeSlots[i].plannedSectionName"
+                       class="single-time-slot h-100 align-self-center"
+                       [style.background]="getSlotColor(plannedTimeSlots[i])">
+                  </div>
+                </div>
+              </div>
+            </div>
+          </ng-template>
+        </df-grid-column>
+        <df-grid-column *ngFor="let contractor of groups; let contractorIndex = index"
+                        field="teamMembers.{{contractor.assignment.candidate.printableName}}"
+                        styleClass="grid-column-lg"
+                        class="activity-column">
+          <ng-template dfGridTemplate="header">
+            <div class="frozen-column d-flex flex-column time-box">
+              <div class="px-2 justify-content-center d-none d-lg-flex pointer"
+                   (click)="showContractorModal(contractor.assignment.id)">
+                <img class="align-self-center"
+                     [src]="contractor.assignment.candidate.photoUrl || 'assets/images/user.png'"
+                     (error)="contractor.assignment.candidate.photoUrl = undefined">
+              </div>
+              <div class="pl-1 pr-0 d-flex justify-content-center contractor-header pointer"
+                   (click)="showContractorModal(contractor.assignment.id)">
+                {{contractor.assignment.candidate.printableName}}
+              </div>
+              <div class="pl-1 pr-0 d-flex justify-content-center contractor-header hours-logged-header my-1">
+                {{contractor.assignment.jobTitle}}
+              </div>
+              <div class="pl-1 pr-0 d-flex justify-content-center contractor-header hours-logged-header text-muted">
+                {{getTimezoneOffsetText(contractor.assignment.candidate)}}
+              </div>
+            </div>
+          </ng-template>
+          <ng-template dfGridTemplate="body"
+                       let-col
+                       let-item="rowData">
+            <div class="d-flex">
+              <div class="d-flex d-md-none flex-column my-auto time-box-group">
+                <div class="w-100 px-0 py-0 text-center time-box-header"
+                     *ngFor="let header of timeSlotsHeaders">
+                  {{header}}
+                </div>
+              </div>
+              <div class="time-box d-flex mb-auto px-0 flex-column">
+                <div class="time-slot w-100 d-flex flex-column"
+                     *ngFor="let slot of timeSlotsGrid; let i = index">
+                  <div
+                    *ngIf="timeSlotsPerContractor[contractorIndex].timeSlots[i] && timeSlotsPerContractor[contractorIndex].timeSlots[i].actName"
+                    class="single-time-slot h-100 align-self-center position-relative"
+                    [style.background]="getSlotColor(timeSlotsPerContractor[contractorIndex].timeSlots[i])"
+                    dfToolTipColor="dark"
+                    dfToolTip="empty"
+                    [dftoolTipTemplate]="timeTooltip"
+                    [dftoolTipData]="timeSlotsPerContractor[contractorIndex].timeSlots[i]"
+                    [dfToolTipPlacement]="getTooltipPlacement(timeSlotsGrid, i)">
+                  </div>
+                </div>
+              </div>
+            </div>
+          </ng-template>
+        </df-grid-column>
+      </df-grid>
+    </df-card-content>
+  </df-card>
+</div>
+
+<ng-template #tootlipPlannedSection
+             let-data="data">
+  <div class="d-flex flex-column section-tooltip-text">
+    <span class="planned-tooltip-title">{{data?.sectionName}}</span>
+    <span>{{showSpentTimeInHoursFormat(data?.spentTime)}} ({{data?.percentageRounded}}%)</span>
+  </div>
+</ng-template>
+
+<ng-template #tootlipSection
+             let-data="data">
+  <div class="d-flex flex-column section-tooltip-text">
+    <span class="section-tooltip-title">{{data?.sectionName}}</span>
+    <span class="mb-2">{{showSpentTimeInHoursFormat(data?.spentTime)}} ({{data?.percentageRounded}}%)</span>
+
+    <span class="section-tooltip-title">Most Used Applications</span>
+    <table>
+      <tbody>
+      <tr *ngFor="let item of data?.groupItems | slice:0:3">
+        <td>{{item?.applicationName}}</td>
+        <td class="tooltip-spent-time">{{showSpentTimeInHoursFormat(item?.spentTime)}}</td>
+        <td class="tooltip-percentage">{{item?.percentage}}%</td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+</ng-template>
+
+<ng-template #timeTooltip
+             let-data="data">
+  <div class="d-flex flex-column section-tooltip-text">
+    <span class="mb-2">{{data?.timeSlot}}</span>
+    <span class="mb-2">{{data?.actName}}</span>
+    <span>Application: {{data?.appName}}</span>
+  </div>
+</ng-template>
+
+<ng-template #profileModal
+             let-close="close">
+  <div class="text-left">
+    <app-my-dashboard-page [includeProfile]="true"
+                           [option]="SUMMARY"
+                           (close)="close()"
+                           [managerControl]="true"
+                           [assignmentId]="currentUserAssignmentId"
+                           [manager]="currentUserManager"
+                           [teamId]="currentUserTeamId"
+                           [userDetail]="currentContractor"></app-my-dashboard-page>
+  </div>
+</ng-template>

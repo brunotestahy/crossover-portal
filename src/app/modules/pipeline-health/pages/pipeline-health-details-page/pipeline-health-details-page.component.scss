@@ -1,0 +1,25 @@
+@import "variables";
+
+.pipeline-queue-state {
+  border: 1px solid #e5e7e8;
+  height: 160px;
+}
+
+.pipeline-state-row {
+  padding: 10px;
+  display: flex;
+  align-items: center;
+  height: 40px;
+  border-bottom: 1px solid #e5e7e8;
+  &--gray {
+    span, a {
+      color: map-get($map: $au-neutral, $key: 3 );
+    }
+  }
+}
+
+.df-card__title {
+  font-size: 14px;
+  display: inline-block;
+  min-height: 50px;
+}

@@ -1,0 +1,24 @@
+<div class="df-loader-container" *ngIf="isLoading">
+  <i class="df-loader"></i>
+</div>
+<div class="container-fluid notification-list py-2" *ngIf="!isLoading">
+  <div class="notification-item ml-sm-4" *ngFor="let n of filterUpdated()">
+    <div class="notification-timestamp">
+      <span class="blue">{{n.updated | date : 'MMM dd yyyy'}}</span> {{n.updated | date: 'hh:mm a'}}
+    </div>
+    <div class="d-flex align-items-center flex-sm-nowrap flex-wrap">
+      <div class="notification-info">
+        <div class="notification-icon">
+          <img class="notification-image" src="/assets/crossover-white.svg">
+        </div>
+      </div>
+      <div class="notification-message">
+        <p class="notification-message__from">Crossover</p>
+        <p class="notification-message__text" [innerHTML]="n.message"></p>
+      </div>
+    </div>
+  </div>
+  <h5 *ngIf="filterUpdated().length === 0" class="text-center">
+    You have no pending notifications.
+  </h5>
+</div>

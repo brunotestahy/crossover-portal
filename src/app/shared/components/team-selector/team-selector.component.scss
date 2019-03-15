@@ -1,0 +1,156 @@
+@import "variables";
+
+.team-selector {
+  position: absolute;
+  z-index: 9999;
+  overflow: hidden;
+  height: 91%;
+  width: 99%;
+  font-weight: 500;
+  box-shadow: 0 5px 14px 0 rgba(0,0,0,.05), 0 0 3px 0 rgba(0,0,0,.09);
+  background-color: #f1f2f5 !important;
+  border: 1px solid rgba(0,0,0,0.09);
+  
+  @media (min-width: $breakpoint-md) {
+    height: 70%;
+    width: 72%;
+  }
+
+  &__icon {
+    font-size: 24px;
+  }
+}
+
+.team-panel-content {
+  overflow-y: auto;
+  overflow-x: hidden;
+  max-width: 97% !important;
+  padding-left: 14px;
+}
+
+.team-panel {
+  @media (max-width: $breakpoint-sm) {
+    max-height: 70%;
+    min-height: 70%;
+    height: 70%;
+  }
+}
+
+.manager-panel-content {
+  overflow-y: auto;
+  overflow-x: hidden;
+  max-width: 97% !important;
+  padding-left: 14px;
+}
+
+.manager-panel {
+  @media (max-width: $breakpoint-sm) {
+    max-height: 30%;
+    min-height: 30%;
+    height: 30%;
+  }
+}
+
+.tablet-cell {
+  @media (min-width: $breakpoint-md) {
+    display: inline !important;
+  }
+
+  @media (max-width: $breakpoint-sm) {
+    display: inline !important;
+  }
+
+  @media (min-width: $breakpoint-sm) {
+    @media (max-width: $breakpoint-md) {
+      display: none !important;
+    }
+  }
+}
+
+.search-box-mobile {
+  display: initial;
+  @media (min-width: $breakpoint-lg) {
+    display: none !important;
+  }
+}
+
+.search-box-lg {
+  @media (max-width: $breakpoint-lg) {
+    display: none !important;
+  }
+  display: initial;
+}
+
+.team-assignment {
+  display: inline-block;
+  border: 2px solid #ffffff;
+  color: #fff;
+  background: #aabac5;
+  width: 32px;
+  height: 32px;
+  overflow: hidden;
+  border-radius: 50%;
+  &:not(:nth-child(1)) {
+    margin-left: -8px;
+  }
+}
+
+.user-cell {
+  height: 35px;
+  min-width: 42px;
+  text-align: left;
+  white-space: nowrap;
+  img {
+    width: 36px;
+    border-radius: 20px;
+    border: 1px solid #d8d8d8;
+  }
+}
+
+.manager-card {
+  height: 40px;
+  &:hover {
+    background-color: #e0e1e2;
+  }
+  &__selected{
+    background-color: #e7eaec;
+  }
+}
+.team {
+  word-break: break-all;
+  &:hover {
+    background-color: #e0e1e2;
+  }
+}
+.team-card {
+  min-width: 90px;
+  height: 85px;
+  @media (max-width: $breakpoint-sm) {
+    height: 77px;
+  }
+  &__selected {
+    background-color: #e7eaec;
+  }
+}
+.selected {
+  color: #17bdff;
+}
+.badge-container {
+  position: relative;
+  height: 20px;
+}
+::ng-deep {
+  .team-panel, .manager-panel{
+    overflow-y: auto;
+  }
+  .team-panel-content {
+    .df-badge--top-center {
+      left: calc(50% - 9px);
+    }
+    .df-badge {
+      position: unset !important;
+      margin-right: auto !important;
+      margin-left: auto !important;
+    }
+  }
+}

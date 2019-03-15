@@ -1,0 +1,45 @@
+.circle-icon {
+  border-radius: 50%;
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+
+  &--bordered {
+    border-width: 1px;
+    border-style: solid;
+    border-color: $au-gray-main;
+  }
+
+  &__image {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+  }
+
+  &--red,
+  &--green,
+  &--yellow {
+    font-weight: bold;
+  }
+
+  &--red {
+    background-color: $au-red;
+    color: $au-white;
+  }
+
+  &--green {
+    background-color: $au-green;
+  }
+
+  &--yellow {
+    background-color: $au-amber;
+  }
+
+  &--gray {
+    background-color: map-get($au-gray, 2);
+  }
+
+}

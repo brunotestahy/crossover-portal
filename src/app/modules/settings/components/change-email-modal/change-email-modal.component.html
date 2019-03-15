@@ -1,0 +1,38 @@
+<form (submit)="submit()" class="standard-form">
+  <div class="df-alert__box__header">
+    Change Email Address
+  </div>
+  <div class="page-content text-left">
+
+    <app-page-alert *ngIf="error" [text]="error" class="my-2"></app-page-alert>
+
+    <div>
+      <label>Current Email</label>
+      <br> {{ (currentUser$ | async)?.email}}
+    </div>
+
+    <div>
+      <label>New Email</label>
+      <df-input-container>
+        <input type="email" [formControl]="emailControl" placeholder="Email...">
+      </df-input-container>
+      <df-validation-messages [control]="emailControl"></df-validation-messages>
+    </div>
+    <p>
+      You will receive a confirmation email to your new email address.
+    </p>
+  </div>
+  <div class="df-alert__box__buttons">
+    <div class="df-alert__button-container">
+      <button class="df-alert__button" type="submit" [loading]="isLoading" loaderPosition="after" df-button
+        theme="success">
+        Change Email
+      </button>
+    </div>
+    <div class="df-alert__button-container">
+      <button class="df-alert__button" type="button" (click)="close()" df-button theme="danger">
+        Cancel
+      </button>
+    </div>
+  </div>
+</form>

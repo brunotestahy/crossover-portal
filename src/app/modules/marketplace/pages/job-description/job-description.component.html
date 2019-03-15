@@ -1,0 +1,130 @@
+<div class="job-header" #top>
+  <div class="container">
+    <h1>Welcome to Crossover</h1>
+    <p> Crossover provides Fortune 1000 companies with a marketplace of the top talent in the world. We put candidates through
+      a series of rigorous evaluations to find the best.
+      <br>
+      <br> Think you are one of them? Apply now. </p>
+  </div>
+</div>
+<div class="df-loader-container" *ngIf="isLoading">
+  <i class="df-loader"></i>
+</div>
+<div class="container" *ngIf="job && !isLoading">
+  <div class="my-3">
+    <div>
+      <h2>{{ job?.title }}</h2>
+      <span class="salary-info">
+        <ng-container *ngIf="job?.salaryType === 'WEEKLY'">
+          ${{job?.salary | number : '2.0-0' }}/hr
+        </ng-container>
+        <ng-container *ngIf="job?.salaryType === 'MONTHLY'">
+          ${{job?.salary | number : '2.0-0' }}/month
+        </ng-container>
+      </span>
+      <div class="alert alert-warning my-4" *ngIf="!isApplicationAllowed">
+        {{prerequisitesError.text}}
+      </div>
+      <div class="alert alert-danger my-4" *ngIf="isError">
+        {{responseError.text}}
+      </div>
+      <button type="button" class="apply-now-btn my-4" (click)="scrollToApply()" df-button theme="info" *ngIf="isApplicationAllowed">
+        APPLY NOW
+      </button>
+      <app-page-alert *ngIf="error" [text]="error" class="my-2"></app-page-alert>
+
+      <h3>Job Description</h3>
+      <hr>
+      <div [innerHTML]="job?.candidateDescription | keepHtml" *ngIf="job.candidateDescription"></div>
+      <div [innerHTML]="job?.managerDescription | keepHtml" *ngIf="job.managerDescription"></div>
+    </div>
+
+    <section class="skills" *ngIf="job?.skills?.length > 0">
+      <h2>Skills Required</h2>
+
+      <hr/>
+
+      <ul>
+        <li *ngFor="let skill of job?.skills">
+          <span class="">{{skill.name}}</span>
+        </li>
+      </ul>
+    </section>
+    <hr>
+    <div class="apply-form" #apply *ngIf="isApplicationAllowed">
+      <ng-container *ngIf="!showHighway">
+        <h2 class="text-center my-3">Apply for this job</h2>
+        <form [formGroup]="form" (submit)="onSubmit()">
+          <ng-container *ngIf="isAnonymous">
+            <div>
+              <df-input-container>
+                <input type="text" formControlName="name" placeholder="Full Name">
+              </df-input-container>
+              <df-validation-messages [control]="form.get('name')" [validationMessagesMap]="nameMessages"></df-validation-messages>
+            </div>
+            <div>
+              <df-input-container>
+                <input type="text" formControlName="email" placeholder="Email" (change)="isEmailUnique(form.controls.email)">
+              </df-input-container>
+              <div *ngIf="isEmailExist" class="text-danger">This email is already registered. Want to <a routerLink="/auth/login">login</a>?</div>
+              <df-validation-messages [control]="form.get('email')">
+              </df-validation-messages>
+            </div>
+            <div>
+              <df-input-container>
+                <input type="password" formControlName="password" placeholder="Password">
+              </df-input-container>
+              <df-validation-messages [control]="form.get('password')" [validationMessagesMap]="passwordMessages"></df-validation-messages>
+            </div>
+            <div>
+              <df-select formControlName="country" placeholder="Country" class="w-100">
+                <df-option *ngFor="let country of allowedCountries" [value]="country" [displayText]="country.name">{{country.name}}</df-option>
+              </df-select>
+              <df-validation-messages [control]="form.get('country')"></df-validation-messages>
+              <div class="text-right">
+                <small class="blue text-right pointer" [dfToolTip]="countryTooltip" [dfToolTipShowOnClick]="true" container="body"
+                  dfToolTipPlacement="right">
+                  Your country is not listed?
+                </small>
+              </div>
+            </div>
+          </ng-container>
+          <label class="file-label w-100" for="cv-file-input">
+            {{form.value.resume ? fileName : 'Browse'}}
+            <div class="file-label__clear" *ngIf="form.value.resume" (click)="clearFile($event)">
+              <i class="fa fa-times"></i>
+            </div>
+          </label>
+          <div class="position-relative">
+            <input id="cv-file-input" type="file" class="file-input" #fileInput (change)="onFileChange($event)" accept=".pdf,.md,.doc,.docx,.xml,.txt">
+          </div>
+          <df-validation-messages [control]="form.get('resume')"></df-validation-messages>
+          <div class="text-center">
+            <small>
+              <span [class.text-danger]="fileSizeError">No cover letters please. Upload cannot be larger than 1MB.</span>
+              <br>
+              <span [class.text-danger]="fileExtensionError">Only file with type 
+                <strong>'.pdf, .md, .doc, .docx, .xml, .txt'</strong> is acceptable.
+              </span>
+            </small>
+          </div>
+          <div class="my-3" *ngIf="isAnonymous">
+            <re-captcha formControlName="recaptcha"></re-captcha>
+            <df-validation-messages [control]="form.get('recaptcha')"></df-validation-messages>
+          </div>
+          <button type="submit" df-button theme="info" class="w-100 apply-now-btn my-3" [loading]="isApplying" loaderPosition="after">APPLY NOW</button>
+        </form>
+      </ng-container>
+      <div *ngIf="showHighway">
+        <p class="text-center">
+          <img src="/assets/images/marketplace/road.png" width="100" height="100">
+          <br>
+          <br> You're ready for Crossover Highway.
+          <br>
+          <br>
+          <button type="button" routerLink="/candidate/dashboard/applications" df-button theme="success">START THE CHALLENGE</button>
+          <br>
+          <br> </p>
+      </div>
+    </div>
+  </div>

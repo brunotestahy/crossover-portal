@@ -1,0 +1,198 @@
+$info-color: #17bdff;
+$danger-color: #f44346;
+
+.count-circle {
+  width: 29px !important;
+}
+
+.info {
+  color: $info-color;
+}
+
+.danger {
+  color: $danger-color;
+}
+
+table {
+  width: 100%;
+  table-layout: fixed;
+
+  thead {
+    tr {
+      td {
+        height: 131px;
+        max-width: 45px;
+        vertical-align: top;
+
+        .bars-holder {
+          position: relative;
+          z-index: 2;
+          height: 126px;
+          border-bottom: 2px solid #f5cb16;
+
+          background: repeating-linear-gradient(
+              to bottom,
+              #ececed,
+              #ececed 1px,
+              #fff 1px,
+              #fff 21px
+          );
+
+          &:before {
+            content: '';
+            display: block;
+            background: #fff;
+            width: 9px;
+            height: 9px;
+            position: absolute;
+            bottom: -5px;
+            left: 50%;
+            margin-left: -5px;
+            border: 2px solid #f5cb16;
+            border-radius: 50%;
+          }
+
+          .bars {
+            position: absolute;
+            bottom: 10px;
+            width: 29px;
+
+            > div {
+              width: 18px;
+              height: 18px;
+              line-height: 19px;
+              margin-top: 3px;
+              background: #02a8f3;
+              border-radius: 50%;
+              text-align: center;
+              color: #fff;
+              font-size: 11px;
+
+              &:first-child {
+                margin-top: 0;
+              }
+
+              &.counter {
+                width: 25px;
+                margin-left: -3.5px;
+              }
+
+              span {
+                position: relative;
+                display: block;
+              }
+            }
+          }
+        }
+
+        .t-header {
+          position: relative;
+          cursor: pointer;
+          padding: 7px 2px 5px;
+          font-size: 11px;
+          line-height: 13px;
+          text-transform: uppercase;
+          text-align: center;
+          height: 38px;
+          z-index: 1;
+          transition: all .3s;
+
+          &:before {
+            content: '';
+            display: block;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(#f5cb16, #fff);
+            position: absolute;
+            top: 0;
+            left: 0;
+            opacity: 0;
+            z-index: -1;
+            transition: opacity .3s;
+          }
+
+          &:hover {
+            &:before {
+              opacity: 1;
+            }
+          }
+        }
+
+        &:first-child {
+          .bars-holder {
+            border-color: #d8d8d8;
+
+            &:before {
+              border-color: #d8d8d8;
+            }
+          }
+
+          .t-header:before {
+            background: linear-gradient(#d8d8d8, #fff);
+          }
+        }
+      }
+    }
+  }
+}
+
+.df-pie-count {
+  opacity: 1;
+  position: absolute;
+  width: 100%;
+  text-align: center;
+  font-size: 16px;
+  top: 33px
+}
+
+.df-pie-badge {
+  opacity: 1;
+  position: absolute;
+  top: 74%;
+  width: 50px;
+  left: 53%;
+}
+
+.chart-container {
+  width: 100%;
+  height: 100px;
+  display: inline-block;
+}
+
+.df-pie {
+  height: 90%;
+}
+
+.workflow-header {
+  font-size: 12px;
+}
+
+::ng-deep {
+  app-workflows-widget {
+    .df-badge {
+      border-radius: 10px !important;
+      width: 34px !important;
+    }
+
+    .pie-tooltip {
+      display: none !important;
+    }
+
+    .df-tooltip__content {
+      background-color: #f5cb16;
+      color: black;
+    }
+    .df-tooltip--bottom::after {
+      border-bottom: 7.5px solid #f5cb16;
+    }
+
+    .pre-work {
+      .df-tooltip__content {
+        background-color: #d8d8d8;
+      }
+      .df-tooltip--bottom::after {
+        border-bottom: 7.5px solid #d8d8d8;
+      }
+    }
+  }
+}

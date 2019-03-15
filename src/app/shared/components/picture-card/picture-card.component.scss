@@ -1,0 +1,46 @@
+@import "variables";
+
+.picture-card-image {
+  max-height: 250px;
+}
+
+.icons-divider {
+  width: 1px;
+  margin-left: 4px;
+  margin-right: 4px;
+  height: 17px;
+  background-color: map-get($au-neutral, 3);
+  display: inline-block;
+}
+
+.fa-skype {
+  transition: 0.2s all;
+  font-size: 24px;
+  &:hover {
+    color: $au-blue;
+  }
+}
+
+.skype-circle {
+  position: absolute;
+  text-decoration: none;
+  background: #22aae4;
+  color: #fff;
+  font-size: 18px;
+  padding: 8px;
+  border-radius: 50%;
+  box-shadow: 0 2px 6px rgba(0,0,0,.3);
+  top: -7px;
+  transform: scale(0);
+  opacity: 0;
+  transition: transform .2s,opacity .2s,left .2s,right .2s,top .2s,background .2s;
+  transition-timing-function: ease-in-out;
+}
+
+.end-contract-link {
+  color: #ea5a5a;
+}
+.disabled{
+  color: #989ba1;
+  cursor: not-allowed;
+}

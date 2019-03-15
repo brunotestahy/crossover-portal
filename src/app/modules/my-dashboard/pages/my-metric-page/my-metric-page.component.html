@@ -1,0 +1,103 @@
+<div class="df-loader-container"
+     *ngIf="isLoading">
+  <i class="df-loader"></i>
+</div>
+<div [class.d-none]="isLoading">
+  <form [formGroup]="form">
+    <div class="row justify-content-between mb-4">
+      <div class="col-12 col-lg-6 d-flex justify-content-start flex-wrap mb-1">
+        <df-select class="wide-element mr-2 my-1"
+                   formControlName="teams"
+                   (change)="handleTeamChange($event)">
+          <df-option *ngFor="let team of teams"
+                     [value]="team.id"
+                     [displayText]="team.name">
+          </df-option>
+        </df-select>
+        <df-select class="wide-element mr-2 my-1"
+                   formControlName="managers">
+          <df-option [value]="'all'"
+                     displayText="All Managers"></df-option>
+          <df-option *ngFor="let manager of managers"
+                     [value]="manager.id"
+                     [displayText]="manager.name"></df-option>
+        </df-select>
+        <span class="mt-2 mb-2" *ngIf="isMetricSet">
+          <b>Metric:</b>&nbsp;{{metricDesc}}</span>
+      </div>
+      <div class="col-12 col-lg-6 d-flex justify-content-end flex-wrap">
+        <df-group-toggle [items]="items"
+                         class="mr-2 my-1 wide-element"
+                         (change)="onViewChange($event)">
+        </df-group-toggle>
+        <df-select formControlName="range"
+                   class="mr-2 my-1 wide-element">
+          <df-option value="4"
+                     displayText="Last 4 weeks"></df-option>
+          <df-option value="8"
+                     displayText="Last 8 weeks"></df-option>
+          <df-option value="12"
+                     displayText="Last 12 weeks"></df-option>
+        </df-select>
+        <button type="button"
+                class="wide-element my-1"
+                df-button
+                (click)="exportCsv()">
+          Export to CSV
+        </button>
+      </div>
+    </div>
+    <app-page-alert class="my-3"
+                    *ngIf="error"
+                    [text]="error"></app-page-alert>
+    <div *ngIf="isMetricSet">
+      <div *ngIf="view === CHART">
+        <div class="row">
+          <div class="col-12 col-lg-3 d-flex flex-column">
+            <df-checkbox class="mb-2"
+                         (change)="toggleCurrentWeek($event)">Show Current Week</df-checkbox>
+            <df-grid [value]="metricGrid"
+                     [responsive]="false">
+              <df-grid-column header="Activity"
+                              field="activity">
+              </df-grid-column>
+              <df-grid-column header="Per Week"
+                              field="weekly">
+              </df-grid-column>
+            </df-grid>
+          </div>
+          <div class="col-12 col-lg-9 d-flex flex-column">
+            <df-line-chart class="metrics-chart"
+                           [data]="metricsChartData"
+                           [showDots]="true"
+                           [showValues]="true"
+                           [smoothLine]="false"
+                           [showLegend]="false"></df-line-chart>
+          </div>
+        </div>
+      </div>
+      <div *ngIf="view === GRID">
+        <df-grid [value]="metricGrid"
+                 id="metric-grid">
+          <df-grid-column header=""
+                          field="name">
+          </df-grid-column>
+          <df-grid-column header="Avg. Units"
+                          field="weekly">
+          </df-grid-column>
+          <df-grid-column *ngFor="let week of weekHeaders; let i = index"
+                          [header]="week">
+            <ng-template dfGridTemplate="body"
+                         let-item="rowData">
+              {{getWeekCellContent(item.weeks, i)}}
+            </ng-template>
+          </df-grid-column>
+        </df-grid>
+      </div>
+    </div>
+    <div class="alert alert-warning my-4"
+         *ngIf="!isMetricSet">
+      No metric setting.
+    </div>
+  </form>
+</div>

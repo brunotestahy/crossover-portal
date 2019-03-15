@@ -1,0 +1,86 @@
+<div class="au-modal-header p-3">
+  <div class="d-flex align-items-center m-0">
+    <h5>Timecard Details</h5>
+    <i (click)="close()"
+       class="au-modal-close fa fa-times">
+    </i>
+  </div>
+</div>
+<div class="px-3 pt-3 text-left overflow-y">
+  <div *ngIf="screenshot"
+       class="mb-3">
+    <a [href]="screenshot?.url"
+       [class.has-missing-screenshot]="isScreenshotMissing"
+       target="_blank"
+       class="timecard-screenshot">
+      <img [src]="screenshot?.thumbnailUrl"
+           (error)="setScreenshotMissingState(true)"
+           class="img-fluid w-100 h-100"
+           *ngIf="!isScreenshotMissing">
+    </a>
+  </div>
+  <p>Snapshot Taken: {{diary.date | date: 'MMM d, y, h:mm:ss a'}}</p>
+  <df-grid #grid
+           [value]="events"
+           [responsive]="isResponsive"
+           class="table-layout-auto table-responsive-40-60">
+    <df-grid-column header="Time"
+                    field="date"
+                    [sortable]="true">
+      <ng-template dfGridTemplate="body"
+                   let-col
+                   let-item="rowData">
+        {{item.date | date : 'h:mm a'}}
+      </ng-template>
+    </df-grid-column>
+    <df-grid-column header="Keyboard"
+                    field="keyboard"
+                    [sortable]="true"></df-grid-column>
+    <df-grid-column header="Mouse"
+                    field="mouse"
+                    [sortable]="true"></df-grid-column>
+    <df-grid-column header="Title"
+                    field="windowTitle"
+                    [sortable]="true"></df-grid-column>
+    <df-grid-column header="Application"
+                    field="processName"
+                    [sortable]="true">
+    </df-grid-column>
+    <df-grid-footer-column-group>
+      <df-grid-row>
+        <df-grid-column>
+          <ng-template dfGridTemplate="footer">
+            Total:
+          </ng-template>
+        </df-grid-column>
+        <df-grid-column>
+          <ng-template dfGridTemplate="footer">
+            {{diary.keyboardEvents}}
+          </ng-template>
+        </df-grid-column>
+        <df-grid-column>
+          <ng-template dfGridTemplate="footer">
+            {{diary.mouseEvents}}
+          </ng-template>
+        </df-grid-column>
+        <df-grid-column>
+          <ng-template dfGridTemplate="footer">
+          </ng-template>
+        </df-grid-column>
+        <df-grid-column>
+          <ng-template dfGridTemplate="footer">
+          </ng-template>
+        </df-grid-column>
+      </df-grid-row>
+    </df-grid-footer-column-group>
+  </df-grid>
+</div>
+<div class="w-100 d-flex align-items-center justify-content-end p-3 flex-no-shrink">
+  <button df-button
+          type="button"
+          theme="info"
+          class="w-100 w-md-auto"
+          (click)="close()">
+    <span>Close</span>
+  </button>
+</div>

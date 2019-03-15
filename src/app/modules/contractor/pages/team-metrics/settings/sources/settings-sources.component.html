@@ -1,0 +1,45 @@
+<div class="d-block">
+  <div class="d-block mb-5 ">
+    <h4 class="mb-0 mr-1">Metric Source</h4>
+    <span class="au-neutral-3">Choose the source of your metric</span>
+  </div>
+  <div class="row h-50">
+    <div class="col-6 col-md-4 d-flex px-3 py-5 justify-content-center pointer right-bottom-border left-border top-border"
+         (click)="showSettingModal(metricType.JIRA)">
+      <div class="d-flex flex-column align-self-center text-center">
+        <img src="assets/images/icons/jira.png"> Jira
+      </div>
+    </div>
+    <div class="col-6 col-md-4 d-flex px-3 py-5 justify-content-center pointer right-bottom-border top-border"
+         (click)="showSettingModal(metricType.ZENDESK)">
+      <div class="d-flex flex-column align-self-center text-center">
+        <img src="assets/images/icons/zendesk.png"> Zendesk
+      </div>
+    </div>
+    <div class="col-6 col-md-4 d-flex px-3 py-5 justify-content-center pointer right-bottom-border left-border-smartphone top-border-md"
+
+         (click)="showSettingModal(metricType.MANUAL)">
+      <div class="d-flex flex-column align-self-center text-center">
+        <img src="assets/images/icons/custom-metric.png"> Manual Metric
+      </div>
+    </div>
+    <div class="col-6 col-md-4 d-flex px-3 py-5 justify-content-center pointer right-bottom-border left-border-md"
+         (click)="showSettingModal(metricType.DESKDOTCOM)">
+      <div class="d-flex flex-column align-self-center text-center">
+        <img src="assets/images/icons/desk.png"> Desk.com
+      </div>
+    </div>
+    <div class="col-6 col-md-4 d-flex px-3 py-5 justify-content-center pointer right-bottom-border left-border-smartphone"
+         (click)="showSettingModal(metricType.GOOGLESHEETS)">
+      <div class="d-flex flex-column align-self-center text-center">
+        <img src="assets/images/icons/google-spreadsheet.png"> Google Sheets
+      </div>
+    </div>
+    <div class="col-6 col-md-4 d-flex px-3 py-5 justify-content-center pointer right-bottom-border"
+         (click)="showSettingModal(metricType.SALESFORCE)">
+      <div class="d-flex flex-column align-self-center text-center">
+        <img src="assets/images/icons/salesforce.png"> Salesforce
+      </div>
+    </div>
+  </div>
+</div>

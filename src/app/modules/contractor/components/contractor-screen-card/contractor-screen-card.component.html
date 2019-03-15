@@ -1,0 +1,27 @@
+<div class="d-flex flex-column">
+  <div class="d-flex
+              contractor
+              online-status
+              {{ getOnlineStatusClass() }}">
+    <img class="align-self-center position-relative pointer"
+         [src]="assignment.candidate.photoUrl || 'assets/images/user.png'"
+         (error)="assignment.candidate.photoUrl = undefined">
+    <div class="align-self-center d-flex flex-column ml-2 contractor-info">
+      <small class="text-left w-100 au-neutral-3 contractor__name">
+        {{assignment.candidate.printableName}}
+      </small>
+      <hr class="my-0">
+      <span class="d-flex w-100 justify-content-between contractor__name">
+        <small class="text-left au-neutral-3 contractor__window mr-1">
+          {{workDiary?.screenshot?.currentWindow}}
+        </small>
+        <small class="text-right au-neutral-3 d-block">
+          {{getWorkDiaryTime()}}
+        </small>
+      </span>
+    </div>
+  </div>
+  <img [src]="workDiary?.screenshot && workDiary?.screenshot.url || '/assets/images/not-found-screenshot.png'"
+       (error)="workDiary?.screenshot ? workDiary?.screenshot.url = undefined : ''"
+       class="img-fluid w-100 ie-fix">
+</div>

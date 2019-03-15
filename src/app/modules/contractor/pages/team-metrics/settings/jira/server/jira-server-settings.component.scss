@@ -1,0 +1,14 @@
+.jira-user {
+  height: 31px;
+}
+
+::ng-deep {
+  app-jira-server-settings {
+    .df-button-loader {
+      border-top: .2em solid #607d8b87;
+      border-right: .2em solid #607d8b87;
+      border-bottom: .2em solid #607d8bb5;
+      border-left: .2em solid #9E9E9E;
+    }
+  }
+}

@@ -1,0 +1,45 @@
+@import "variables";
+
+.profile-image-selector {
+  &__image {
+    width: 100%;
+    height: 100%;
+  }
+
+  .overlay-container {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    background-color: rgba(0,0,0,.5);
+    transition: opacity .3s ease;
+    color: $au-white;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    &:hover {
+      opacity: 1;
+    }
+    @media screen and (min-width: 769px) {
+      opacity: 0;
+    }
+  }
+
+  .file-upload {
+    margin: 0 auto;
+    text-align: center;
+    line-height: 200px;
+  }
+
+  .delete-image {
+    width: 15px;
+    height: 17px;
+    position: absolute;
+    top: 160px;
+    left: 50%;
+    -webkit-transform: translatex(-50%);
+    transform: translatex(-50%);
+  }
+}

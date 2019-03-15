@@ -1,0 +1,31 @@
+.onboarding {
+
+  &__steps {
+    margin-top: 15px;
+    margin-bottom: 15px;
+  }
+
+  &__step {
+    display: inline-block;
+    width: 8px;
+    height: 8px;
+    background: map-get($au-gray, 2);
+    border-radius: 50%;
+    margin-right: 9px;
+    &--completed {
+      background: $au-gray-main;
+    }
+
+    &--active {
+      background: $au-blue;
+    }
+  }
+
+  &__office-icon {
+    background-image: url('/assets/images/candidate/onboarding-process/desk-test.png');
+    width: 100%;
+    height: 560px;
+    opacity: .3;
+  }
+
+}

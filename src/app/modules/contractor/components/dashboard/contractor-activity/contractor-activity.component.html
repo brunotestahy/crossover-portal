@@ -1,0 +1,161 @@
+<div class="au-modal-header p-3 d-flex">
+  <div class="d-flex flex-column flex-sm-row flex-md-row flex-lg-row flex-xl-row w-100 header-content">
+    <div class="d-flex mr-auto">
+      <div class="user mr-3 align-self-center online-status {{ getOnlineStatusClass() }}">
+        <img [src]="assignment.candidate.photoUrl || 'assets/images/user.png'">
+      </div>
+      <div class="contractor-name">
+        <h5 class="mt-2 d-flex">
+          {{assignment.candidate.printableName}}
+        </h5>
+        <h6 class=" d-flex">
+          {{assignment.jobTitle}}
+        </h6>
+      </div>
+    </div>
+    <div class="d-flex">
+      <a href="#"
+          class="mr-2 align-self-center d-flex"
+          [routerLink]=""
+          *ngIf="dateControl.value < today"
+          (click)="fetchToday()">Today</a>
+      <span class="mr-2 d-flex align-self-center"
+          *ngIf="dateControl.value >= today">Today</span>
+      <div class="d-flex justify-content-center align-items-center">
+        <i class="fa fa-chevron-left pointer"
+          (click)="previousDay()"></i>
+        <df-datepicker class="daily-date-picker"
+                        [formControl]="dateControl"
+                        [formatFn]="getDailyFormat"
+                        [direction]="-2">
+        </df-datepicker>
+        <i class="fa fa-chevron-right pointer"
+            (click)="nextDay()"
+            *ngIf="dateControl.value < today"></i>
+      </div>
+    </div>
+  </div>
+  <i (click)="onClose()"
+     class="cursor-pointer fa fa-times ml-3 align-self-center">
+  </i>
+</div>
+<div class="df-loader-container"
+     *ngIf="isLoading">
+  <i class="df-loader"></i>
+</div>
+<div *ngIf="!isLoading"
+     class="d-block mr-2 ml-2">
+  <div class="row mx-0 my-3 p-0 score-info">
+    <div class="col-12 col-sm-4 d-flex align-items-center justify-content-center"
+         [dfToolTip]="ALIGNMENT_LABEL"
+         dfToolTipPlacement="bottom">
+      <div class="align-self-center d-flex d-sm-block">
+        <i class="fa fa-info-circle d-inline d-md-none mr-1"
+           [dfToolTip]="ALIGNMENT_LABEL"
+           container="body"
+           dfToolTipPlacement="right"></i>
+        <small class="mr-3">Alignment Score: </small>
+      </div>
+      <df-progress-bar
+        [percentage]="alignment / 100"
+        class="mr-3 align-self-center w-25 d-flex {{ getScoreClass(alignment, 100) }}">
+      </df-progress-bar>
+      <small>{{getScorePercentage(alignment)}}%</small>
+    </div>
+    <div class="col-12 col-sm-4 d-flex align-items-center justify-content-center"
+         [dfToolTip]="FOCUS_LABEL"
+         dfToolTipPlacement="bottom">
+      <div class="align-self-center d-flex d-sm-block">
+        <i class="fa fa-info-circle d-inline d-md-none mr-1"
+           [dfToolTip]="FOCUS_LABEL"
+           container="body"
+           dfToolTipPlacement="right"></i>
+        <small class="mr-2">
+          Focus Score:
+        </small>
+      </div>
+      <df-progress-bar
+        [percentage]="focus / 100"
+        class="mr-2 align-self-center w-25 d-flex {{ getScoreClass(focus, 100) }}">
+      </df-progress-bar>
+      <small>{{getScorePercentage(focus)}}%</small>
+    </div>
+    <div class="col-12 col-sm-4 d-flex align-items-center justify-content-center"
+         [dfToolTip]="INTENSITY_LABEL"
+         dfToolTipPlacement="bottom">
+      <div class="align-self-center d-flex d-sm-block">
+        <i class="fa fa-info-circle d-inline d-md-none mr-1"
+           [dfToolTip]="INTENSITY_LABEL"
+           container="body"
+           dfToolTipPlacement="right"></i>
+        <small class="mr-3">
+          Intensity Score:
+        </small>
+      </div>
+      <df-progress-bar
+        [percentage]="intensity / 100"
+        class="mr-3 align-self-center w-25 d-flex {{ getScoreClass(intensity, 100) }}">
+      </df-progress-bar>
+      <small>{{getScorePercentage(intensity)}}%</small>
+    </div>
+  </div>
+  <div class="time-box-container">
+    <div class="time-box-header d-flex mx-auto">
+      <div class="col h-100 px-0 py-0 text-center"
+           *ngFor="let header of timeSlotsHeaders">
+        {{header}}
+      </div>
+    </div>
+    <div class="time-box d-flex mx-auto position-relative">
+      <div class="time-slot h-100 d-flex"
+           *ngFor="let slot of timeSlotsGrid; let i = index">
+
+        <div *ngIf="timeSlots[i] && timeSlots[i]?.actName"
+             class="h-{{getSlotHeight(i)}} w-100 align-self-center {{getOpacity(i)}} selection-transition"
+             (click)="selectTimeSlot(i)"
+             [style.background]="getSlotColor(timeSlots[i])"
+             dfToolTipColor="dark"
+             dfToolTip="empty"
+             [dftoolTipTemplate]="timeTooltip"
+             [dftoolTipData]="timeSlots[i]"
+             dfToolTipPlacement="right">
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="w-100 mt-1 contractor-screenshot align-items-center d-flex justify-content-between"
+       [class.has-missing-screenshot]="!currentImageUrl">
+    <i [class.invisible]="!selectedTimeSlot || isFirstSlot()"
+       class="fa fa-chevron-circle-left fa-3x pointer ml-3"
+       (click)="previousTimeSlot()"></i>
+    <img [src]="currentImageUrl"
+            (error)="currentImageUrl = undefined"
+            class="img-fluid"
+            *ngIf="currentImageUrl">
+    <i [class.invisible]="!selectedTimeSlot || isLastSlot()"
+       class="fa fa-chevron-circle-right fa-3x pointer mr-3"
+       (click)="nextTimeSlot()"></i>
+  </div>
+  <div *ngIf="selectedTimeSlot"
+       class="w-100 p-3 d-block">
+    <div class="text-left"><span class="au-neutral-3">Snapshot taken:</span> {{getSnapshotTaken(selectedTimeSlot)}}</div>
+    <div class="text-left"><span class="au-neutral-3">Active window:</span> {{getActiveWindow()}}</div>
+  </div>
+</div>
+
+<ng-template #timeTooltip
+             let-data="data">
+  <div class="d-flex flex-column section-tooltip-text">
+    <span class="mb-2">
+      {{data?.timeSlot}}
+    </span>
+    <span class="mb-2">
+      <i class="fa fa-circle mr-2"
+         [style.color]="getSlotColor(data)"></i>
+        {{data?.actName}}
+    </span>
+    <span>
+      <i class="fa fa-circle invisible mr-2"></i>
+      {{data?.appName}}</span>
+  </div>
+</ng-template>

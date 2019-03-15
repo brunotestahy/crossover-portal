@@ -1,0 +1,26 @@
+@import "variables";
+
+:host {
+  app-page-alert {
+    flex-grow: 0;
+  }
+
+  .clickable-text {
+    display: inline-block;
+    color: $au-blue;
+    cursor: pointer;
+  }
+
+  .center-all {
+    display: flex;
+    text-align: center;
+    justify-content: center;
+    align-items: center;
+  }
+  df-card {
+    font-size: 1.2rem;
+  }
+  .no-shrink {
+    flex-shrink: 0;
+  }
+}

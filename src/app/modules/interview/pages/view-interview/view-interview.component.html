@@ -1,0 +1,106 @@
+<div class="section__header section__header--aligned">
+  Interview Details
+</div>
+<div class="df-loader-container"
+     *ngIf="isLoading">
+  <i class="df-loader"></i>
+</div>
+<div class="container-fluid padding-aligned my-3 page-scroll"
+     *ngIf="!isLoading">
+  <app-page-alert [text]="error"
+                  *ngIf="error"
+                  class="my-3"></app-page-alert>
+  <div *ngIf="interview">
+    <h5 class="note note--info">{{interview.selection.marketplaceMember.application.job.title}}</h5>
+    <div class="row">
+      <div class="col-md-6">
+        <df-card class="my-3"
+                 *ngIf="!isManager">
+          <df-card-content class="d-flex align-items-center p-0">
+            <div class="p-4 text-center au-white bg-au-blue">
+              <i class="fa fa-user fa-fw fa-3x"></i>
+            </div>
+            <div class="p-3">
+              <strong>Hiring manager:</strong>
+              <br class="d-block d-md-none"> {{interview.selection.manager.printableName}}
+            </div>
+          </df-card-content>
+        </df-card>
+        <df-card class="my-3"
+                 *ngIf="isManager">
+          <df-card-content class="d-flex align-items-center p-0">
+            <div class="p-4 text-center au-white bg-au-blue">
+              <i class="fa fa-user fa-fw fa-3x"></i>
+            </div>
+            <div class="p-3">
+              <strong>Candidate:</strong>
+              <br class="d-block d-md-none"> {{interview.interviewee.printableName}}
+            </div>
+          </df-card-content>
+        </df-card>
+        <df-card class="my-3">
+          <df-card-content class="d-flex align-items-center p-0">
+            <div class="p-4 text-center au-white bg-au-blue">
+              <i class="fa fa-map-marker fa-fw fa-3x"></i>
+            </div>
+            <div class="p-3"
+                 *ngIf="!isManager">
+              <strong>Location:</strong>
+              <br class="d-block d-md-none"> {{interview.selection.manager.location.city ? interview.selection.manager.location.city+',
+              ' : ''}} {{interview.selection.manager.location.country.name}}
+            </div>
+            <div class="p-3"
+                 *ngIf="isManager">
+              <strong>Location:</strong>
+              <br class="d-block d-md-none"> {{interview.interviewee.location.city ? interview.interviewee.location.city+',
+              ' : ''}} {{interview.interviewee.location.country.name}}
+            </div>
+          </df-card-content>
+        </df-card>
+        <df-card class="my-3"
+                 *ngIf="interview.startDateTime && interview.status === 'CANDIDATE_ACCEPTED'">
+          <df-card-content class="d-flex align-items-center p-0">
+            <div class="p-4 text-center au-white bg-au-blue">
+              <i class="fa fa-calendar fa-fw fa-3x"></i>
+            </div>
+            <div class="p-3">
+              <strong>Interview date/time:</strong>
+              <br class="d-block d-md-none"> {{ interview.startDateTime | date : 'MMM dd, y HH:mm a'}}
+            </div>
+          </df-card-content>
+        </df-card>
+      </div>
+      <div class="col-md-6">
+        <div class="container-fluid my-3">
+          <div class="row"
+               *ngIf="interview.status !== 'CANDIDATE_ACCEPTED'">
+            <div class="col-md-6 text-md-right">
+              <button type="button"
+                      df-button
+                      theme="success"
+                      class="w-100 w-md-auto my-1 my-md-0"
+                      routerLink="../accept">Accept</button>
+            </div>
+            <div class="col-md-6 text-md-left">
+              <button type="button"
+                      df-button
+                      theme="danger"
+                      class="w-100 w-md-auto my-1 my-md-0"
+                      routerLink="../response">Decline</button>
+            </div>
+          </div>
+          <div class="row"
+               *ngIf="interview.status === 'CANDIDATE_ACCEPTED'">
+            <div class="col-md-12">
+              <button type="button"
+                      df-button
+                      theme="info"
+                      class="w-100 w-md-auto my-1 my-md-0"
+                      routerLink="../video-conference">Launch Video Conference</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

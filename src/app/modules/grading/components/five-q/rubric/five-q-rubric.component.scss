@@ -1,0 +1,27 @@
+.rubric-label {
+  background-color: #17bdff;
+  color: white;
+  height: 30px;
+  min-height: 30px;
+}
+
+.rubric-text {
+  white-space: pre-wrap;
+}
+
+.description-link {
+  font-size: 14px !important;
+}
+
+.header-text {
+  color: #17bdff;
+}
+
+::ng-deep {
+  app-five-q-rubric {
+    .df-accordion-header__button__icon {
+      color: #17bdff !important;
+      font-size: 16px !important;
+    }
+  }
+}

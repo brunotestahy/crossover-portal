@@ -1,0 +1,22 @@
+<div class="job-description-modal d-flex flex-column">
+  <div class="job-description-modal__header section__header d-flex align-items-center">
+    <h5>{{ job?.title }}</h5>
+    <button type="button"
+      class="job-description-modal__close"
+            df-button
+            df-clear-button
+            theme="danger"
+            (click)="close()">
+      <df-icon name="times"></df-icon>
+    </button>
+  </div>
+
+  <div class="job-description-modal__content d-flex flex-column flex-grow">
+    <div class="job-description-modal__content-holder px-2"
+      [innerHtml]="job?.managerDescription | keepHtml">
+    </div>
+  </div>
+
+  <div class="job-description-modal__footer">
+  </div>
+</div>

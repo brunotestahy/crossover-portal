@@ -1,0 +1,29 @@
+
+.linkedin-btn {
+  display: block;
+  background-color: #002855;
+  border-radius: 4px;
+  white-space: nowrap;
+  border-width: 0;
+  text-align: left;
+  cursor: pointer;
+  transition: all 0.3s;
+
+  &:hover {
+    background-color: lighten(#002855, 8%);
+  }
+
+  &__icon {
+    color: #fff;
+    font-size: 20px;
+    padding: 8px 15px;
+    border-right: 1px solid rgba(255,255,255,.85);
+  }
+
+  &__text {
+    color: #fff;
+    padding: 8px 10px;
+    vertical-align: top;
+    display: inline-block;
+  }
+}

@@ -1,0 +1,237 @@
+<form [formGroup]="formGroup"
+      class="d-block">
+  <div class="d-block"
+       formGroupName="jiraAccount">
+    <div *ngIf="error"
+         class="alert alert-danger my-3">{{error}}</div>
+    <div class="d-flex mt-3 justify-content-between">
+      <h6 class="mb-0 mt-3">Base URL*</h6>
+      <div [dfToolTip]="tooltipText"
+           dfToolTipPlacement="top"
+           container="body"
+           [disabled]="!readOnly">
+        <df-slide-toggle class="mr-2"
+                         formControlName="confirmServer"></df-slide-toggle>
+      </div>
+    </div>
+    <div [dfToolTip]="tooltipText"
+         dfToolTipPlacement="top"
+         container="body"
+         [disabled]="!readOnly">
+      <div class="d-block">
+        <span>Enter your full publicly accessible JIRA URL (with https://). Might be an on-demand subdomain like </span>
+        <a target="_blank"
+           href="https://youraccount.jira.com">https://youraccount.jira.com</a>
+        <span> or a custom domain like </span>
+        <a target="_blank"
+           href="https://youraccount.com">https://youraccount.com</a>
+        <span>.</span>
+      </div>
+      <df-input-container>
+        <input type="text"
+               formControlName="baseUrl">
+      </df-input-container>
+    </div>
+    <div [dfToolTip]="tooltipText"
+         dfToolTipPlacement="top"
+         container="body"
+         [disabled]="!readOnly">
+      <h6 class="mb-0 mt-3">Username*</h6>
+      <div class="au-neutral-3">
+        Your username in Jira.
+      </div>
+      <df-input-container>
+        <input type="text"
+               formControlName="username">
+      </df-input-container>
+    </div>
+    <div [dfToolTip]="tooltipText"
+         dfToolTipPlacement="top"
+         container="body"
+         [disabled]="!readOnly">
+      <h6 class="mb-0 mt-3">Password*</h6>
+      <df-input-container>
+        <input type="password"
+               formControlName="password">
+      </df-input-container>
+    </div>
+  </div>
+  <div class="d-flex flex-column my-4 justify-content-center">
+    <div class="align-self-center">
+      To continue, we need to check the connection to the server(s)
+    </div>
+    <button (click)="onCheckServers()"
+            class="w-100 w-md-75 align-self-center"
+            type="button"
+            [loading]="isLoading"
+            df-button
+            df-large-button>
+      Check Server(s)
+    </button>
+  </div>
+  <div *ngIf="showDetailContent">
+    <div class="d-block"
+         formGroupName="metricInfo">
+      <h5 class="mb-4">Metric</h5>
+      <h6 class="mb-0 mt-3">Metric Name*</h6>
+      <df-input-container>
+        <input type="text"
+               placeholder="eg: # of tickets resolved"
+               formControlName="name">
+      </df-input-container>
+      <df-validation-messages [control]="metricInfo.get('name')"></df-validation-messages>
+      <h6 class="mb-0 mt-3">Define the metric as</h6>
+      <df-radio-group formControlName="metricDefinition">
+        <df-radio-input [value]="ISSUES"
+                        dfToolTipColor="dark"
+                        dfToolTip="The metric will be the number of issues returned that result from the query"
+                        dfToolTipPlacement="top">
+          Number of issues
+        </df-radio-input>
+        <df-radio-input [value]="CUSTOM_FIELD"
+                        dfToolTipColor="dark"
+                        dfToolTip="The metric will be the sum of the values of a custom field of the issues that result from the query"
+                        dfToolTipPlacement="top">
+          Sum of a custom field
+        </df-radio-input>
+      </df-radio-group>
+      <div class="d-block mt-3"
+           *ngIf="metricInfo.controls.metricDefinition.value === CUSTOM_FIELD">
+        <h6 class="mb-0 mr-2">Custom Field Id*</h6>
+        <df-input-container>
+          <input type="number"
+                 placeholder="eg: 10"
+                 formControlName="customFieldId">
+        </df-input-container>
+      </div>
+      <div class="d-flex mt-3">
+        <h6 class="mb-0 mr-2">Metric target per team member</h6>
+        <i class="fa fa-question-circle"
+           dfToolTipColor="dark"
+           dfToolTip="Weekly target of the metric for the contractor"
+           dfToolTipPlacement="top"></i>
+      </div>
+      <df-input-container>
+        <input type="number"
+               placeholder="eg: 10"
+               formControlName="metricTarget">
+      </df-input-container>
+      <df-validation-messages [control]="metricInfo.get('metricTarget')"></df-validation-messages>
+      <df-tab-group class="mt-3 px-2">
+        <df-tab label="Tickets Resolved">
+          <div class="d-block pt-3">
+            <div class="d-flex justify-content-between">
+              <h6 class="mb-0">Jira Projects</h6>
+              <div [dfToolTip]="tooltipText"
+                   dfToolTipPlacement="top"
+                   container="body"
+                   class="d-flex"
+                   [disabled]="!readOnly">
+                <a href="#"
+                   [class.disabled]="readOnly"
+                   [routerLink]=""
+                   (click)="addProject()">
+                  Add Project
+                  <i class="fa fa-plus-circle"></i>
+                </a>
+              </div>
+            </div>
+            Type the name of the project that you want to watch.
+            <div class="d-flex container"
+                 *ngFor="let project of projects; let i = index;">
+              <df-input-container class="mr-2">
+                <input type="text"
+                       formControlName="project"
+                       (change)="updateProject($event, i)"
+                       placeholder="eg: MOBILE">
+              </df-input-container>
+              <i *ngIf="i !== 0"
+                 class="fa fa-trash pointer align-self-center"
+                 (click)="removeProject(i)"></i>
+            </div>
+          </div>
+        </df-tab>
+        <df-tab label="Custom Query"
+                [disabled]="readOnly">
+          <div class="d-block pt-3">
+            <p>For every week (Monday to Sunday) and every contractor, the following query will be used.
+              <br>
+              <code class="text-info">Assignee = '(assignee)' AND ResolutionDate
+              &gt;= 'YYYY-MM-DD 00:00' AND ResolutionDate &lt;= 'yyyy-mm-dd 23:59' AND '(custom_query)'
+              </code>
+              <br> Where 'YYYY-MM-DD' and 'yyyy-mm-dd' is replaced by the Monday and Sunday of the weeek.
+            </p>
+            <h6 class="mb-0">
+              <strong>Custom Query*</strong>
+            </h6>
+            <small>Type the Jira query, make sure to include the project(s) and don't include any timeframe.</small>
+            <df-input-container class="w-100 settings-query">
+              <input type="text"
+                     placeholder="eg: issuetype = Story AND status in(Closed,Resolved) AND project = Project1"
+                     formControlName="customQuery">
+            </df-input-container>
+          </div>
+        </df-tab>
+        <df-tab label="Advanced Query"
+                [disabled]="readOnly">
+          <div class="d-block pt-3">
+            The Jira query will be run for each contractor and week. The query
+            <strong>must</strong> contain the parameters:
+            <ul>
+              <li>'[c]' : Contractor. The query will be run once per each contractor</li>
+              <li>'[ws]' : Week Start. We use Mondays at 00:00</li>
+              <li>'[we]' : Week End. We use Sundays at 23:59</li>
+            </ul>
+            <br> Jira queries use the timezone set by
+            <b>{{jiraAccount.value.username}}</b> in Jira, which might have an effect on the # of results of the query.
+            <br> Example query:
+            <br>
+            <em>Reporter = [c] AND Status changed to 'Released' after [ws] AND Status changed to 'Released' before [we] AND IssueType
+              = 'Story'</em>
+            <br>
+            <h6 class="mb-0">
+              <strong>Advanced Query*</strong>
+            </h6>
+            <df-input-container class="w-100 settings-query">
+              <input type="text"
+                     placeholder="eg: issuetype = Story AND status in(Closed,Resolved) AND project = Project1"
+                     (keyup)="validateAdvancedQuery()"
+                     formControlName="advancedQuery">
+            </df-input-container>
+            <div *ngIf="!validAdvancedQuery"
+                 class="alert alert-danger mt-3"> The query must contain [c] / [ws] / [we] at least once. </div>
+          </div>
+        </df-tab>
+      </df-tab-group>
+    </div>
+    <div class="mt-4">
+      <h5 class="mb-4">User Jira ID</h5>
+      <div *ngFor="let user of jiraUsers; let i = index"
+           class="row">
+        <div class="col-12 col-md-4 mt-5 mt-md-0 d-flex jira-user">
+          <div class="align-self-end">
+            {{user.printableName}}
+          </div>
+        </div>
+        <div class="col-12 col-md-4">
+          <df-select class="w-100"
+                     placeholder="Select a server">
+            <df-option *ngFor="let server of servers"
+                       [value]="server.jiraSetupId"
+                       (change)="updateServer($event, i)"
+                       [displayText]="server.name">
+            </df-option>
+          </df-select>
+        </div>
+        <div class="col-12 col-md-4">
+          <df-input-container>
+            <input type="text"
+                   placeholder="eg: john.smith"
+                   (change)="updateUsername($event, i)"
+                   [value]="user.jiraId">
+          </df-input-container>
+        </div>
+      </div>
+    </div>
+  </div>
+</form>

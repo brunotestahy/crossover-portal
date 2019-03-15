@@ -1,0 +1,31 @@
+<div class="row">
+  <div class="col text-left">
+    <p class="pointer"
+       [class.font-weight-bold]="value >= cookieConstants.COOKIES_REQUIRED_SLIDER"
+       (click)="setValue(cookieConstants.COOKIES_REQUIRED_SLIDER)">
+      Required Cookies
+      <br> Cookies that are required to enable core site functionality.
+    </p>
+    <p class="pointer"
+       [class.font-weight-bold]="value >= cookieConstants.COOKIES_ANALYTICS_SLIDER"
+       (click)="setValue(cookieConstants.COOKIES_ANALYTICS_SLIDER)">
+      Analytics Cookies
+      <br> Cookies that allow us to analyze site usage so we can improve your experience.
+    </p>
+    <p class="pointer"
+       [class.font-weight-bold]="value >= cookieConstants.COOKIES_ADS_SLIDER"
+       (click)="setValue(cookieConstants.COOKIES_ADS_SLIDER)">
+      Advertising Cookies
+      <br> Cookies that are used by advertising companies to serve ads that are relevant to your interest.
+    </p>
+  </div>
+  <div class="col-auto">
+    <df-slider [(ngModel)]="value"
+               (ngModelChange)="setValue($event)"
+               [showTooltip]="false"
+               [min]="cookieConstants.COOKIES_REQUIRED_SLIDER"
+               [vertical]="true"
+               [max]="cookieConstants.COOKIES_ADS_SLIDER">
+    </df-slider>
+  </div>
+</div>

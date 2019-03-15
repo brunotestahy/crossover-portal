@@ -1,0 +1,37 @@
+.entry {
+  padding-bottom: 1rem;
+  border-bottom: 1px solid rgba(0,0,0,.1);
+  margin-bottom: 1rem;
+  &.last {
+    border-bottom: 0;
+  }
+  & input[type="file"] {
+    display: none;
+  }
+  & .change {
+    padding-left: 0;
+    padding-right: 0;
+  }
+  & .change label {
+    padding-left: 22px;
+    padding-right: 22px;
+    cursor: pointer;
+  }
+}
+
+.label {
+  line-height: 2.5;
+}
+
+.message {
+  padding: 15px;
+  border: 1px solid transparent;
+  border-radius: 4px;
+  text-align: center;
+}
+
+.alert {
+  background-color: #f2dede;
+  border-color: #ebccd1;
+  color: #a94442;
+}

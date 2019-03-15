@@ -1,0 +1,384 @@
+<div class="user-profile__background"
+     *ngIf="!showBodyOnly"></div>
+<div class="mb-3"
+     [class.container]="!showBodyOnly">
+  <div class="standard-form"
+       [class.user-profile__main]="!showBodyOnly"
+       [class.user-profile__main--body-only]="showBodyOnly">
+    <div class="user-profile__main-header"
+         *ngIf="!showBodyOnly">
+      <app-page-alert *ngIf="error"
+                      [text]="error"></app-page-alert>
+      <div class="row position-relative">
+        <div class="col-md-3">
+          <app-profile-image-selector [(photoUrl)]="editingItem.photoUrl"
+                                      (photoUrlChange)="updateProfilePhoto($event)"
+                                      (remove)="deleteProfilePhoto()"
+                                      class="mx-auto mx-sm-0"></app-profile-image-selector>
+        </div>
+        <div class="col-md-9 py-3 px-5 px-md-1">
+          <div class="user-profile__name has-edit">
+            <h2 placement="bottom"
+                [ngbPopover]="nameForm"
+                #namePopover="ngbPopover">
+              {{ candidate?.printableName }}
+              <span class="edit-arrow">
+                <i class="fa fa-edit"></i>
+              </span>
+            </h2>
+            <ng-template #nameForm>
+              <app-name-form [initialValue]="candidate"
+                             (cancel)="namePopover.close()"
+                             (save)="saveProfile($event); namePopover.close()"></app-name-form>
+            </ng-template>
+          </div>
+          <div class="user-profile__headline has-edit col-md-6 px-0"
+               placement="bottom"
+               [ngbPopover]="headlineForm"
+               #headlinePopover="ngbPopover">
+            {{ candidate?.headline }}
+            <span class="edit-arrow">
+              <i class="fa fa-edit"></i>
+            </span>
+            <ng-template #headlineForm>
+              <app-headline-form [initialValue]="candidate"
+                                 (cancel)="headlinePopover.close()"
+                                 (save)="saveProfile($event); headlinePopover.close()"></app-headline-form>
+            </ng-template>
+          </div>
+          <div class="user-profile__location has-edit"
+               placement="bottom"
+               [ngbPopover]="locationForm"
+               #locationPopover="ngbPopover">
+            <span class="user-profile__location_city"
+                  *ngIf="candidate?.location?.city">
+              {{ candidate?.location?.city }}
+            </span>
+            <span *ngIf="candidate?.location?.city &&
+              candidate?.location?.country?.name"
+                  class="user-profile__location_spacer">,</span>
+            <span class="user-profile__location_country"
+                  *ngIf="candidate?.location?.country?.name">
+              {{ candidate?.location?.country?.name }}
+            </span>
+            <span *ngIf="(candidate?.location?.city || candidate?.location?.country?.name) &&
+              candidate?.industry?.name"
+                  class="user-profile__location_spacer">|</span>
+            <span class="user-profile__location_industry"
+                  *ngIf="candidate?.industry?.name">
+              {{ candidate?.industry?.name }}
+            </span>
+            <span class="edit-arrow">
+              <i class="fa fa-edit"></i>
+            </span>
+            <ng-template #locationForm>
+              <app-location-form (save)="saveProfile($event); locationPopover.close()"
+                                 (cancel)="locationPopover.close()"
+                                 [countries]="countries"
+                                 [industries]="industries"
+                                 [initialValue]="candidate"></app-location-form>
+            </ng-template>
+          </div>
+          <div class="my-3"
+               *ngIf="candidate?.employments?.length || candidate?.educations?.length">
+            <div class="user-profile__headline-highlight">
+              <span class="user-profile__headline-highlight__title">Previous</span>
+              <ul class="user-profile__headline-highlight__list">
+                <li *ngFor="let employment of candidate?.employments; let last = last;"
+                    [class.last]="last">{{ employment.company }}</li>
+              </ul>
+            </div>
+            <div class="user-profile__headline-highlight">
+              <span class="user-profile__headline-highlight__title">Education</span>
+              <ul class="user-profile__headline-highlight__list">
+                <li *ngFor="let education of candidate?.educations; let last = last;"
+                    [class.last]="last">{{ education.school }}</li>
+              </ul>
+            </div>
+          </div>
+          <app-linkedin-form></app-linkedin-form>
+        </div>
+        <div class="col-md-3 px-5 px-sm-0 user-profile__availability">
+          <app-availability-form class="d-block px-md-3"
+                                 [availabilities]="(enums$ | async)?.candidateAvailabilities"
+                                 [displayFormat]="'%s after getting hired'"
+                                 [initialValue]="candidate"
+                                 (save)="saveProfile($event)">
+          </app-availability-form>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="user-profile__section-header mt-0">
+    Documents
+  </div>
+  <div class="user-profile__section documents">
+    <div *ngIf="!isEditable"
+         class="d-flex">
+      <div *ngFor="let application of applications"
+           class="pr-2">
+        <a href="{{application.fileUrl}}"
+           target="_blank"
+           class="btn badge-primary">{{application.resumeFile.label}}</a>
+      </div>
+    </div>
+    <button type="button"
+            df-button
+            theme="info"
+            *ngIf="isEditable"
+            (click)="toggleSection('resume')">Resume</button>
+  </div>
+  <app-resume-form [applications]="applications"
+                   class="d-block user-profile__section user-profile__resume"
+                   (cancel)="toggleSection('resume')"
+                   (save)="toggleSection('resume')"
+                   *ngIf="editingItem.resume">
+  </app-resume-form>
+
+  <div class="user-profile__section-header">
+    Contact Info
+  </div>
+  <div class="user-profile__section">
+    <div class="row">
+      <div class="col-md-4">
+        <div class="d-inline-block mr-2">Email</div>
+        <div class="d-inline-block">
+          <a href="mailto:{{ candidate?.email }}">{{ candidate?.email }}</a>
+        </div>
+      </div>
+      <div class="col-md-4 user-profile__skype">
+        <div class="d-inline-block mr-2">Skype</div>
+        <div class="d-inline-block has-edit"
+             placement="bottom"
+             [ngbPopover]="skypeForm"
+             #skypePopover="ngbPopover"
+             *ngIf="isEditable">
+          {{ candidate?.skypeId }}
+          <span class="edit-arrow">
+            <i class="fa fa-edit"></i>
+          </span>
+          <ng-template #skypeForm>
+            <app-skype-form [initialValue]="candidate"
+                            (cancel)="skypePopover.close()"
+                            (save)="saveProfile($event); skypePopover.close()">
+            </app-skype-form>
+          </ng-template>
+        </div>
+        <div class="d-inline-block"
+             *ngIf="!isEditable">{{ candidate?.skypeId }}</div>
+      </div>
+      <div class="col-md-4 user-profile__phone">
+        <div class="d-inline-block mr-2">Phone</div>
+        <div class="d-inline-block has-edit"
+             placement="bottom"
+             [ngbPopover]="phoneForm"
+             #phonePopover="ngbPopover"
+             *ngIf="isEditable">
+          {{ candidate?.location?.phone || 'No phone specified' }}
+          <span class="edit-arrow">
+            <i class="fa fa-edit"></i>
+          </span>
+          <ng-template #phoneForm>
+            <app-phone-form [initialValue]="candidate"
+                            (cancel)="phonePopover.close()"
+                            (save)="saveProfile($event); phonePopover.close()"></app-phone-form>
+          </ng-template>
+        </div>
+        <div class="d-inline-block"
+             *ngIf="!isEditable">{{ candidate?.location?.phone || 'No phone specified' }}</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="user-profile__section-header">
+    Background
+  </div>
+  <div class="user-profile__section summary">
+    <div class="user-profile__background-section">
+      <div class="d-flex align-items-center mb-3">
+        <img src="/assets/images/profile/summary-icon.png"
+             height="35">
+        <h3 class="user-profile__background-section__title">Summary</h3>
+      </div>
+      <div *ngIf="!isEditable">
+        {{ candidate?.summary || 'Profile summary is not specified' }}
+      </div>
+      <div *ngIf="isEditable">
+        <div *ngIf="!editingItem.summary; else summaryEdit"
+             class="has-edit">
+          {{ candidate?.summary || 'Profile summary is not specified' }}
+          <span class="edit-arrow"
+                (click)="toggleSection('summary')">
+            <i class="fa fa-edit"></i>
+          </span>
+        </div>
+        <ng-template #summaryEdit>
+          <app-summary-form class="d-block standard-form"
+                            (save)="saveProfile($event); toggleSection('summary')"
+                            (cancel)="toggleSection('summary');"
+                            [initialValue]="candidate?.summary"></app-summary-form>
+        </ng-template>
+      </div>
+    </div>
+    <div class="user-profile__background-section user-profile__experiences">
+      <div class="d-flex align-items-center mb-3">
+        <img src="/assets/images/profile/experience-icon.png"
+             height="35">
+        <h3 class="user-profile__background-section__title">Experience</h3>
+        <button type="button"
+                df-button
+                (click)="setSection('position', null); setSection('experiences')"
+                class="ml-auto"
+                *ngIf="isEditable">
+          <i class="fa fa-plus mr-md-2"></i>
+          <span class="d-none d-md-inline">Add Position</span>
+        </button>
+      </div>
+      <div *ngIf="editingItem.experiences"
+           class="my-3 user-profile__positions-form">
+        <app-positions-form class="d-block"
+                            *ngIf="editingItem.position === null"
+                            [countries]="countries"
+                            (cancel)="setSection('experiences', false)"
+                            (save)="saveProfile($event); setSection('experiences', false)"></app-positions-form>
+      </div>
+      <app-positions-list [entries]="candidate?.employments"
+                          [(selectedEntry)]="editingItem.position"
+                          [isEditable]="isEditable"
+                          class="d-block"></app-positions-list>
+      <app-positions-form class="d-block"
+                          *ngIf="editingItem.position !== null"
+                          [initialValue]="editingItem.position"
+                          [countries]="countries"
+                          (cancel)="setSection('position', null)"
+                          (save)="saveProfile($event); setSection('position', null)"
+                          (remove)="saveProfile($event); setSection('position', null)"></app-positions-form>
+    </div>
+
+    <div class="user-profile__background-section">
+      <div class="d-flex align-items-center mb-3">
+        <img src="/assets/images/profile/globe-icon.png"
+             height="35">
+        <h3 class="user-profile__background-section__title">Languages</h3>
+        <button type="button"
+                df-button
+                (click)="setSection('languages')"
+                class="ml-auto"
+                *ngIf="isEditable">
+          <i class="fa fa-plus mr-md-2"></i>
+          <span class="d-none d-md-inline">Add Language</span>
+        </button>
+      </div>
+      <div *ngIf="editingItem.languages"
+           class="my-3">
+        <app-language-form class="d-block"
+                           [languages]="languages"
+                           [proficiencies]="proficiencies.entries"
+                           (cancel)="setSection('languages', false)"
+                           (save)="saveProfile($event); setSection('languages', false)"></app-language-form>
+      </div>
+      <div>
+        <app-language-list class="d-block"
+                           *ngIf="editingItem.candidateLanguage === null"
+                           [isEditable]="isEditable"
+                           [(selectedEntry)]="editingItem.candidateLanguage"
+                           [candidateLanguages]="candidate?.languages"></app-language-list>
+        <app-language-form class="d-block"
+                           *ngIf="editingItem.candidateLanguage !== null"
+                           [languages]="languages"
+                           [proficiencies]="proficiencies.entries"
+                           [initialValue]="editingItem.candidateLanguage"
+                           (cancel)="setSection('candidateLanguage', null)"
+                           (save)="saveProfile($event); setSection('candidateLanguage', null)"
+                           (remove)="saveProfile($event); setSection('candidateLanguage', null)"></app-language-form>
+      </div>
+    </div>
+
+    <div class="user-profile__background-section">
+      <div class="d-flex align-items-center mb-3">
+        <img src="/assets/images/profile/skills-icon.png"
+             height="35">
+        <h3 class="user-profile__background-section__title">Skills</h3>
+        <button type="button"
+                df-button
+                (click)="setSection('skills')"
+                class="ml-auto"
+                *ngIf="isEditable">
+          <i class="fa fa-plus mr-md-2"></i>
+          <span class="d-none d-md-inline">Add Skill</span>
+        </button>
+      </div>
+      <div *ngIf="editingItem.skills"
+           class="my-3">
+        <app-skill-form [skills]="skills$ | async"
+                        (filter)="filterSkills($event)"
+                        (cancel)="setSection('skills', false)"
+                        (save)="saveProfile($event); setSection('skills', false)"></app-skill-form>
+      </div>
+      <div>
+        <app-skill-list [(edit)]="editingItem.skills"
+                        [isEditable]="isEditable"
+                        [candidateSkills]="candidate?.skills"
+                        (delete)="saveProfile($event);"></app-skill-list>
+      </div>
+    </div>
+
+    <div class="user-profile__background-section">
+      <div class="d-flex align-items-center mb-3">
+        <img src="/assets/images/profile/edu-icon.png"
+             width="39">
+        <h3 class="user-profile__background-section__title">Education</h3>
+        <button type="button"
+                df-button
+                (click)="setSection('candidateEducation', null); setSection('educations')"
+                class="ml-auto"
+                *ngIf="isEditable">
+          <i class="fa fa-plus mr-md-2"></i>
+          <span class="d-none d-md-inline">Add Education</span>
+        </button>
+      </div>
+      <div *ngIf="editingItem.educations"
+           class="my-3">
+        <app-education-form class="d-block"
+                            (cancel)="setSection('educations', false)"
+                            (save)="saveProfile($event); setSection('educations', false)"></app-education-form>
+      </div>
+      <app-education-list [(selectedEntry)]="editingItem.candidateEducation"
+                          [isEditable]="isEditable"
+                          [educations]="candidate?.educations"
+                          (remove)="saveProfile($event); setSection('candidateEducation', null)"
+                          (save)="saveProfile($event); setSection('educations', false)"
+                          (cancel)="setSection('candidateEducation', null)"></app-education-list>
+    </div>
+
+    <div class="user-profile__background-section">
+      <div class="d-flex align-items-center mb-3">
+        <img src="/assets/images/profile/cert-icon.png"
+             width="39">
+        <h3 class="user-profile__background-section__title">Certifications</h3>
+        <button type="button"
+                df-button
+                (click)="setSection('certifications')"
+                class="ml-auto"
+                *ngIf="isEditable">
+          <i class="fa fa-plus mr-md-2"></i>
+          <span class="d-none d-md-inline">Add Certification</span>
+        </button>
+      </div>
+      <div *ngIf="editingItem.certifications"
+           class="my-3">
+        <app-certification-form class="d-block"
+                                (cancel)="setSection('certifications', false)"
+                                (save)="saveProfile($event); setSection('certifications', false)"></app-certification-form>
+      </div>
+      <app-certification-list [(selectedEntry)]="editingItem.candidateCertification"
+                              [certifications]="candidate?.certifications"
+                              [isEditable]="isEditable"
+                              (remove)="saveProfile($event); setSection('candidateCertification', null)"
+                              (save)="saveProfile($event); setSection('certifications', false)"
+                              (cancel)="setSection('candidateCertification', null)"></app-certification-list>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,52 @@
+@import "variables";
+
+.tracker-cover {
+  min-height: 400px;
+  background-image: url('/assets/images/tracker-background.jpg');
+  background-size: cover;
+  background-position-y: 40%;
+  color: #fff;
+  &__text {
+    padding-top: 60px;
+    padding-bottom: 100px;
+  }
+}
+
+.buttons-container {
+  margin: -100px auto 30px;
+  max-width: 520px;
+  padding: 40px;
+  background: #fcfcfc;
+  border: 1px solid #d8d8d8;
+}
+
+.download-buttons {
+  font-size: 15px;
+  align-items: center;
+  justify-content: space-between;
+  align-content: center;
+}
+
+.download-worksmart-button {
+  width: 140px;
+  height: 57px;
+}
+
+.go-to-dashboard-btn {
+  height: 57px;
+}
+
+.download-worksmart-link {
+  margin-top: 30px;
+  display: inline-block;
+}
+
+.os-header {
+  font-size: 24px;
+}
+
+@media screen and (min-width: $breakpoint-sm) {
+  .os-header {
+    font-size: 28px;
+  }
+}

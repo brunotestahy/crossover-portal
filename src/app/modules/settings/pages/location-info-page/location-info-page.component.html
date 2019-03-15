@@ -1,0 +1,84 @@
+<div class="page-content">
+  <form [formGroup]="form" class="standard-form" (submit)="onSubmit()">
+    <div class="row">
+      <div class="col-md-12 col-xl-10 offset-xl-1">
+        <app-page-alert *ngIf="error" [text]="error" class="my-2"></app-page-alert>
+        <div class="form-row">
+          <div class="col-12">
+            <label>Country</label>
+          </div>
+          <div class="col-12">
+            <df-select formControlName="country" class="w-100" [filterable]="true">
+              <df-option *ngFor="let country of countries" [value]="country" [displayText]="country.name"></df-option>
+            </df-select>
+            <df-validation-messages [control]="form.get('country')"></df-validation-messages>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="col-12">
+            <label>Timezone</label>
+          </div>
+          <div class="col-12">
+            <df-select formControlName="timeZone" class="w-100">
+              <df-option
+                *ngFor="let timezone of form.value.country.timezones"
+                [value]="timezone"
+                [displayText]="timezone.name + ' ' + timezone.hourlyOffset">
+              </df-option>
+            </df-select>
+            <df-validation-messages [control]="form.get('timeZone')"></df-validation-messages>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="col-12">
+            <label>Address</label>
+          </div>
+          <div class="col-12">
+            <df-input-container>
+              <input type="text" formControlName="address" placeholder="Address...">
+            </df-input-container>
+            <df-validation-messages [control]="form.get('address')" ></df-validation-messages>
+          </div>
+          <div class="col-12">
+            <df-input-container>
+              <input type="text" formControlName="city" placeholder="City*"
+                     ngx-google-places-autocomplete [options] = "placesRef.options"
+                     #placesRef="ngx-places" (onAddressChange)="onAddressChange($event)">
+            </df-input-container>
+            <df-validation-messages [validationMessagesMap]="nameMessages" [control]="form.get('city')">
+            </df-validation-messages>
+          </div>
+          <div class="col-12">
+            <df-input-container>
+              <input type="text" formControlName="state" placeholder="State/Province">
+            </df-input-container>
+            <df-validation-messages [control]="form.get('state')"></df-validation-messages>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="col-12">
+            <label>Zip</label>
+          </div>
+          <div class="col-12">
+            <df-input-container>
+              <input type="text" formControlName="zip" placeholder="ZIP...">
+            </df-input-container>
+            <df-validation-messages [control]="form.get('zip')"></df-validation-messages>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="col-12">
+            <label>Phone</label>
+          </div>
+          <div class="col-12">
+            <df-input-container>
+              <input type="text" formControlName="phone" placeholder="111-111-1111">
+            </df-input-container>
+            <df-validation-messages [control]="form.get('phone')"></df-validation-messages>
+          </div>
+        </div>
+        <button class="d-block ml-auto w-100 w-md-auto" type="submit" df-button theme="success" [loading]="saving" loaderPosition="after">Save Changes</button>
+      </div>
+    </div>
+  </form>
+</div>

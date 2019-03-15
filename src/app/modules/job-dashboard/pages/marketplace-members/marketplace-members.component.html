@@ -1,0 +1,34 @@
+<div *ngIf="!error">
+  <div *ngIf="!isLoading" class="section__header section__header--aligned d-flex flex-wrap justify-content-between">
+    <a [routerLink]="['../..']" class="ml-2">
+      <i class="fa fa-arrow-left"></i>
+      Back to Marketplace
+    </a>
+    <div class="ml-2 d-flex flex-wrap mw-100">
+      <span class="mr-2">{{ job?.title }} - ${{ job?.salary }}/{{ getSalaryUnitAbbreviation(job?.salaryUnit) }}</span>
+      <span class="clickable-text"
+            (click)="openJobDescriptionModal(job)">Job Description</span>
+    </div>
+    <div><!-- This empty div is necessary for proper layout. Please don't remove it --></div>
+  </div>
+  <div class="page-content padding-aligned page-scroll d-flex px-3">
+    <div *ngIf="!isLoading"
+         class="d-flex flex-column text-center align-items-center w-100">
+      <img src="assets/images/marketplace/candidates _lookup.png"
+           class="mb-3">
+      <p class="w-100">We are working on finding qualified candidates for this job.</p>
+      <p *ngIf="isSubscribed" class="w-100">
+        You are subscribed to this pipeline and we will let you know when new candidates enter.
+      </p>
+      <p *ngIf="!isSubscribed" class="w-100">
+        <span class="clickable-text"
+              (click)="subscribeToJobPipeline()">Click here</span> if you want to be notified when new candidates enter this pipeline.
+      </p>
+    </div>
+    <div *ngIf="isLoading"
+         class="d-flex flex-grow center-all">
+      <i class="df-loader"></i>
+    </div>
+  </div>
+</div>
+<p *ngIf="error" class="alert alert-danger m-2">{{error}}</p>

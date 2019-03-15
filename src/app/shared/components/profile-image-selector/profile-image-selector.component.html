@@ -1,0 +1,20 @@
+<div class="profile-image-selector position-relative text-align-center">
+  <img class="profile-image-selector__image" [src]="photoUrl || defaultPhotoUrl" />
+  <div class="overlay-container">
+    <div class="flex-grow d-flex align-items-end mb-2" *ngIf="photoUrl">
+      <button type="button" class="fixed-button-width" df-button (click)="onImageSelect('Change Photo')">
+        Change Photo
+      </button>
+    </div>
+    <div class="flex-grow d-flex align-items-start mt-2" *ngIf="photoUrl" >
+      <button type="button" class="fixed-button-width" df-button theme="danger" (click)="onImageRemove()">
+        Delete Photo
+      </button>
+    </div>
+    <div class="flex-grow d-flex align-items-center mb-2" *ngIf="!photoUrl">
+      <button type="button" class="fixed-button-width" df-button (click)="onImageSelect('Add Photo')">
+        Add Photo
+      </button>
+    </div>
+  </div>
+</div>

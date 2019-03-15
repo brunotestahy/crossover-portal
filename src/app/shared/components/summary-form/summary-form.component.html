@@ -1,0 +1,9 @@
+<form class="standard-form" [formGroup]="form" (submit)="onSubmit()">
+  <df-input-container>
+    <textarea formControlName="summary" class="w-100"></textarea>
+  </df-input-container>
+  <div>
+    <button type="submit" df-button theme="info">Save</button>
+    <button type="button" df-button theme="info" (click)="onCancel()">Cancel</button>
+  </div>
+</form>

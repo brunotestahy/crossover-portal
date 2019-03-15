@@ -1,0 +1,63 @@
+<div *ngIf="isEditable">
+  <ng-template ngFor
+               let-employment
+               let-last="last"
+               [ngForOf]="employments">
+    <div *ngIf="employment !== selectedEntry"
+         (click)="onSelect(employment)"
+         class="has-edit">
+      <h4>
+        {{ employment.title }}
+        <span class="edit-arrow">
+          <i class="fa fa-edit"></i>
+        </span>
+      </h4>
+      <div>{{ employment.company }}</div>
+      <div>{{ employment.role }}</div>
+      <div>
+        {{ employment.formattedStartDate }}
+        <span *ngIf="employment.formattedStartDate">-</span>
+        {{ employment.formattedEndDate }}
+        <span class="spacer"
+              *ngIf="(employment.formattedStartDate || employment.formattedEndDate) &&
+ (employment.city || employment.country)">|</span>
+        <span *ngIf="employment.city">{{ employment.city }}</span>
+        <span class="spacer"
+              *ngIf="employment.city && employment.country">,</span>
+        <span *ngIf="employment.country">{{ employment.country.name }}</span>
+      </div>
+      <div>
+        <strong>{{ employment.description }}</strong>
+      </div>
+      <hr *ngIf="!last" />
+    </div>
+  </ng-template>
+</div>
+<div *ngIf="!isEditable">
+  <ng-template ngFor
+               let-employment
+               let-last="last"
+               [ngForOf]="employments">
+    <div *ngIf="employment !== selectedEntry">
+      <h4> {{ employment.title }}</h4>
+      <div>{{ employment.company }}</div>
+      <div>{{ employment.role }}</div>
+      <div>
+        {{ employment.formattedStartDate }}
+        <span *ngIf="employment.formattedStartDate">-</span>
+        {{ employment.formattedEndDate }}
+        <span class="spacer"
+              *ngIf="(employment.formattedStartDate || employment.formattedEndDate) &&
+            (employment.city || employment.country)">|</span>
+        <span *ngIf="employment.city">{{ employment.city }}</span>
+        <span class="spacer"
+              *ngIf="employment.city && employment.country">,</span>
+        <span *ngIf="employment.country">{{ employment.country.name }}</span>
+      </div>
+      <div>
+        <strong>{{ employment.description }}</strong>
+      </div>
+      <hr *ngIf="!last" />
+    </div>
+  </ng-template>
+</div>

@@ -1,0 +1,15 @@
+@import "variables";
+
+df-bar {
+  display: block;
+  width: 100%;
+  height: 280px;
+}
+
+:host {
+  ::ng-deep {
+    .df-bar__axis--x line {
+      stroke-opacity: 0;
+    }
+  }
+}

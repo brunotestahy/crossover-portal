@@ -1,0 +1,110 @@
+<df-card #card
+         class="px-4 py-3">
+  <h4 class="project-evaluation__title d-flex align-items-center w-100 py-3">
+    <img src="/assets/images/candidate/application-process/steps/project-evaluation.svg"
+         width="45"
+         height="45" />
+    <span class="ml-3">Project Evaluation</span>
+    <div class="d-flex align-items-center ml-2 ml-md-4">
+      <small><i class="fa fa-circle au-blue mr-2"></i></small>
+      <small><i class="fa fa-circle au-blue mr-2"></i></small>
+      <small><i class="fa fa-circle-o au-gray-3 mr-2"></i></small>
+      <small><i class="fa fa-circle-o au-gray-3"></i></small>
+    </div>
+  </h4>
+  <h2 class="mt-4">Instructions</h2>
+  <p class="pt-4">
+    Try to complete the project as much as possible within given time-frame, even if you do not finish the
+    assignment, your work will be evaluated depending on what and how much you completed. In case something comes
+    up and you need more time, you can request an extension after you start the project.
+  </p>
+  <p>
+    Note that you are expected to work on the assignment independently. Discussing assignment details with
+    colleagues or any indication of outside help will be considered cheating.
+  </p>
+  <p>
+    Do not expect too much hand-holding as this is an evaluation assignment. You must make assumptions regarding
+    any missing information, and describe these assumptions in your readme file.
+  </p>
+  <p>
+    Read the complete assignment before you start. Understand clearly what is required so that your work will be
+    appropriate and easier.
+  </p>
+  <p>
+    The assignment will be similar to
+    <a class="au-blue" href="https://techtrial.s3.amazonaws.com/System/Sample%20Software%20Engineer%20-%20Java%20Assignment%201.pdf"
+      target="_blank">this</a>. Feel free to take a look at this sample project and have an idea about how our test looks like.
+  </p>
+  <p>
+    Once you click the "Start Project" button below, you will be given detailed instructions about the project.
+    Once you begin, you will have <b>{{ data?.assignmentDaysCount }} days</b> to upload your submission.
+    The project will most likely take at least 10 hours to complete, so please make sure that you have that time
+    available before beginning.
+  </p>
+  <p>
+    <span *ngIf="data?.prerequisites">
+      Before you click on "Start Project", view the system pre-requisites
+      <span class="au-blue cursor-pointer" (click)="openPrerequisitesModal(prerequisitesTemplate)">here</span>.
+      You can set them up now instead of using your precious project time.
+    </span>
+    <span>
+      Please make sure you read this section carefully - it contains valuable information on everything you need to
+      complete your assignment smoothly.
+    </span>
+  </p>
+  <h2 class="mt-4">Possible outcomes of the evaluation</h2>
+  <p>
+    We evaluate your delivery against the following three criteria: completeness, design quality and code quality.
+  </p>
+  <h5 class="au-blue mt-2">INVITED BUT NOT STARTED</h5>
+  <p>
+    If you are invited but do not start your assignment within the given invitation period, don’t worry - you can
+    apply again whenever you have the time.
+  </p>
+  <h5 class="au-blue mt-2">INVITED, STARTED, AND NOT DELIVERED</h5>
+  <p>
+    If you start your assignment but do not deliver it, you will be able to apply again for this same position
+    after three months.
+  </p>
+  <h5 class="au-blue mt-2">INVITED, STARTED, DELIVERED AND SELECTED</h5>
+  <p>
+    If your assignment solution meets the criteria, we will invite you to a discussion with one of our
+    Technical Evaluators. He will want to hear more about your project and your experience.
+  </p>
+  <h5 class="au-blue mt-2">INVITED, STARTED, DELIVERED AND NOT SELECTED</h5>
+  <p>
+    If you started and delivered your assignment solution but are not selected to move on, you may have a second
+    chance! We will assess your score as well as the effort that you put into the assignment. If you qualify for a
+    second chance, we will let you know by email and re-invite you to the project evaluation.
+  </p>
+  <div class="d-flex justify-content-end">
+    <button *ngIf="data?.prerequisites"
+            df-button
+            type="button"
+            class="mr-2 col col-md-auto"
+            (click)="openPrerequisitesModal(prerequisitesTemplate)">
+      <span>Pre-requisites</span>
+    </button>
+    <button df-button
+            type="button"
+            class="btn-primary col-6 col-md-auto"
+            (click)="startProject()">
+      <span>Start Project</span>
+    </button>
+  </div>
+</df-card>
+
+<ng-template #prerequisitesTemplate
+             let-close="close">
+  <div class="au-modal-header p-3">
+    <h5 class="d-flex align-items-center w-100 m-0">
+      <span>Assignment Pre-requisites</span>
+    </h5>
+    <i (click)="close()"
+       class="au-modal-close fa fa-times">
+    </i>
+  </div>
+  <div class="p-3 text-left"
+       [innerHTML]="data?.prerequisites">
+  </div>
+</ng-template>

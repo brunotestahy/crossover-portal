@@ -1,0 +1,38 @@
+:host {
+  display: block;
+}
+
+.activity-level-bar {
+  background: url('/assets/images/activity_bar.png') 0 top;
+  background-size: 16px;
+  display: inline-block;
+  height: 10px;
+  width: 100%;
+  margin-top: 5px;
+  border: 1px solid #fff;
+  top: 0;
+  overflow: hidden;
+}
+
+.activity-level-bar {
+  .normal-activity, .low-activity, .meeting-time {
+    background: transparent repeat scroll 0 bottom;
+    background-size: 16px !important;
+    display: inline-block;
+    height: 100%;
+    vertical-align: top;
+    float: left;
+  }
+
+  .normal-activity {
+    background-image: url('/assets/images/activity_bar.png');
+  }
+
+  .low-activity {
+    background-image: url('/assets/images/activity_bar_low.png');
+  }
+
+  .meeting-time {
+    background-image: url('/assets/images/activity_bar_meeting.png');
+  }
+}

@@ -1,0 +1,37 @@
+<div *ngIf="isEditable">
+  <div class="has-edit"
+       *ngFor="let certification of certifications; let last = last;">
+    <div (click)="onEdit(certification)"
+         *ngIf="selectedEntry !== certification">
+      <h4>
+        {{ certification.name }}
+        <span class="edit-arrow">
+          <i class="fa fa-edit"></i>
+        </span>
+      </h4>
+      <span>{{ certification.startDateTime | date:'yyyy':'UTC' }}</span>
+      <span *ngIf="certification.startDateTime && certification.endDateTime">-</span>
+      <span>{{ certification.endDateTime | date:'yyyy':'UTC' }}</span>
+    </div>
+    <app-certification-form class="d-block"
+                            [initialValue]="selectedEntry"
+                            (cancel)="onCancel()"
+                            (save)="onSave($event)"
+                            (remove)="onDelete($event)"
+                            *ngIf="selectedEntry === certification"></app-certification-form>
+    <hr *ngIf="!last" />
+  </div>
+</div>
+<div *ngIf="!isEditable">
+  <div *ngFor="let certification of certifications; let last = last;">
+    <div *ngIf="selectedEntry !== certification">
+      <h4>
+        {{ certification.name }}
+      </h4>
+      <span>{{ certification.startDateTime | date:'yyyy':'UTC' }}</span>
+      <span *ngIf="certification.startDateTime && certification.endDateTime">-</span>
+      <span>{{ certification.endDateTime | date:'yyyy':'UTC' }}</span>
+    </div>
+    <hr *ngIf="!last" />
+  </div>
+</div>

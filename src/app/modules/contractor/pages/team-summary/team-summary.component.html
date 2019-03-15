@@ -1,0 +1,645 @@
+<div class="section__header section__header--aligned">
+  <div *ngIf="!showTeamSelector">Team Summary</div>
+  <div *ngIf="showTeamSelector">My Teams</div>
+</div>
+
+<div class="page-content padding-aligned page-scroll">
+  <app-page-alert *ngIf="error !== ''"
+                  [text]="error"
+                  class="my-3"></app-page-alert>
+  <div *ngIf="!showTeamSelector">
+    <df-card>
+      <df-card-content class="d-flex justify-content-center justify-content-md-end flex-wrap ml-md-auto">
+        <a
+          [routerLink]=""
+          class="d-flex align-self-center mr-2"
+          [class.currently-visible-week]="dataFormattingService.currentDateMatches(instance, weekModes.FourPreviousWeeks)"
+          [class.disabled]="loadState.component"
+          (click)="invokeIf(!loadState.component, navigationService.fetchLastFourWeeks)">Last 4 Weeks</a>
+        <a
+          [routerLink]=""
+          class="d-flex align-self-center mr-2"
+          [class.currently-visible-week]="dataFormattingService.currentDateMatches(
+            instance,
+            weekModes.Single,
+            this.recentDates.startOfLastWeek
+          )"
+          [class.disabled]="loadState.component"
+          (click)="invokeIf(!loadState.component, navigationService.fetchLastWeek)">Last Week</a>
+        <a
+          [routerLink]=""
+          class="d-flex align-self-center mr-2"
+          [class.currently-visible-week]="dataFormattingService.currentDateMatches(
+            instance,
+            weekModes.Single,
+            this.recentDates.startOfThisWeek
+          )"
+          [class.disabled]="loadState.component"
+          (click)="invokeIf(!loadState.component, navigationService.fetchThisWeek)">This Week</a>
+        <div class="d-flex justify-content-center align-items-center mr-3" [formGroup]="form">
+          <i
+            class="fa fa-chevron-left pointer"
+            [class.disabled]="loadState.component"
+            *ngIf="form.get('weeksCount')?.value === weekModes.Single"
+            (click)="invokeIf(!loadState.component, navigationService.previousWeek);"></i>
+          <df-datepicker
+            formControlName="dateControl"
+            [formatFn]="dataFormattingService.getWeeklyFormatter(instance)"
+            [direction]="-2"
+            (onDateSelected)="navigationService.setWeeksCount(instance, weekModes.Single)">
+          </df-datepicker>
+          <i
+            *ngIf="form.get('weeksCount')?.value === weekModes.Single && form.get('dateControl')?.value < recentDates.startOfThisWeek"
+            class="fa fa-chevron-right pointer"
+            [class.disabled]="loadState.component"
+            (click)="invokeIf(!loadState.component, navigationService.nextWeek);"></i>
+        </div>
+      </df-card-content>
+    </df-card>
+    <df-card class="my-3 overflow-visible">
+      <div class="df-loader-container"
+           *ngIf="loadState.component">
+        <i class="df-loader"></i>
+      </div>
+      <df-card-content *ngIf="!loadState.component"
+                       class="pb-0">
+        <div class="row">
+          <!-- Team metric chart -->
+          <div class="col-12 col-lg-6">
+            <app-team-summary-chart *ngIf="teamSummary.length"
+                                    class="d-block"
+                                    [chunkSize]="numberOfWeeks"
+                                    [metricName]="metricInfo.description"
+                                    [summary]="productivitySummary"
+                                    [endDate]="endDate">
+            </app-team-summary-chart>
+          </div>
+          <!-- Top / bottom performers card -->
+          <div class="col-12 col-lg-6 mb-3">
+            <div class="row">
+
+              <!-- Top performer -->
+              <div class="col-12 col-md-6 d-flex flex-column mb-5 mb-md-0"
+                   *ngIf="topPerformer">
+                <div class="d-flex"
+                     [dfToolTip]="'Highest average metric for ' +
+                      dataFormattingService.getWeeklyFormat.bind(instance)(form.get('dateControl').value, true)"
+                     dfToolTipPlacement="top">
+                  <i class="fa fa-arrow-circle-up fa-2x mr-2 align-self-center success"></i>
+                  <h4 class="align-self-center mb-0">Top Performer</h4>
+                </div>
+                <div class="team-member row">
+                  <div class="px-3 justify-content-center d-flex">
+                    <img class="align-self-center"
+                         [src]="topPerformer?.assignment.candidate.photoUrl || 'assets/images/user.png'">
+                  </div>
+                  <div class="px-0 d-flex flex-column justify-content-center">
+                    <div class="shortened-column">{{topPerformer?.assignment.candidate.printableName}}</div>
+                    <div class="text-muted shortened-column">{{topPerformer?.assignment.jobTitle}}</div>
+                  </div>
+                </div>
+                <div class="row mx-0">
+                  <i class="fa fa-calendar align-self-center col-3 col-lg-2 text-muted pr-0 text-left"
+                     dfToolTip="Hours Logged"
+                     dfToolTipPlacement="top"></i>
+                  <df-progress-bar
+                    [percentage]="dataFormattingService.getHoursLoggedPercentage(
+                      instance,
+                      topPerformer?.recordedHoursPastWeeksAvg,
+                      topPerformer?.assignment?.weeklyLimit
+                    )"
+                    class="w-100 px-0 col-6 col-lg-8 align-self-center d-flex"></df-progress-bar>
+                  <div class="align-self-center col-3 col-lg-2 pl-0 text-right"
+                    [dfToolTip]="'Hours Logged for ' +
+                      dataFormattingService.getWeeklyFormat.bind(instance)(form.get('dateControl').value, true)"
+                    dfToolTipPlacement="left">
+                    {{topPerformer?.recordedHoursPastWeeksAvg?.toFixed(0)}}
+                  </div>
+                </div>
+                <div class="row mx-0">
+                  <i class="fa fa-check-square align-self-center col-3 col-lg-2 pr-0 text-muted text-left"
+                     [dfToolTip]="metricInfo.description"
+                     dfToolTipPlacement="top"></i>
+                  <df-progress-bar
+                    [percentage]="dataFormattingService.getMetricPercentage(instance, topPerformer?.metricsStatsPastWeeksAvg)"
+                    class="w-100 col-6 col-lg-8 px-0 align-self-center d-flex"></df-progress-bar>
+                  <div class="align-self-center col-3 col-lg-2 pl-0 text-right"
+                    [dfToolTip]="this.metricInfo.description + ' for ' +
+                      dataFormattingService.getWeeklyFormat.bind(instance)(form.get('dateControl').value, true)"
+                    dfToolTipPlacement="left">
+                    {{dataFormattingService.formatMetric(topPerformer?.metricsStatsPastWeeksAvg)}}
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-4 d-flex flex-column justify-content-center"
+                       [dfToolTip]="'Intensity score average for ' +
+                        dataFormattingService.getWeeklyFormat.bind(instance)(form.get('dateControl').value, true)"
+                       dfToolTipPlacement="top">
+                    <span class="align-self-center small-text">Intensity</span>
+                    <df-progress-bar
+                      [percentage]="topPerformer?.intensityScorePastWeeksAvg / 100"
+                      class="align-self-center w-100 w-lg-75 d-flex
+                        {{ dataRenderingService.getScoreClass(topPerformer?.intensityScorePastWeeksAvg, 100) }}"></df-progress-bar>
+                  </div>
+                  <div class="col-4 d-flex flex-column justify-content-center"
+                       [dfToolTip]="'Focus score average for ' +
+                        dataFormattingService.getWeeklyFormat.bind(instance)(form.get('dateControl').value, true)"
+                       dfToolTipPlacement="top">
+                    <span class="align-self-center small-text">Focus</span>
+                    <df-progress-bar
+                      [percentage]="topPerformer?.focusScorePastWeeksAvg / 100"
+                      class="align-self-center w-100 w-lg-75 d-flex
+                        {{ dataRenderingService.getScoreClass(topPerformer?.focusScorePastWeeksAvg, 100) }}"></df-progress-bar>
+                  </div>
+                  <div class="col-4 d-flex flex-column justify-content-center"
+                       [dfToolTip]="'Alignment score average for ' +
+                        dataFormattingService.getWeeklyFormat.bind(instance)(form.get('dateControl').value, true)"
+                       dfToolTipPlacement="top">
+                    <span class="align-self-center small-text">Alignment</span>
+                    <df-progress-bar
+                      [percentage]="topPerformer?.activityMetricsPastWeeksAvg / 100"
+                      class="align-self-center w-100 w-lg-75 d-flex
+                        {{ dataRenderingService.getScoreClass(topPerformer?.activityMetricsPastWeeksAvg, 100) }}"></df-progress-bar>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Bottom performer -->
+              <ng-container *ngIf="!bottomPerformerError && bottomPerformer; then bottomPerformerTemplate; else bottomPerformerErrorMessage">
+              </ng-container>
+
+              <ng-template #bottomPerformerTemplate>
+                <div class="col-12 col-md-6 d-flex flex-column mb-5 mb-md-0">
+                  <div class="d-flex"
+                       [dfToolTip]="'Lowest average metric for ' +
+                        dataFormattingService.getWeeklyFormat.bind(instance)(form.get('dateControl').value, true)"
+                       dfToolTipPlacement="top">
+                    <i class="fa fa-arrow-circle-down fa-2x mr-2 align-self-center danger"></i>
+                    <h4 class="align-self-center mb-0">Bottom Performer</h4>
+                  </div>
+                  <div class="team-member row">
+                    <div class="px-3 justify-content-center d-flex">
+                      <img class="align-self-center"
+                       [src]="bottomPerformer?.assignment.candidate.photoUrl  || 'assets/images/user.png'">
+                    </div>
+                    <div class="px-0 d-flex flex-column justify-content-center">
+                      <div class="shortened-column">{{bottomPerformer?.assignment.candidate.printableName}}</div>
+                      <div class="text-muted shortened-column">{{bottomPerformer?.assignment.jobTitle}}</div>
+                    </div>
+                  </div>
+                  <div class="row mx-0">
+                    <i class="fa fa-calendar align-self-center col-3 col-lg-2 pr-0 text-muted text-left"
+                       dfToolTip="Hours Logged"
+                       dfToolTipPlacement="top"></i>
+                    <df-progress-bar
+                      [percentage]="dataFormattingService.getHoursLoggedPercentage(
+                        instance,
+                        bottomPerformer?.recordedHoursPastWeeksAvg,
+                        bottomPerformer?.assignment?.weeklyLimit
+                      )"
+                      class="w-100 px-0 col-6 col-lg-8 align-self-center d-flex"></df-progress-bar>
+                    <div class="align-self-center col-3 col-lg-2 pl-0 text-right"
+                      [dfToolTip]="'Hours Logged for ' +
+                        dataFormattingService.getWeeklyFormat.bind(instance)(form.get('dateControl').value, true)"
+                      dfToolTipPlacement="left">
+                      {{bottomPerformer?.recordedHoursPastWeeksAvg?.toFixed(0)}}
+                    </div>
+                  </div>
+                  <div class="row mx-0">
+                    <i class="fa fa-check-square align-self-center col-3 col-lg-2 pr-0 text-muted text-left"
+                       [dfToolTip]="metricInfo.description"
+                       dfToolTipPlacement="top"></i>
+                    <df-progress-bar
+                      [percentage]="dataFormattingService.getMetricPercentage(instance, bottomPerformer?.metricsStatsPastWeeksAvg)"
+                      class="w-100 px-0 col-6 col-lg-8 align-self-center d-flex"></df-progress-bar>
+                    <div class="align-self-center col-3 col-lg-2 pl-0 text-right"
+                      [dfToolTip]="this.metricInfo.description + ' for ' +
+                        dataFormattingService.getWeeklyFormat.bind(instance)(form.get('dateControl').value, true)"
+                      dfToolTipPlacement="left">
+                      {{dataFormattingService.formatMetric(bottomPerformer?.metricsStatsPastWeeksAvg)}}
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-4 d-flex flex-column justify-content-center"
+                         [dfToolTip]="'Intensity score average for ' +
+                          dataFormattingService.getWeeklyFormat.bind(instance)(form.get('dateControl').value, true)"
+                         dfToolTipPlacement="top">
+                      <span class="align-self-center small-text">Intensity</span>
+                      <df-progress-bar
+                        [percentage]="bottomPerformer?.intensityScorePastWeeksAvg / 100"
+                        class="align-self-center w-100 w-lg-75 d-flex
+                          {{ dataRenderingService.getScoreClass(bottomPerformer?.intensityScorePastWeeksAvg, 100) }}"></df-progress-bar>
+                    </div>
+                    <div class="col-4 d-flex flex-column justify-content-center"
+                         [dfToolTip]="'Focus score average for ' +
+                          dataFormattingService.getWeeklyFormat.bind(instance)(form.get('dateControl').value, true)"
+                         dfToolTipPlacement="top">
+                      <span class="align-self-center small-text">Focus</span>
+                      <df-progress-bar
+                        [percentage]="bottomPerformer?.focusScorePastWeeksAvg / 100"
+                        class="align-self-center w-100 w-lg-75 d-flex
+                          {{ dataRenderingService.getScoreClass(bottomPerformer?.focusScorePastWeeksAvg, 100) }}"></df-progress-bar>
+                    </div>
+                    <div class="col-4 d-flex flex-column justify-content-center"
+                         [dfToolTip]="'Alignment score average for ' +
+                            dataFormattingService.getWeeklyFormat.bind(instance)(form.get('dateControl').value, true)"
+                         dfToolTipPlacement="top">
+                      <span class="align-self-center small-text">Alignment</span>
+                      <df-progress-bar
+                        [percentage]="bottomPerformer?.activityMetricsPastWeeksAvg / 100"
+                        class="align-self-center w-100 w-lg-75 d-flex
+                          {{ dataRenderingService.getScoreClass(bottomPerformer?.activityMetricsPastWeeksAvg, 100) }}"></df-progress-bar>
+                    </div>
+                  </div>
+                </div>
+              </ng-template>
+
+              <ng-template #bottomPerformerErrorMessage>
+                <div class="col-12 col-md-6 d-flex flex-column mb-5 mb-md-0 justify-content-center">
+                  <p class="text-center mb-0">{{ bottomPerformerError }}</p>
+                </div>
+              </ng-template>
+
+            </div>
+          </div>
+        </div>
+      </df-card-content>
+    </df-card>
+    <df-card class="my-2 overflow-visible">
+      <div class="df-loader-container"
+           *ngIf="loadState.component">
+        <i class="df-loader"></i>
+      </div>
+      <df-card-content *ngIf="!loadState.component"
+                       class="d-flex flex-column">
+        <df-grid [value]="teamSummary"
+                 [frozenValue]="[teamAverage]"
+                 [responsive]="true"
+                 [sortField]="'metricsStatsPastWeeksAvg'"
+                 scrollable="true"
+                 scrollHeight="440px"
+                 id="teamSummaryGrid">
+          <df-grid-column field="name">
+            <ng-template dfGridTemplate="header">
+              <div class="d-flex">
+                <i class="fa fa-user font-18 text-muted align-self-center mr-2"></i>
+                <div class="align-self-center mr-2">Team Member</div>
+              </div>
+            </ng-template>
+            <ng-template dfGridTemplate="body"
+                         let-col
+                         let-item="rowData">
+              <!-- Active Users -->
+              <div class="contractor-cell" *ngIf="item.active === true">
+                <div
+                  (click)="navigationService.openContractorModal(instance, item, profileModal)"
+                  class="team-member row position-relative pointer"
+                  dfToolTip="empty"
+                  [dftoolTipTemplate]="contractorCard"
+                  [dftoolTipData]="item.assignment"
+                  dfToolTipPlacement="top">
+                  <div class="col-md-4 px-2 justify-content-center d-none d-lg-flex">
+                    <div class="pt-2 online-status
+                      {{ dataRenderingService.getOnlineStatusClass(instance, item?.assignment) }}">
+                      <img class="align-self-center"
+                           [src]="item.assignment?.candidate.photoUrl || 'assets/images/users.png'">
+                    </div>
+                  </div>
+                  <div class="col-12 col-md-8 pl-1 pr-0 d-flex flex-column justify-content-center text-center text-md-left">
+                    {{item.assignment?.candidate.printableName}}
+                  </div>
+                </div>
+              </div>
+
+              <!-- Inactive Users -->
+              <div class="contractor-cell" *ngIf="item.active === false">
+               <div
+                 class="team-member row position-relative inactive"
+                 [dfToolTip]="dataRenderingService.getInactiveMessage(item)"
+                 dfToolTipPlacement="top">
+                 <div class="col-md-4 px-2 justify-content-center d-none d-lg-flex">
+                   <img class="align-self-center"
+                        [src]="item.assignment?.candidate.photoUrl || 'assets/images/users.png'">
+                 </div>
+                 <div class="col-12 col-md-8 pl-1 pr-0 d-flex flex-column justify-content-center text-center text-md-left">
+                   {{item.assignment?.candidate.printableName}}
+                 </div>
+               </div>
+              </div>
+
+              <!-- Team Average -->
+              <div class="contractor-cell"
+                   *ngIf="item.active === undefined">
+                <div class="team-member row position-relative">
+                  <div class="col-md-4 px-2 justify-content-center d-none d-lg-flex">
+                    <img class="align-self-center"
+                         src="assets/images/users.png">
+                  </div>
+                  <div class="col-12 col-md-8 pl-1 pr-0 d-flex flex-column justify-content-center text-center text-md-left">
+                    Team Average
+                  </div>
+                </div>
+              </div>
+            </ng-template>
+          </df-grid-column>
+          <df-grid-column [sortable]="true"
+                          field="recordedHoursPastWeeksAvg">
+            <ng-template dfGridTemplate="header">
+              <div class="d-flex">
+                <i class="fa fa-calendar font-18 text-muted align-self-center mr-2"></i>
+                <div class="align-self-center mr-2">Hours Logged</div>
+              </div>
+            </ng-template>
+            <ng-template dfGridTemplate="body"
+                         let-col
+                         let-item="rowData">
+              <div class="row pointer position-relative"
+                   (click)="navigationService.showTrend(instance, trends.HoursLogged, item.recordedHours)"
+                   dfToolTip="Click to see the trend"
+                   dfToolTipPlacement="top">
+                <df-progress-bar
+                  [percentage]="dataFormattingService.getHoursLoggedPercentage(
+                  instance,
+                  item.recordedHoursPastWeeksAvg,
+                  item.assignment?.weeklyLimit
+                  )"
+                   [color]="INFO"
+                   class="col-9 align-self-center w-100 d-flex"></df-progress-bar>
+                <div class="col-3 align-self-center px-0">{{item.recordedHoursPastWeeksAvg?.toFixed(0)}}</div>
+              </div>
+            </ng-template>
+          </df-grid-column>
+          <df-grid-column [sortable]="true"
+                          field="metricsStatsPastWeeksAvg">
+            <ng-template dfGridTemplate="header">
+              <div class="d-flex">
+                <i class="fa fa-check-square font-18 text-muted align-self-center mr-2"></i>
+                <div class="align-self-center mr-2">{{metricInfo.description}}</div>
+              </div>
+            </ng-template>
+            <ng-template dfGridTemplate="body"
+                         let-col
+                         let-item="rowData">
+              <div class="row pointer position-relative"
+                   (click)="navigationService.showTrend(instance, trends.Metrics, item.metricsStats)"
+                   dfToolTip="Click to see the trend"
+                   dfToolTipPlacement="top">
+                <df-progress-bar
+                  [percentage]="dataFormattingService.getMetricPercentage(instance, item.metricsStatsPastWeeksAvg)"
+                  [color]="INFO"
+                  class="col-9 align-self-center w-100 d-flex"></df-progress-bar>
+                <div class="col-3 align-self-center px-0">{{dataFormattingService.formatMetric(item.metricsStatsPastWeeksAvg)}}</div>
+              </div>
+            </ng-template>
+          </df-grid-column>
+          <df-grid-column [sortable]="true"
+                          field="activityMetricsPastWeeksAvg">
+            <ng-template dfGridTemplate="header">
+              <div class="d-flex"
+                   [dfToolTip]="trendDescriptions.Alignment"
+                   dfToolTipPlacement="bottom">
+                <i class="fa fa-align-center font-18 text-muted align-self-center mr-2 position-relative"></i>
+                <div class="d-lg-none">
+                  &nbsp; &nbsp;
+                </div>
+                <div class="align-self-center mr-2 d-md-none">Alignment</div>
+                <div class="align-self-center mr-2 d-none d-lg-flex">Alignment</div>
+              </div>
+            </ng-template>
+            <ng-template dfGridTemplate="body"
+                         let-col
+                         let-item="rowData">
+              <div class="pointer position-relative"
+                   (click)="navigationService.showTrend(instance, trends.Alignment, item.alignment)"
+                   dfToolTip="Click to see the trend"
+                   dfToolTipPlacement="top">
+                <i class="fa fa-circle
+                  {{ dataRenderingService.getTrendClass(item.activityMetricsPastWeeksAvg, 100).cssClass }}"></i>
+                {{item.activityMetricsPastWeeksAvg?.toFixed(0)}}%
+              </div>
+            </ng-template>
+          </df-grid-column>
+          <df-grid-column [sortable]="true"
+                          field="focusScorePastWeeksAvg">
+            <ng-template dfGridTemplate="header">
+              <div class="d-flex"
+                   [dfToolTip]="trendDescriptions.Focus"
+                   dfToolTipPlacement="bottom">
+                <i class="fa fa-crosshairs font-18 text-muted align-self-center mr-2 position-relative"></i>
+                <div class="d-lg-none">
+                  &nbsp; &nbsp;
+                </div>
+                <div class="align-self-center mr-2 d-md-none">Focus</div>
+                <div class="align-self-center mr-2 d-none d-lg-flex">Focus</div>
+              </div>
+            </ng-template>
+            <ng-template dfGridTemplate="body"
+                         let-col
+                         let-item="rowData">
+              <div class="pointer position-relative"
+                   (click)="navigationService.showTrend(instance, trends.Focus, item.focusScores)"
+                   dfToolTip="Click to see the trend"
+                   dfToolTipPlacement="top">
+                <i class="fa fa-circle
+                  {{ dataRenderingService.getTrendClass(item.focusScorePastWeeksAvg, 100).cssClass }}"></i>
+                {{item.focusScorePastWeeksAvg?.toFixed(0)}}%
+              </div>
+            </ng-template>
+          </df-grid-column>
+          <df-grid-column [sortable]="true"
+                          field="intensityScorePastWeeksAvg">
+            <ng-template dfGridTemplate="header">
+              <div class="d-flex"
+                   [dfToolTip]="trendDescriptions.Intensity"
+                   dfToolTipPlacement="bottom">
+                <i class="fa fa-bolt font-18 text-muted align-self-center mr-2 position-relative"></i>
+                <div class="d-lg-none">
+                  &nbsp; &nbsp;
+                </div>
+                <div class="align-self-center mr-2 d-md-none">Intensity</div>
+                <div class="align-self-center mr-2 d-none d-lg-flex">Intensity</div>
+              </div>
+            </ng-template>
+            <ng-template dfGridTemplate="body"
+                         let-col
+                         let-item="rowData">
+              <div class="pointer position-relative"
+                   (click)="navigationService.showTrend(instance, trends.Intensity, item.intensityScores)"
+                   dfToolTip="Click to see the trend"
+                   dfToolTipPlacement="top">
+                <i class="fa fa-circle
+                  {{ dataRenderingService.getTrendClass(item.intensityScorePastWeeksAvg, 100).cssClass }}"></i>
+                {{item.intensityScorePastWeeksAvg?.toFixed(0)}}%
+              </div>
+            </ng-template>
+          </df-grid-column>
+        </df-grid>
+        <div class="d-flex justify-content-end mt-2">
+          <span>You have {{teamSummaryCount}} direct reports.</span>
+        </div>
+      </df-card-content>
+    </df-card>
+  </div>
+  <div *ngIf="showTeamSelector">
+    <app-team-summary-selector (teamSelect)="navigationService.showSelectedTeam(instance, $event)"></app-team-summary-selector>
+  </div>
+</div>
+
+<ng-template #hoursLoggedModal
+             let-close="close">
+  <div class="au-modal-header p-3">
+    <div class="d-flex align-items-center m-0">
+      <i class="fa fa-calendar mr-2 mb-1"></i>
+      <h5>Hours Logged Trend</h5>
+      <span class="ml-auto mr-2 d-flex">{{ trendRangeTitle }}</span>
+      <i (click)="close()"
+         class="cursor-pointer fa fa-times">
+      </i>
+    </div>
+  </div>
+  <ng-container>
+    <div class="px-3 pt-3 text-left">
+      <df-line-chart
+        [data]="metricInfo.current"
+        [showDots]="true"
+        [showValues]="true"
+        [smoothLine]="false"
+        [showLegend]="false"
+        [xAxisTickFormatter]="dataFormattingService.xAxisTickFormatter"
+        [numTicks]=4>
+      </df-line-chart>
+    </div>
+  </ng-container>
+</ng-template>
+
+
+  <ng-template #metricModal
+               let-close="close">
+    <div class="au-modal-header p-3">
+      <div class="d-flex align-items-center m-0">
+        <i class="fa fa-check-square mr-2 mb-1"></i>
+        <h5 class="text-capitalize">{{metricInfo.description}} Trend</h5>
+        <span class="ml-auto mr-2 d-flex">{{ trendRangeTitle }}</span>
+        <i (click)="close()"
+           class="cursor-pointer fa fa-times">
+        </i>
+      </div>
+    </div>
+    <ng-container>
+      <div class="px-3 pt-3 text-left">
+        <df-line-chart [data]="metricInfo.current"
+                       [showDots]="true"
+                       [showValues]="true"
+                       [smoothLine]="false"
+                       [showLegend]="false"
+                       [xAxisTickFormatter]="xAxisTickFormatter"
+                       [numTicks]=4>
+        </df-line-chart>
+      </div>
+    </ng-container>
+  </ng-template>
+
+  <ng-template #alignmentScoreModal
+               let-close="close">
+    <div class="au-modal-header p-3">
+      <div class="d-flex align-items-center m-0">
+        <i class="fa fa-align-center mr-2 mb-1"></i>
+        <h5>Alignment Score Trend</h5>
+        <span class="ml-auto mr-2 d-flex">{{ trendRangeTitle }}</span>
+        <i (click)="close()"
+           class="cursor-pointer fa fa-times">
+        </i>
+      </div>
+    </div>
+    <ng-container>
+      <div class="px-3 pt-3 text-left">
+        <df-line-chart
+          [data]="metricInfo.current"
+          [showDots]="true"
+          [showValues]="true"
+          [smoothLine]="false"
+          [showLegend]="false"
+          [xAxisTickFormatter]="dataFormattingService.xAxisTickFormatter"
+          [numTicks]=4>
+        </df-line-chart>
+      </div>
+    </ng-container>
+  </ng-template>
+
+<ng-template #focusScoreModal
+             let-close="close">
+  <div class="au-modal-header p-3">
+    <div class="d-flex align-items-center m-0">
+      <i class="fa fa-crosshairs mr-2 mb-1"></i>
+      <h5>Focus Score Trend</h5>
+      <span class="ml-auto mr-2 d-flex">{{ trendRangeTitle }}</span>
+      <i (click)="close()"
+         class="cursor-pointer fa fa-times">
+      </i>
+    </div>
+  </div>
+  <ng-container>
+    <div class="px-3 pt-3 text-left">
+      <df-line-chart [data]="metricInfo.current"
+                     [showDots]="true"
+                     [showValues]="true"
+                     [smoothLine]="false"
+                     [showLegend]="false"
+                     [xAxisTickFormatter]="dataFormattingService.xAxisTickFormatter"
+                     [numTicks]=4>
+      </df-line-chart>
+    </div>
+  </ng-container>
+</ng-template>
+
+
+
+<ng-template #intensityScoreModal
+             let-close="close">
+  <div class="au-modal-header p-3">
+    <div class="d-flex align-items-center m-0">
+      <i class="fa fa-bolt mr-2 mb-1"></i>
+      <h5>Intensity Score Trend</h5>
+      <span class="ml-auto mr-2 d-flex">{{ trendRangeTitle }}</span>
+      <i (click)="close()"
+         class="cursor-pointer fa fa-times">
+      </i>
+    </div>
+  </div>
+  <ng-container>
+    <div class="px-3 pt-3 text-left">
+      <df-line-chart
+        [data]="metricInfo.current"
+        [showDots]="true"
+        [showValues]="true"
+        [smoothLine]="false"
+        [showLegend]="false"
+        [xAxisTickFormatter]="dataFormattingService.xAxisTickFormatter"
+        [numTicks]=4>
+      </df-line-chart>
+    </div>
+  </ng-container>
+</ng-template>
+
+<!-- Contractor card data -->
+<ng-template #contractorCard
+             let-data="data">
+  <app-contractor-card [assignment]="data"
+                       [workDiaries]="workDiaries"
+                       [manager]="data.manager?.printableName"></app-contractor-card>
+</ng-template>
+<ng-template #profileModal
+             let-close="close">
+  <div class="df-loader-container"
+       *ngIf="loadState.model">
+    <i class="df-loader"></i>
+  </div>
+  <app-my-dashboard-page *ngIf="!loadState.model"
+                         [includeProfile]="true"
+                         [managerControl]="true"
+                         [assignmentId]="currentUserAssignmentId"
+                         [manager]="currentUserManager"
+                         [teamId]="currentUserTeamId"
+                         (close)="close()"
+                         [userDetail]="currentContractor"></app-my-dashboard-page>
+</ng-template>

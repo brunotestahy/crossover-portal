@@ -1,0 +1,37 @@
+.picture-card-image {
+  max-height: 150px;
+}
+
+.effective-date-picker {
+  width: 241px;
+}
+
+.end-contract-content {
+  max-height: calc(100vh - 140px);
+  overflow-y: auto;
+}
+
+::ng-deep {
+  .effective-date-picker {
+    input {
+      border-bottom-width: 0px !important;
+      text-align: right !important;
+      padding-right: 28px !important;
+    }
+  }
+
+  .reason-text {
+    .df-input-container--invalid {
+      border-bottom-color: unset !important;
+    }
+  }
+
+  .score-toggle {
+    .df-group-toggle__item {
+      width: 54px;
+    }
+    .df-group-toggle__btn {
+      width: 100%;
+    }
+  }
+}

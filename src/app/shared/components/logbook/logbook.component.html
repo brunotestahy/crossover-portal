@@ -1,0 +1,465 @@
+<div class="row">
+  <div *ngIf="userDetail?.location.timeZone?.offset && !isLoading"
+       class="col-sm-auto">
+    <div class="d-flex small-gutters flex-wrap">
+      <div class="col-sm-auto mb-2 d-flex align-items-center">
+        <span class="mr-2">Timezone</span>
+        <df-select class="mr-2 flex-grow"
+                   [formControl]="timezoneControl">
+          <df-option [value]="userDetail?.location.timeZone?.offset"
+                     displayText="Contractor:{{userDetail?.location.timeZone?.hourlyOffset}}h">
+            Contractor:{{userDetail?.location.timeZone?.hourlyOffset}}h
+          </df-option>
+          <df-option [value]="0"
+                     [displayText]="'UTC: 00:00h'">UTC:00:00h
+          </df-option>
+        </df-select>
+      </div>
+      <div class="col-sm-auto mb-2 d-flex align-items-center">
+        <span class="mr-2">Show</span>
+        <df-select class="mr-2 flex-grow"
+                   [formControl]="filterControl">
+          <df-option *ngFor="let filter of filters"
+                     [value]="filter"
+                     [displayText]="filter.label">{{filter.label}}
+          </df-option>
+        </df-select>
+      </div>
+      <div class="col-sm-auto mb-2">
+        <div class="d-flex small-gutters flex-wrap">
+          <div class="col-auto">
+            <button [dfToolTip]="is12HFormat ? 'Switch to 24h format' : 'Switch to 12h format'"
+                    type="button"
+                    class=" btn-square"
+                    df-button
+                    (click)="toggleHourFormat()"
+                    df-border-button>
+              {{is12HFormat ? '24H' : '12H'}}
+            </button>
+          </div>
+          <div class="col-auto">
+            <button [dfToolTip]="isGridView ? 'Switch to list view' : 'Switch to grid view'"
+                    type="button"
+                    df-button
+                    class="logbook__view-btn btn-square"
+                    [class.logbook__view-btn--grid]="!isGridView"
+                    (click)="toggleView()"
+                    df-border-button>
+              <span class="logbook__view-btn__icon"></span>
+              <span class="logbook__view-btn__icon"></span>
+              <span class="logbook__view-btn__icon"></span>
+              <span class="logbook__view-btn__icon"></span>
+            </button>
+          </div>
+          <div class="col-auto">
+            <button [dfToolTip]="allExpanded ? 'Collapse timecards' : 'Expand timecards'"
+                    type="button"
+                    df-button
+                    *ngIf="!isGridView"
+                    class="d-none d-md-block logbook__expand-btn btn-square"
+                    [class.logbook__expand-btn--expanded]="allExpanded"
+                    (click)="toggleExpansion()"
+                    df-border-button>
+              <div>
+                <span class="logbook__expand-btn__left-icon"></span>
+                <span class="logbook__expand-btn__left-icon"></span>
+                <span class="logbook__expand-btn__left-icon"></span>
+                <span class="logbook__expand-btn__left-icon"></span>
+              </div>
+              <div>
+                <span class="logbook__expand-btn__right-icon"></span>
+                <span class="logbook__expand-btn__right-icon"></span>
+                <span class="logbook__expand-btn__right-icon"></span>
+                <span class="logbook__expand-btn__right-icon"></span>
+              </div>
+            </button>
+          </div>
+        </div>
+
+      </div>
+
+
+    </div>
+  </div>
+  <div *ngIf="userDetail?.location.timeZone?.offset && !isLoading"
+       class="col-sm-auto ml-xl-auto align-items-center right-toolbar">
+    <div class="d-flex flex-wrap small-gutters">
+      <div class="col-sm-auto d-flex align-items-center">
+        <div (click)="showInfo()"
+             class="pointer ml-md-auto text-nowrap">
+          Info
+          <i class="au-blue fa fa-info-circle"></i>
+        </div>
+      </div>
+      <div class="col-12 col-sm-auto">
+        <button df-button
+                theme="success"
+                class="mr-2 mb-2 w-100 w-sm-auto"
+                *ngIf="userDetail?.avatarTypes.indexOf('CANDIDATE') > -1"
+                [disabled]="isReadOnly || !isCurrentWeek"
+                (click)="openManualTimeModal()">Add Manual Time
+        </button>
+      </div>
+      <div class="col-12 col-sm-auto">
+        <button df-button
+                theme="danger"
+                class="mr-2 mb-2 w-100 w-sm-auto"
+                *ngIf="userDetail?.avatarTypes.indexOf('CANDIDATE') > -1"
+                [disabled]="isReadOnly || !hasOneCardCheckedAtList || (userDetail?.avatarTypes.indexOf('CANDIDATE') > -1 && !isCurrentWeek)"
+                (click)="openDeleteTimecardModal()">Delete Time Card
+        </button>
+      </div>
+      <div class="col-12 col-sm-auto">
+        <button df-button
+                theme="info"
+                class=" w-100 w-sm-auto"
+                *ngIf="userDetail?.avatarTypes.indexOf('CANDIDATE') > -1"
+                [disabled]="isReadOnly || !hasOneIdleCardCheckedAtList || !hasOneCardCheckedAtList || (userDetail?.avatarTypes.indexOf('CANDIDATE') > -1 && !isCurrentWeek)"
+                (click)="openNotIdleModal()">Not Idle
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="container-fluid my-3">
+  <div class="df-loader-container"
+       *ngIf="isLoading; else loadedContent">
+    <i class="df-loader"></i>
+  </div>
+  <ng-template #loadedContent>
+    <ng-container *ngIf="isGridView; else listView">
+      <ng-container *ngIf="shouldGroupByHour$ | async; else notGrouped">
+        <div *ngFor="let group of workDiariesByHour;">
+          <div class="row">
+            <div class="col-auto d-flex align-items-center justify-content-center">
+              <span class="logbook__grid-hour">{{group.hour | date : hourFormat}}</span>
+            </div>
+            <div class="col">
+              <div class="row">
+                <div class="col-sm-6 col-lg-4 col-xl-2"
+                     *ngFor="let diary of group.diaries">
+                  <ng-container *ngIf="diary">
+                    <div [class.checkbox-overlay]="diary.checked"
+                         class="d-flex">
+                      <div class="mr-auto"
+                           *ngIf="isNormalTimeCard(diary)"
+                           class="text-truncate">{{diary.windowTitle}}
+                      </div>
+                      <div class="mr-auto"
+                           *ngIf="isIdleTimeCard(diary)">
+                        <span class="text-truncate">Idle Time</span>
+                      </div>
+                      <div class="mr-auto"
+                           *ngIf="isMeetingTimeCard(diary)">
+                        <i class="fa fa-info-circle d-pointer mr-2 d-inline-block"
+                           [dfToolTip]="'Meeting Time<br>' + getActionComment(diary, timeCardActions.SET_MEETING_TIME)"></i>
+                        <span class="text-truncate">Meeting Time</span>
+                      </div>
+                      <div class="mr-auto"
+                           *ngIf="isManualTimeCard(diary)">
+                        <i class="fa fa-info-circle d-pointer mr-2 d-inline-block"
+                           [dfToolTip]="'Manual Time<br>' + diary.memo"></i>
+                        <span class="text-truncate">Manual Time</span>
+                      </div>
+                      <div class="mr-auto"
+                           *ngIf="diary.isDisputed">
+                        <span class="text-truncate">Disputed Time</span>
+                      </div>
+                      <div class="mr-auto"
+                           *ngIf="diary.isDisputeResolved">
+                        <span class="text-truncate">Dispute resolved</span>
+                      </div>
+                      <df-checkbox *ngIf="!isReadOnly && isCurrentWeek"
+                                   [value]="diary.checked"
+                                   (change)="diary.checked = $event.checked"
+                                   class="ml-auto">
+                      </df-checkbox>
+                    </div>
+                    <div *ngIf="diary.checked"
+                         class="overlay"></div>
+                    <div class="timecard-indicator"
+                         [class.bg-au-amber]="diary.isManual"
+                         [class.bg-au-green]="diary.isMeeting"
+                         [class.bg-au-light-gray]="diary.isIdle"></div>
+                    <div class="form-row">
+                      <div class="col-6">
+                        <img src="/assets/images/user.png"
+                             class="img-fluid">
+                      </div>
+                      <div class="col-6">
+                        <div class="my-2">
+                          <span class="bg-au-white p-2 text-nowrap">{{diary.localDate | date: is12HFormat ? 'hh:mm a' : 'HH:mm'}}</span>
+                        </div>
+                        <div class="my-2">
+                          <i class="fa fa-fw fa-keyboard-o au-blue"></i> {{diary.keyboardEvents}}
+                        </div>
+                        <div class="my-2">
+                          <i class="fa fa-fw fa-mouse-pointer au-blue"></i> {{diary.mouseEvents}}
+                        </div>
+                      </div>
+                    </div>
+                    <app-activity-level-bar [class.invisible]="diary.isManual"
+                                            [dfToolTip]="'Intensity Score: ' + getIntensityScore(diary)"
+                                            class="pointer"
+                                            [workDiary]="diary"
+                                            (click)="openTimecardDetails(diary)"></app-activity-level-bar>
+                    <div (click)="openLogbookScreenshotViewer(filteredWorkdiaries.indexOf(diary))">
+                      <img *ngIf="diary.isManual"
+                           src="/assets/images/manual-time.png"
+                           class="img-fluid w-100">
+                      <img *ngIf="!diary.isManual"
+                           src="/assets/images/not-found-screenshot.png"
+                           class="img-fluid w-100">
+                    </div>
+                  </ng-container>
+                </div>
+              </div>
+            </div>
+          </div>
+          <hr>
+        </div>
+        <div *ngIf="workDiariesByHour?.length === 0"
+             class="text-center font-18 my-3">
+          No entries in logbook.
+        </div>
+      </ng-container>
+      <ng-template #notGrouped>
+        <div class="row">
+          <div *ngFor="let diary of filteredWorkdiaries; let index = index;"
+               class="col-sm-6 col-md-4 col-lg-3 col-xl-2 mb-2">
+            <div [class.checkbox-overlay]="diary.checked"
+                 class="d-flex">
+              <div *ngIf="isNormalTimeCard(diary)"
+                   class="text-truncate">{{diary.windowTitle}}
+              </div>
+              <div class="mr-auto"
+                   *ngIf="isIdleTimeCard(diary)">
+                <span class="text-truncate">Idle Time</span>
+              </div>
+              <div class="mr-auto"
+                   *ngIf="isMeetingTimeCard(diary)">
+                <i class="fa fa-info-circle d-pointer mr-2 d-inline-block"
+                   [dfToolTip]="'Meeting Time<br>' + getActionComment(diary,  timeCardActions.SET_MEETING_TIME)"></i>
+                <span class="text-truncate">Meeting Time</span>
+              </div>
+              <div class="mr-auto"
+                   *ngIf="isManualTimeCard(diary)">
+                <i class="fa fa-info-circle d-pointer mr-2 d-inline-block"
+                   [dfToolTip]="'Manual Time<br>' + diary.memo"></i>
+                <span class="text-truncate">Manual Time</span>
+              </div>
+              <div class="mr-auto"
+                   *ngIf="diary.isDisputed">
+                <span class="text-truncate">Disputed Time</span>
+              </div>
+              <div class="mr-auto"
+                   *ngIf="diary.isDisputeResolved">
+                <span class="text-truncate">Dispute resolved</span>
+              </div>
+              <df-checkbox *ngIf="!isReadOnly && isCurrentWeek"
+                           [value]="diary.checked"
+                           (change)="diary.checked = $event.checked"
+                           class="ml-auto">
+              </df-checkbox>
+            </div>
+            <div *ngIf="diary.checked"
+                 class="overlay"></div>
+            <div class="timecard-indicator"
+                 [class.bg-au-amber]="diary.isManual"
+                 [class.bg-au-green]="diary.isMeeting"
+                 [class.bg-au-light-gray]="diary.isIdle"></div>
+            <div class="form-row">
+              <div class="col-6">
+                <img src="/assets/images/user.png"
+                     class="img-fluid">
+              </div>
+              <div class="col-6">
+                <div class="my-2">
+                  <span class="bg-au-white p-2">{{diary.localDate | date: is12HFormat ? 'hh:mm a' : 'HH:mm'}}</span>
+                </div>
+                <div class="my-2">
+                  <strong>
+                    <i class="fa fa-fw fa-keyboard-o au-blue"></i> {{diary.keyboardEvents}}</strong>
+                </div>
+                <div class="my-2">
+                  <strong>
+                    <i class="fa fa-fw fa-mouse-pointer au-blue"></i> {{diary.mouseEvents}}</strong>
+                </div>
+              </div>
+            </div>
+            <app-activity-level-bar [class.invisible]="diary.isManual"
+                                    [dfToolTip]="'Intensity Score: ' + getIntensityScore(diary)"
+                                    class="pointer"
+                                    [workDiary]="diary"
+                                    (click)="openTimecardDetails(diary)"></app-activity-level-bar>
+            <div (click)="openLogbookScreenshotViewer(index)">
+              <img *ngIf="diary.isManual"
+                   src="/assets/images/manual-time.png"
+                   class="img-fluid w-100">
+              <img *ngIf="!diary.isManual"
+                   src="/assets/images/not-found-screenshot.png"
+                   class="img-fluid w-100">
+            </div>
+          </div>
+        </div>
+        <div *ngIf="filteredWorkdiaries?.length === 0"
+             class="text-center font-18 my-3">
+          No entries in logbook.
+        </div>
+      </ng-template>
+    </ng-container>
+
+    <ng-template #listView>
+      <app-timecards-list-view [workDiaries]="filteredWorkdiaries"
+                               [day]="day"
+                               (openDetails)="openTimecardDetails($event)"
+                               [is12hFormat]="is12HFormat"
+                               [isExpanded]="allExpanded"
+                               (rowSelect)="onRowSelect($event)"></app-timecards-list-view>
+    </ng-template>
+  </ng-template>
+</div>
+
+<ng-template #infoModal
+             let-close="close">
+  <div class="au-modal-header p-3 d-flex align-items-center">
+    <h5 class="d-flex align-items-center w-100 m-0">
+      <span>Logbook Information</span>
+    </h5>
+    <i (click)="close()"
+       class="au-modal-close fa fa-times">
+    </i>
+  </div>
+  <div class="container-fluid my-3 text-left">
+    <div class="row">
+      <div class="col-md-6 mb-2">
+        <div class="row">
+          <div class="col-sm-6 col-md-4 col-xl-3">
+            <img class="img-fluid w-100"
+                 src="/assets/images/productivity-keys.png">
+          </div>
+          <div class="col-sm-6 col-md-8 col-xl-9">
+            <h4>Key strokes</h4>
+            <p>
+              - Number of key strokes in this time period Mouse scroll up and mouse scroll down each count as individual key strokes.
+            </p>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-6 mb-2">
+        <div class="row">
+          <div class="col-sm-6 col-md-4 col-xl-3">
+            <img class="img-fluid w-100"
+                 src="/assets/images/productivity-mouse.png">
+          </div>
+          <div class="col-sm-6 col-md-8 col-xl-9">
+            <h4>Mouse clicks</h4>
+            <p>
+              - Number of left or right mouse clicks in this time period.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-sm-6 col-md-4 col-xl-3">
+        <img class="img-fluid w-100"
+             src="/assets/images/productivity-bar.png">
+      </div>
+      <div class="col-sm-6 col-md-8 col-xl-9">
+        <h4>Activity bar</h4>
+        <p>
+          The activity bar represents the amount of detectable work a contractor has done in the 10 minute time card. While there are
+          many jobs or situations that do not require constant use of the keyboard or mouse, the activity bar allows you
+          to determine which time cards to examine more closely.
+        </p>
+        <p>
+          The 10 segments of the activity bar each represent 1 minute. More than 10 mouse+keyboard events in a particular minute result
+          in a full segment; between 5 and 10, a half-full segment; all else, an empty segment. For example, if a user has
+          3 full, 1 half-full and 6 empty minutes, the activity bar will show 3.5 filled segments starting from the left.
+        </p>
+      </div>
+    </div>
+  </div>
+  <div class="container-fluid d-flex align-items-center justify-content-end pb-3">
+    <button df-button
+            type="button"
+            theme="info"
+            (click)="close();">
+      Got it
+    </button>
+  </div>
+</ng-template>
+
+<ng-template #addManualTimeModal
+             let-close="close">
+  <form (submit)="saveManualTime(close)"
+        [formGroup]="manualTimeForm"
+        class="standard-form">
+    <div class="au-modal-header p-3 d-flex align-items-center">
+      <h5 class="d-flex align-items-center w-100 m-0">
+        <span>Add manual time</span>
+      </h5>
+      <i (click)="close()"
+         class="au-modal-close fa fa-times">
+      </i>
+    </div>
+    <div class="container-fluid my-3 text-left">
+      <app-page-alert [text]="manualTimeError"
+                      *ngIf="manualTimeError"
+                      class="mb-3"></app-page-alert>
+      <div>
+        <i class="fa fa-calendar-o"></i>
+        {{day | date: 'MMMM dd'}}, UTC {{showSelectedTimeZone}}
+      </div>
+      <hr>
+      <div class="row align-items-start">
+        <span class="text-nowrap mr-3 mt-md-1 col-auto align-self-start">
+          Time Range:
+        </span>
+        <div class="col-md">
+          <df-timepicker formControlName="start"
+                         [format24Hour]="!is12HFormat"
+                         [changeMode]="TIME_PICKER_CHANGE_MODE"
+                         minutesChangeBy="10"></df-timepicker>
+          <df-validation-messages controlName="start"
+                                  *ngIf="!manualTimeForm.errors?.range"></df-validation-messages>
+          <df-validation-messages [control]="manualTimeForm"
+                                  *ngIf="manualTimeForm.errors?.range"
+                                  [validationMessagesMap]="manualMessagesMap"></df-validation-messages>
+        </div>
+        <div class="col-md">
+          <df-timepicker formControlName="end"
+                         [format24Hour]="!is12HFormat"
+                         [changeMode]="TIME_PICKER_CHANGE_MODE"
+                         minutesChangeBy="10"></df-timepicker>
+          <df-validation-messages controlName="end"></df-validation-messages>
+        </div>
+
+      </div>
+      <div>
+        <df-input-container label="Memo:">
+          <textarea formControlName="memo"></textarea>
+        </df-input-container>
+        <df-validation-messages controlName="memo"></df-validation-messages>
+      </div>
+      <div>All manual time must be approved by your manager.</div>
+    </div>
+    <div class="container-fluid d-flex align-items-center justify-content-end pb-3">
+      <button df-button
+              type="submit"
+              class="mr-2"
+              theme="success"
+              loaderPosition="after"
+              [loading]="isAddingManualTime">
+        Save
+      </button>
+      <button df-button
+              type="button"
+              theme="danger"
+              (click)="close()">
+        Cancel
+      </button>
+    </div>
+  </form>
+</ng-template>

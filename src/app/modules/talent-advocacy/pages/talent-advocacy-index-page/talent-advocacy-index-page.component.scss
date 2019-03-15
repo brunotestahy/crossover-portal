@@ -1,0 +1,35 @@
+:host {
+  df-grid::ng-deep {
+    table {
+      table-layout: auto;
+    }
+  }
+
+  .file-wrapper {
+    cursor: pointer;
+    display: inline-block;
+    overflow: hidden;
+    position: relative;
+    input {
+      cursor: pointer;
+      z-index: 1;
+      font-size: 0;
+      /*This will work for IE10+*/
+      @media screen and (-ms-high-contrast: active), screen and (-ms-high-contrast: none) {
+        font-size: 100px;
+      }
+      opacity: 0;
+      width: 152px;
+      height: 32px;
+      position: absolute;
+    }
+  }
+}
+
+form .ie-fix {
+  // Make the modal close button aligned in the right for IE browsers
+  /*This will work for IE10+*/
+  @media screen and (-ms-high-contrast: active), screen and (-ms-high-contrast: none) {
+    float: right;
+  }
+}

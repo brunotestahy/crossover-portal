@@ -1,0 +1,62 @@
+@import "variables";
+
+.user {
+  height: 41px;
+  min-width: 42px;
+  text-align: left;
+  white-space: nowrap;
+  img {
+    width: 40px;
+    border-radius: 20px;
+    border: 1px solid #d8d8d8;
+  }
+
+  @media (min-width: $breakpoint-xl) {
+    display: block !important;
+  }
+}
+
+.contractor-desk {
+  width: 130px;
+  height: 136px;
+  transform: rotate(-90deg);
+
+  &--selected {
+    border-style: solid;
+    border-width: thin;
+    color: #313541;
+  }
+
+  &__contractor-2 {
+    background: url('/assets/images/contractor/working-contractors/2.png') no-repeat;
+  }
+
+  &__contractor-4 {
+    background: url('/assets/images/contractor/working-contractors/4.png') no-repeat;
+  }
+
+  &__contractor-7 {
+    background: url('/assets/images/contractor/working-contractors/7.png') no-repeat;
+  }
+
+  &__contractor-8 {
+    background: url('/assets/images/contractor/working-contractors/8.png') no-repeat;
+  }
+
+  &__contractor-1 {
+    background: url('/assets/images/contractor/working-contractors/1.png') no-repeat;
+  }
+
+  &__contractor-3 {
+    background: url('/assets/images/contractor/working-contractors/3.png') no-repeat;
+  }
+
+  &__contractor-5 {
+    background: url('/assets/images/contractor/working-contractors/5.png') no-repeat;
+  }
+
+  &__contractor-6 {
+    background: url('/assets/images/contractor/working-contractors/6.png') no-repeat;
+  }
+
+}

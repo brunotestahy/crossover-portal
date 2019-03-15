@@ -1,0 +1,196 @@
+@import "variables";
+
+.section-bar, .top-section-bar {
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-wrap: wrap;
+  flex-wrap: wrap;
+  margin-right: -15px;
+  margin-left: -15px;
+  padding-top: 20px;
+  padding-bottom: 20px;
+
+  @media (max-width: $breakpoint-sm) {
+    flex-direction: column !important;
+  }
+}
+
+.top-section-bar {
+  padding-bottom: 30px;
+}
+
+.tooltip-spent-time {
+  min-width: 3rem;
+  text-align: center;
+}
+
+.tooltip-percentage {
+  min-width: 1.8rem;
+  text-align: right;
+}
+
+.section-bar__element {
+  flex-basis: unset;
+  -ms-flex-positive: unset;
+  flex-grow: unset;
+  max-width: 100%;
+  position: unset;
+  width: 100%;
+  min-height: 1px;
+  padding-right: 0;
+  padding-left: 0;
+  font-size: 11px;
+
+  // Dynamic height for mobile section bars
+  $percentage: 0;
+  $maxDivHeight: 25;
+  @while($percentage <= 100) {
+    &.section-height-#{$percentage} {
+      height: ($percentage * 2) + px;
+
+      // Hide content with div's height smaller than 25px
+      @if (($percentage * 2) < $maxDivHeight) {
+        div {
+          display: none;
+        }
+      }
+    }
+    $percentage: $percentage + 1;
+  }
+
+  @media (min-width: $breakpoint-md) {
+    flex-basis: 0;
+    -ms-flex-positive: 1;
+    flex-grow: 1;
+    position: relative;
+
+    // Dynamic width for section bars
+    $percentage: 0;
+    $maxDivWidth: 6;
+    @while($percentage <= 100) {
+      &.section-height-#{$percentage} {
+        height: 80px;
+
+        div {
+          display: block;
+        }
+      }
+
+      &.section-width-#{$percentage} {
+        max-width: ($percentage * 1%);
+
+        // Hide content with div's width smaller than 6%
+        @if ($percentage < $maxDivWidth) {
+          div {
+            display: none;
+          }
+        }
+      }
+      $percentage: $percentage + 1;
+    }
+  }
+}
+
+.section-tooltip-text {
+  font-size: 11px;
+
+  span {
+    display: block;
+  }
+}
+
+.section-tooltip-title {
+  font-size: 14px;
+}
+
+.period-toggle {
+  margin-left: auto;
+  @media (max-width: $breakpoint-lg) {
+    margin-left: unset;
+  }
+}
+
+.time-box-container {
+  overflow-x: auto;
+  height: 130px;
+}
+
+.time-box {
+  min-width: 1440px;
+  max-width: 1440px;
+  width: 1440px;
+  height: 90%;
+}
+
+.time-box-header {
+  min-width: 1440px;
+  max-width: 1440px;
+  font-size: 11px;
+  height: 10%;
+  width: 1440px;
+}
+
+.time-slot {
+  min-width: 10px;
+  max-width: 10px;
+  width: 10px;
+
+  &:first-of-type {
+    border-left: 1px solid #ebebeb;
+  }
+
+  $timeCardsPerHour: 6;
+  $totalTimeCards: 144;
+  @while ($timeCardsPerHour <= $totalTimeCards) {
+    &:nth-of-type(#{$timeCardsPerHour}) {
+      border-right: 1px solid #ebebeb;
+    }
+    $timeCardsPerHour: $timeCardsPerHour + 6;
+  }
+}
+
+::ng-deep {
+  .df-label {
+    border-radius: 14px !important;
+    height: 20px !important;
+  }
+
+  #timePov {
+    .df-group-toggle__item {
+      width: 124px !important;
+    }
+  }
+
+  #displayMode {
+    .df-group-toggle__item {
+      width: 88px !important;
+    }
+  }
+
+  @media (min-width: $breakpoint-md) {
+    .tooltip-daily .df-tooltip--top {
+      -webkit-transform: translateX(-40.5%) translateY(-100%) translateY(-10px) !important;
+      transform: translateX(-40.5%) translateY(-100%) translateY(-10px) !important;
+    }
+  }
+
+  .tooltip-contractor {
+    &::ng-deep {
+      .df-tooltip--top {
+        -webkit-transform: translateX(-18%) translateY(-100%) translateY(-10px) !important;
+        transform: translateX(-18%) translateY(-100%) translateY(-10px) !important;
+        display: none;
+      }
+    }
+  }
+
+  .tooltip-manager {
+    &::ng-deep {
+      .df-tooltip--top {
+        -webkit-transform: translateX(-82%) translateY(-100%) translateY(-10px) !important;
+        transform: translateX(-82%) translateY(-100%) translateY(-10px) !important;
+        display: none;
+      }
+    }
+  }
+}

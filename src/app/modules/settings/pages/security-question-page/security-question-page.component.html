@@ -1,0 +1,83 @@
+<div class="page-content">
+  <form [formGroup]="form" class="standard-form" (submit)="onSubmit()">
+    <div class="row">
+      <div class="col-md-12 col-xl-10 offset-xl-1">
+        <app-page-alert *ngIf="error" [text]="error" class="my-2"></app-page-alert>
+        <div class="mb-1">
+          Answer your existing security question in order to create a new one. Please choose a question you can remember!
+        </div>
+        <div class="form-row form-group">
+          <div class="col-12">
+            <label>Existing Question</label>
+          </div>
+          <div class="col-12">
+            <df-input-container>
+              <input type="text" [value]="currentQuestion" readonly="true" class="pl-1 pr-1">
+            </df-input-container>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="col-12">
+            <label>Answer</label>
+          </div>
+          <div class="col-12">
+            <df-input-container>
+              <input type="text" placeholder="Enter your answer here..." formControlName="answer">
+            </df-input-container>
+            <df-validation-messages [control]="form.controls.answer"></df-validation-messages>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="col-12">
+            <label>New Question</label>
+          </div>
+          <div class="col-12">
+            <df-select formControlName="question" placeholder="Please select security question..." class="w-100">
+              <df-option *ngFor="let question of questions" [value]="question" [displayText]="question"></df-option>
+              <df-option value="other" displayText="Other..."></df-option>
+            </df-select>
+            <df-validation-messages [control]="form.controls.question"></df-validation-messages>
+          </div>
+        </div>
+        <div class="form-row" *ngIf="form.controls.customQuestion.enabled">
+          <div class="col-12">
+            <label>Custom Question</label>
+          </div>
+          <div class="col-12">
+            <df-input-container>
+              <input type="text" formControlName="customQuestion" placeholder="Custom Question">
+            </df-input-container>
+            <df-validation-messages [control]="form.controls.customQuestion"></df-validation-messages>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="col-12">
+            <label>Answer</label>
+          </div>
+          <div class="col-12">
+            <df-input-container>
+              <input type="text" placeholder="Enter your new answer here..." formControlName="newAnswer">
+            </df-input-container>
+            <df-validation-messages [control]="form.controls.newAnswer"></df-validation-messages>
+          </div>
+        </div>
+        <div>
+          <df-checkbox formControlName="accept">I understand that my account will be locked if I answer this question incorrectly.</df-checkbox>
+          <df-validation-messages [control]="form.controls.accept"></df-validation-messages>
+        </div>
+        <div class="row">
+          <div class="col-md-9 order-2 order-md-1">
+            <div>
+              <em>Note: If you are locked out of your account, you will be able to contact Crossover
+                <a routerLink="/support">Support</a> to resolve the issue</em>
+            </div>
+          </div>
+          <div class="col-md-3 order-1 order-md-2">
+            <button type="submit" df-button theme="success" class="d-block w-100 mb-4" [loading]="saving" loaderPosition="after">Change</button>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </form>
+</div>

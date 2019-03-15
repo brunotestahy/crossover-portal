@@ -1,0 +1,11 @@
+<form [formGroup]="form" class="standard-form">
+    <label>I am available to work:</label>
+    <df-select formControlName="availability" (change)="onSubmit()">
+      <df-option
+        *ngFor="let option of availabilities"
+        [value]="option"
+        [displayText]="optionsTransform(option | enumToString : true : true)">
+          {{ optionsTransform(option | enumToString : true : true) }}
+      </df-option>
+    </df-select>
+</form>
